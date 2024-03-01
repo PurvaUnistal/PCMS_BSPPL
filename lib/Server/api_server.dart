@@ -1,0 +1,108 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'package:bsppl/Server/api_error.dart';
+import 'package:bsppl/Server/app_url.dart';
+import 'package:bsppl/Utils/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
+
+class ApiServer {
+
+  static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async{
+    try {
+      final response = await get(
+        Uri.parse(urlEndPoint),
+      ).timeout(const Duration(minutes: 1));
+      log("URL-->${urlEndPoint.toString()}");
+      log(urlEndPoint + "==>" + response.body);
+      if (response.statusCode == 200) {
+     //   return jsonDecode(response.body.toString());
+        return response.body.toString();
+      } else {
+        log("Api.error-->${Api.error}");
+        return null;
+      }
+    } catch (e){
+      log("ApiServer-->${e.toString()}");
+      if (e is SocketException) {
+        log("SocketException : ${e.toString()}");
+        Utils.warningSnackBar(msg:"No Internet",context:context);
+      } else if (e is TimeoutException) {
+        log("TimeoutException : ${e.toString()}");
+        Utils.warningSnackBar(msg:"Timeout, Please try again",context:context);
+      } else {
+        log("Unhandled exception : ${e.toString()}");
+        Utils.warningSnackBar(msg:e.toString(),context:context);
+      }
+      return null;
+    }
+  }
+
+  static Future<dynamic> postData({var urlEndPoint, required BuildContext context, var body}) async {
+    try {
+      final response = await post(Uri.parse(urlEndPoint), body: json.encode(body)).timeout(const Duration(minutes: 1));
+      log("get Res ===== ${response.body}");
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        log("Api.error-->${Api.error}");
+        return null;
+      }
+    } catch (e){
+      log("ApiServer-->${e.toString()}");
+      if (e is SocketException) {
+        log("SocketException : ${e.toString()}");
+        Utils.warningSnackBar(msg:"No Internet",context:context);
+      } else if (e is TimeoutException) {
+        log("TimeoutException : ${e.toString()}");
+        Utils.warningSnackBar(msg:"Timeout, Please try again",context:context);
+      } else {
+        log("Unhandled exception : ${e.toString()}");
+        Utils.warningSnackBar(msg:e.toString(),context:context);
+      }
+      return null;
+    }
+  }
+
+  static Future<dynamic> postDataWithFile({
+    required var body, required BuildContext context, required String filePath, required String keyWord}) async {
+    try{
+      var request = MultipartRequest("POST", Uri.parse(AppUrl.submitAll));
+      if(filePath.isNotEmpty){
+        final mimeTypeData =
+        lookupMimeType(filePath, headerBytes: [0xFF, 0xD8])!.split('/');
+        var uploadFile = await MultipartFile.fromPath(keyWord, filePath,
+            contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+        request.files.add(uploadFile);
+      }
+      request.fields.addAll(body);
+   //   request.headers.addAll(header);
+      var response = await request.send();
+      if(response.statusCode == 200){
+        var responseData = await response.stream.toBytes();
+        var result = json.decode(String.fromCharCodes(responseData));
+        log(result.toString());
+        return result;
+      } else if(response.statusCode == 415){
+        var responseData = await response.stream.toBytes();
+        var result = json.decode(String.fromCharCodes(responseData));
+        log(result.toString());
+        return result;
+      } else if(response.statusCode == 400){
+        var responseData = await response.stream.toBytes();
+        var result = json.decode(String.fromCharCodes(responseData));
+        log(result.toString());
+        return result;
+      }else {
+        return null;
+      }
+    }catch(e){
+      log(e.toString());
+      return null;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
+import 'package:bsppl/Utils/common_widget/local_img.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
@@ -231,68 +232,25 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
   }
 
   Widget _photo({required FetchRouteSurveyDataState dataState}) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width/3,
-      height:MediaQuery.of(context).size.width/3,
-      child: InkWell(
-        onTap: () {
-          showModalBottomSheet(
-              enableDrag: true,
-              isScrollControlled: true,
-              context: context, builder: (BuildContext context){
-            return  ImagePopWidget(
-              onTapCamera: () async {
-                Navigator.of(context).pop();
-                BlocProvider.of<RouteSurveyBloc>(context).add(SelectCameraCaptureEvent());
-              },
-              onTapGallery: () async {
-                Navigator.of(context).pop();
-                BlocProvider.of<RouteSurveyBloc>(context).add(SelectGalleryCaptureEvent());
-              },
-            );
-          });
-        },
-        child: DottedBorder(
-          color: AppColor.grey,
-          strokeWidth: 1,
-          child: dataState.photo.path == ""
-              ||dataState.photo.path.isEmpty ?
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Center(child: Icon(Icons.photo_camera_back_outlined),),
-              Padding(
-                padding:  EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-                child: TextWidget(AppString.photo,
-                  fontSize: 12,
-                  color: AppColor.grey,),
-              ),
-            ],
-          ):Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.file(
-                    dataState.photo,
-                    fit: BoxFit.fill,
-                    width: MediaQuery.of(context).size.width/3,
-                    height: MediaQuery.of(context).size.width/4.5 ,
-                  )
-                ],
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width/3,
-                  height:MediaQuery.of(context).size.width/3,
-                  color : Colors.white.withOpacity(0.6),
-                  child: Center(child: Icon(Icons.refresh, color: AppColor.appBlueColor,))),
-
-            ],
-          ),
-        ),
-      ),
+    return LocalImgWidget(
+      file: dataState.photo,
+      onTap: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context, builder: (BuildContext context){
+          return  ImagePopWidget(
+            onTapCamera: () async {
+              Navigator.of(context).pop();
+              BlocProvider.of<RouteSurveyBloc>(context).add(SelectCameraCaptureEvent());
+            },
+            onTapGallery: () async {
+              Navigator.of(context).pop();
+              BlocProvider.of<RouteSurveyBloc>(context).add(SelectGalleryCaptureEvent());
+            },
+          );
+        });
+      },
     );
   }
 

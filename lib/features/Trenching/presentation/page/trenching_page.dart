@@ -3,7 +3,7 @@ import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
-import 'package:bsppl/Utils/common_widget/img_layout.dart';
+import 'package:bsppl/Utils/common_widget/local_img.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
@@ -350,15 +350,24 @@ class _TrenchingPageState extends State<TrenchingPage> {
   }
 
   Widget _photo({required TrenchingFetchDataState dataState}) {
-    return ImgLayoutWidget(
+    return LocalImgWidget(
       file: dataState.photo,
-      onTapCamera: () async {
-        Navigator.of(context).pop();
-        BlocProvider.of<TrenchingBloc>(context).add(SelectCameraCaptureEvent());
-      },
-      onTapGallery: () async {
-        Navigator.of(context).pop();
-        BlocProvider.of<TrenchingBloc>(context).add(SelectCameraCaptureEvent());
+      onTap: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context, builder: (BuildContext context){
+          return  ImagePopWidget(
+            onTapCamera: () async {
+              Navigator.of(context).pop();
+              BlocProvider.of<TrenchingBloc>(context).add(SelectCameraCaptureEvent());
+            },
+            onTapGallery: () async {
+              Navigator.of(context).pop();
+              BlocProvider.of<TrenchingBloc>(context).add(SelectGalleryCaptureEvent());
+            },
+          );
+        });
       },
     );
   }

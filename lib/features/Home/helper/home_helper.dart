@@ -1,4 +1,3 @@
-import 'package:bsppl/Utils/commonClass/enums.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/features/Backfilling/presentation/backfilling_page.dart';
 import 'package:bsppl/features/Bending/presentation/bending_page.dart';
@@ -24,22 +23,11 @@ import 'package:bsppl/features/YardReceiving/presentation/yard_receiving_page.da
 import 'package:flutter/material.dart';
 
 class HomeHelper {
-
-
   static Future<dynamic> fetchDrawerList({required BuildContext context}) async {
-
     try{
        List<DrawerModel> drawerList = [];
        drawerList.add(DrawerModel(widget: const DashboardView(), icon: Icons.home_outlined,
            label: AppString.dashboard, sublist: [], isSelected: true));
-
-       List<DrawerSubModel> systemAdminList = await fetchSystemAdminSubList();
-
-       drawerList.add(DrawerModel(widget: const YardReceivingPage(), icon: Icons.yard_outlined,
-           label: AppString.yardReceiving, sublist: [],  isSelected: false, actionButtonWidget: null));
-
-       drawerList.add(DrawerModel(widget: const IssueToContractorPage(), icon: Icons.warning_amber_outlined,
-           label: AppString.hoto, sublist: [],  isSelected: false, actionButtonWidget: null));
 
        drawerList.add(DrawerModel(widget: const RouteSurveyPage(), icon: Icons.alt_route_sharp,
            label: AppString.routeSurvey, sublist: [],  isSelected: false, actionButtonWidget: null));
@@ -92,222 +80,15 @@ class HomeHelper {
        drawerList.add(DrawerModel(widget: const HindrancePage(), icon: Icons.hiking_outlined,
            label: AppString.hindrance, sublist: [],  isSelected: false, actionButtonWidget: null));
 
+       drawerList.add(DrawerModel(widget: const YardReceivingPage(), icon: Icons.yard_outlined,
+           label: AppString.yardReceiving, sublist: [],  isSelected: false, actionButtonWidget: null));
+
+       drawerList.add(DrawerModel(widget: const IssueToContractorPage(), icon: Icons.warning_amber_outlined,
+           label: AppString.hoto, sublist: [],  isSelected: false, actionButtonWidget: null));
        return drawerList;
-    }catch(e){
+
+    } catch(e){
       return null;
     }
   }
-
-
-  static Widget _rousurveyInsertAction({required BuildContext context}) {
-    return Row(
-      children: [
-         IconButton(onPressed: () {
-          /* BlocProvider.of<AddRouteSurveyBloc>(context).add(AddRouteSurveyPageLoadEvent(context: context));
-           Navigator.push(context,
-               MaterialPageRoute(builder: (_) => const  AddRouteSurveyPage()));*/
-         }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _bendingActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-        /*  BlocProvider.of<AddBendingBloc>(context).add(AddBendingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddBendingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _weldingActionButton({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-         /* BlocProvider.of<AddWeldingBloc>(context).add(AddWeldingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddWeldingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _backFillingActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-        /*  BlocProvider.of<AddBackFillingBloc>(context).add(AddBackFillingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddBackFillingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-
-  static Widget _clearingGradingAction({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-         /* BlocProvider.of<AddClearingGradingBloc>(context).add(AddClearingGradingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddClearingGradingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _soilresistivityinsertActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-         /* BlocProvider.of<AddSoilResistivityBloc>(context).add(AddSoilResistivityPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddSoilResistivityPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _rouHandoverActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-         /* BlocProvider.of<AddRouHandoverBloc>(context).add(AddRouHandoverLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddRouHandoverPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _trenchingActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-        /*  BlocProvider.of<AddTrenChingBloc>(context).add(AddTrenChingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddTrenChingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Widget _stringingActionWidget({required BuildContext context}) {
-    return Row(
-      children: [
-        IconButton(onPressed: () {
-         /* BlocProvider.of<AddStringingBloc>(context).add(AddStringingPageLoadEvent(context: context));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const  AddStringingPage()));*/
-        }, icon: const Icon(Icons.add)),
-
-        IconButton(onPressed: () {
-
-        }, icon: const Icon(Icons.filter_alt_outlined)),
-      ],
-    );
-  }
-
-  static Future<dynamic> fetchSystemAdminSubList() async {
-
-    try{
-      List<DrawerSubModel> drawerSubList = [];
-      drawerSubList.add(DrawerSubModel(
-        label: 'Add User',
-        widget: Container(),
-        isSelected: false,
-      ));
-
-      drawerSubList.add(DrawerSubModel(
-        label: 'Update User',
-        widget: Container(),
-        isSelected: false,
-      ));
-
-      drawerSubList.add(DrawerSubModel(
-        label: 'Update Company',
-        widget: Container(),
-        isSelected: false,
-      ));
-      return drawerSubList;
-    }catch(e){
-      return null;
-    }
-  }
-
-  static Future<dynamic> fetchAppBottomBarItems({required BuildContext context, 
-            required RoleType appModule}) async {
-     try{
-       List<BottomNavigationBarItem> bottomNavigationBarItemList = [];
-
-/*         if (appModule == RoleType.serviceCenter){
-            bottomNavigationBarItemList.add(BottomNavigationBarItem(
-              icon: const Icon(Icons.fire_truck_outlined,),
-              label: AppString.running,
-            ));
-            bottomNavigationBarItemList.add(BottomNavigationBarItem(
-              icon: const Icon(Icons.assignment_outlined,),
-              label: AppString.assign,
-            ));
-
-            bottomNavigationBarItemList.add(BottomNavigationBarItem(
-              icon: const Icon(Icons.person_pin,),
-              label: AppString.profile,
-            ));
-          }*/
-
-          return bottomNavigationBarItemList;
-     }catch(e){
-   //    SnackBarErrorWidget(context).show(message: "Bottom Bar Error");
-       return null;
-     }
-  }
-
-  static Future<dynamic> fetchPageWidgets({required BuildContext context,
-    required RoleType appModule}) async {
-    try{
-      List<Widget> pageWidgetList = [];
-      return pageWidgetList;
-    }catch(e){
-    //  SnackBarErrorWidget(context).show(message: "Page Widget Error");
-      return null;
-    }
-  }
-
 }

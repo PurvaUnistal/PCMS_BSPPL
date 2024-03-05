@@ -70,11 +70,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             Utils.successSnackBar(msg:
                 "${res.posts!.status.type.toString()}fully Login",
               context:   event.context);
-            await PreferenceUtil.setString(
-                key: PreferenceValue.email, value: emailId.toString());
-            await PreferenceUtil.setString(
-                key: PreferenceValue.password, value: password.toString());
-
+            await PreferenceUtil.setString(key: PreferenceValue.email, value: emailId.toString());
+            await PreferenceUtil.setString(key: PreferenceValue.password, value: password.toString());
+            await PreferenceUtil.setString(key: PreferenceValue.userId, value: res.posts!.status.value.split(",")[0].toString());
+            await PreferenceUtil.setString(key: PreferenceValue.userName, value: res.posts!.status.value.split(",")[1].toString());
+            await PreferenceUtil.setString(key: PreferenceValue.grpType, value: res.posts!.status.value.split(",")[2].toString());
+            await PreferenceUtil.setString(key: PreferenceValue.sectionId, value: res.posts!.status.value.split(",")[3].toString());
             Navigator.pushReplacementNamed(
                 event.context, RoutesName.homePage);
           } else if (res.posts!.status.type == "Failed") {

@@ -35,7 +35,21 @@ class SelectWeatherEvent extends RouteSurveyEvent{
   @override
   List<Object?> get props => [weatherValue];
 }
+class SelectSectionLengthEvent extends RouteSurveyEvent{
+  @override
+  List<Object?> get props => [];
+}
+class SelectCameraCaptureEvent extends RouteSurveyEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
+class SelectGalleryCaptureEvent extends RouteSurveyEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 class RouteSurveySubmitEvent extends RouteSurveyEvent{
   final BuildContext context;
   RouteSurveySubmitEvent({ required this.context});

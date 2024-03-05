@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
@@ -19,6 +21,8 @@ class TrenchingPageLoadState extends TrenchingState{
 }
 class TrenchingFetchDataState extends TrenchingState{
   final bool isPageLoader;
+  final bool isLoader;
+  final File photo;
   final AlignSheetModel? alignSheetValue;
   final JointTypeModel? jointTypeFromValue;
   final JointTypeModel? jointTypeToValue;
@@ -44,6 +48,8 @@ class TrenchingFetchDataState extends TrenchingState{
   final TextEditingController activityRemarkController;
   TrenchingFetchDataState({
     required this.isPageLoader,
+    required this.isLoader,
+    required this.photo,
     required this.alignSheetValue,
     required this.jointTypeFromValue,
     required this.jointTypeToValue,
@@ -72,6 +78,8 @@ class TrenchingFetchDataState extends TrenchingState{
   // TODO: implement props
   List<Object?> get props => [
    isPageLoader,
+    isLoader,
+    photo,
    alignSheetValue,
    jointTypeFromValue,
    jointTypeToValue,

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Server/app_url.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/Utils/utils.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class RouteSurveyHelper{
     required BuildContext context,
     required String date,
     required reportNumber,
+    required alignmentSheet,
     required chainageFrom,
     required chainageTo,
   }) async{
@@ -46,6 +48,10 @@ class RouteSurveyHelper{
       }
       if(reportNumber.isEmpty){
         Utils.errorSnackBar(msg: AppValidation.reportNoValid,context:  context);
+        return false;
+      }
+      if(alignmentSheet.isEmpty){
+        Utils.errorSnackBar(msg: AppValidation.alignmentSheetValid,context:  context);
         return false;
       }
       if(chainageFrom.isEmpty){
@@ -67,7 +73,6 @@ class RouteSurveyHelper{
   static Future<dynamic> submitData({
     required BuildContext context,
     required String date,
-    required String sectionID,
     required String mrChainageFrom,
     required String mrChainageTo,
     required String trReportNumber,
@@ -82,11 +87,14 @@ class RouteSurveyHelper{
     required String chainage,
     required String others,
     required String remarks,
-    required File photo,
+    required String photo,
   }) async {
+    String userId =  await PreferenceUtil.getString(key: PreferenceValue.userId);
+    String sectionId =  await PreferenceUtil.getString(key: PreferenceValue.sectionId);
     var json = {
       "type": "rou",
-      "SectionID": sectionID,
+      "UserID": userId,
+      "SectionID": sectionId,
       "MR_Chainage_From": mrChainageFrom,
       "MR_Chainage_To":mrChainageTo,
       "TR_Report_Number": trReportNumber,
@@ -104,12 +112,20 @@ class RouteSurveyHelper{
       "TN_Remarks": remarks,
     };
     try{
-      var res = await ApiServer.postDataWithFile(context: context,body: json, keyWord: "Photo",
-          filePath: photo.path.toString());
-      if(res != null){
-      //  return alignSheetModelFromJson(res);
+      if (!context.mounted) return;
+      var res = await ApiServer.postDataWithFile(context: context,body: json,
+          keyWord: "Photo",filePath: photo.toString());
+      if(res.toString().contains("1") && res != null){
+        if (!context.mounted) return;
+        Utils.successSnackBar(msg: "Route Survey Added Successfully.",context:  context);
+        return res;
+      } else  if(res.toString().contains("0") && res != null){
+        if (!context.mounted) return;
+        Utils.errorSnackBar(msg: "Something Wrong.",context:  context);
+        return null;
       }
     } catch(e){
+      if (!context.mounted) return;
       log("catchLogin-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(),context:  context);
       return null;

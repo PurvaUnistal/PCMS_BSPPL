@@ -34,4 +34,22 @@ class SelectCoatingOkValueEvent extends StringingEvent{
   List<Object?> get props => [checkYes,checkNo];
 }
 
+class SelectCameraCaptureEvent extends StringingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends StringingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class StringingSubmitEvent extends StringingEvent{
+  final BuildContext context;
+  StringingSubmitEvent({ required this.context});
+  @override
+  List<Object?> get props => [context];
+}
 

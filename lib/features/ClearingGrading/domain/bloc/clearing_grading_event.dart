@@ -41,3 +41,28 @@ class SelectTerrainEvent extends ClearingGradingEvent{
   @override
   List<Object?> get props => [terrainValue];
 }
+
+
+class SelectSectionLengthEvent extends ClearingGradingEvent{
+  @override
+  List<Object?> get props => [];
+}
+
+class SelectCameraCaptureEvent extends ClearingGradingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends ClearingGradingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class ClearingGradingSubmitEvent extends ClearingGradingEvent{
+  final BuildContext context;
+  ClearingGradingSubmitEvent({ required this.context});
+  @override
+  List<Object?> get props => [context];
+}

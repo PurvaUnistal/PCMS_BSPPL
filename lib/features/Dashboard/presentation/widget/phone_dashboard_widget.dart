@@ -12,6 +12,16 @@ class PhoneDashboardWidget extends StatefulWidget {
 }
 
 class _PhoneDashboardWidgetState extends State<PhoneDashboardWidget> {
+  final ScrollController listScrollController = ScrollController();
+
+  @override
+  void initState() {
+    listScrollController.addListener(_scrollListener);
+    super.initState();
+  }
+  _scrollListener() {
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
@@ -29,6 +39,8 @@ class _PhoneDashboardWidgetState extends State<PhoneDashboardWidget> {
     return Container(
        margin: const EdgeInsets.all(10.0),
        child:  ListView.builder(
+           controller: listScrollController,
+           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
            itemCount: dataState.drawerList.length,
            itemBuilder: (context, index) {
            return index != 0 ?

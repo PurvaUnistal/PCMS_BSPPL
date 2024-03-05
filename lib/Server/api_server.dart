@@ -7,6 +7,7 @@ import 'package:bsppl/Server/app_url.dart';
 import 'package:bsppl/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -85,7 +86,7 @@ class ApiServer {
       if(response.statusCode == 200){
         var responseData = await response.stream.toBytes();
         var result = json.decode(String.fromCharCodes(responseData));
-        log(result.toString());
+        log("result-->${result.toString()}");
         return result;
       } else if(response.statusCode == 415){
         var responseData = await response.stream.toBytes();
@@ -104,5 +105,18 @@ class ApiServer {
       log(e.toString());
       return null;
     }
+  }
+
+
+  static  Future<File?> cameraCapture() async {
+    final XFile? file = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 5);
+    File files = File(file!.path);
+    return files;
+  }
+
+  static Future<File?> galleryCapture() async {
+    final XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 5);
+    File files = File(file!.path);
+    return files;
   }
 }

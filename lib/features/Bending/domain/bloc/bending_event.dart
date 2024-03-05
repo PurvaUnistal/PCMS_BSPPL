@@ -60,3 +60,27 @@ class SelectHolidayEvent extends BendEvent{
   @override
   List<Object?> get props => [holidayValue];
 }
+
+class SelectSectionLengthEvent extends BendEvent{
+  @override
+  List<Object?> get props => [];
+}
+
+class SelectCameraCaptureEvent extends BendEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends BendEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class BendSubmitEvent extends BendEvent{
+  final BuildContext context;
+  BendSubmitEvent({ required this.context});
+  @override
+  List<Object?> get props => [context];
+}

@@ -47,3 +47,25 @@ class SelectWeatherEvent extends TrenchingEvent{
   @override
   List<Object?> get props => [weatherValue];
 }
+
+class SelectSectionLengthEvent extends TrenchingEvent{
+  @override
+  List<Object?> get props => [];
+}
+class SelectCameraCaptureEvent extends TrenchingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends TrenchingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+class TrenchingSubmitEvent extends TrenchingEvent{
+  final BuildContext context;
+  TrenchingSubmitEvent({ required this.context});
+  @override
+  List<Object?> get props => [context];
+}

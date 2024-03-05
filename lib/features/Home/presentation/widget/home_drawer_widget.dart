@@ -7,6 +7,7 @@ import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/Home/domain/bloc/home_bloc.dart';
 import 'package:bsppl/features/Home/domain/model/drawer_model.dart';
+import 'package:bsppl/features/Home/presentation/widget/logout_widget.dart';
 import 'package:bsppl/features/Login/domain/model/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeDrawerWidget extends StatelessWidget {
   HomeDrawerWidget({super.key});
 
-  /*final LoginModel _userData =  UserInfo.instance.userData;
-  LoginModel get userData => _userData;
-*/
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
@@ -192,10 +190,10 @@ class HomeDrawerWidget extends StatelessWidget {
           bottom:  MediaQuery.of(context).size.width * 0.02),
       child: GestureDetector(
         onTap: () {
-          /*showModalBottomSheet(
+          showModalBottomSheet(
               context: context,
               builder: (context) => const LogoutWidget()
-          );*/
+          );
         },
         child: Row(
           children: [
@@ -203,9 +201,7 @@ class HomeDrawerWidget extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.03,
             ),
-            TextWidget(AppString.logout,
-              fontSize: AppFont.font_12,
-            ),
+            Text(AppString.logout,),
           ],
         ),
       ),

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bsppl/features/ClearingGrading/domain/model/terrain_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +23,17 @@ class RouteHandOverInitialState extends RouteHandOverState{
 
 class RouteHandOverFetchDataState extends RouteHandOverState{
   final bool isPageLoader;
+  final bool isLoader;
+  final File photo;
   final TextEditingController dateController;
   final TextEditingController reportNumberController;
   final WeatherModel? weatherValue;
   final List<WeatherModel> weatherList;
+  final TerrainModel? terrainValue;
+  final List<TerrainModel> terrainList;
   final TextEditingController chainageFromController;
   final TextEditingController chainageToController;
+  final TextEditingController sectionLengthController;
   final TextEditingController terrainController;
   final TextEditingController skippingController;
   final TextEditingController hindranceController;
@@ -34,12 +42,17 @@ class RouteHandOverFetchDataState extends RouteHandOverState{
 
   RouteHandOverFetchDataState({
     required this.isPageLoader,
+    required this.isLoader,
+    required this.photo,
     required this.dateController,
     required this.reportNumberController,
     required this.weatherValue,
     required this.weatherList,
+    required this.terrainValue,
+    required this.terrainList,
     required this.chainageFromController,
     required this.chainageToController,
+    required this.sectionLengthController,
     required this.terrainController,
     required this.skippingController,
     required this.hindranceController,
@@ -50,13 +63,18 @@ class RouteHandOverFetchDataState extends RouteHandOverState{
   // TODO: implement props
   List<Object?> get props => [
    isPageLoader,
+    isLoader,
+    photo,
    dateController,
    reportNumberController,
    weatherValue,
    weatherList,
+    terrainValue,
+    terrainList,
    chainageFromController,
    chainageToController,
    terrainController,
+    sectionLengthController,
    skippingController,
    hindranceController,
    panchnamaController,

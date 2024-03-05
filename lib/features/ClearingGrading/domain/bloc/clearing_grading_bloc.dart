@@ -1,4 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/features/ClearingGrading/domain/bloc/clearing_grading_event.dart';
 import 'package:bsppl/features/ClearingGrading/domain/bloc/clearing_grading_state.dart';
 import 'package:bsppl/features/ClearingGrading/domain/model/terrain_model.dart';
@@ -17,10 +21,20 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
     on<SelectAlignmentEvent>(_selectAlignment);
     on<SelectWeatherEvent>(_selectWeather);
     on<SelectTerrainEvent>(_selectTerrain);
+    on<SelectSectionLengthEvent>(_sectionLength);
+    on<SelectCameraCaptureEvent>(_selectCameraCapture);
+    on<SelectGalleryCaptureEvent>(_selectGalleryCapture);
+    on<ClearingGradingSubmitEvent>(_submit);
 
   }
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
+
+  bool _isLoader = false;
+  bool get isLoader => _isLoader;
+
+  File _photo = File("");
+  File get photo => _photo;
 
   AlignSheetModel? alignSheetValue;
   WeatherModel? weatherValue;
@@ -48,11 +62,14 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
   TextEditingController chainageController =  TextEditingController();
   TextEditingController locationBoundaryController =  TextEditingController();
   TextEditingController distanceController =  TextEditingController();
+  TextEditingController typeGrpController =  TextEditingController();
   TextEditingController activityRemarkController = TextEditingController();
 
   _pageLoad(ClearingGradingPageLoadEvent event, emit) async {
     emit(ClearingGradingPageLoadState());
     _isPageLoader= false;
+    _isLoader = false;
+    _photo = File("");
     dateController.text = "";
     reportNumberController.text = "";
     chainageFromController.text = "";
@@ -66,6 +83,7 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
     chainageController.text = "";
     locationBoundaryController.text = "";
     distanceController.text = "";
+    typeGrpController.text = "";
     activityRemarkController.text = "";
     alignSheetValue = AlignSheetModel();
     weatherValue = WeatherModel();
@@ -73,6 +91,7 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
     _alignSheetList = [];
     _weatherList = [];
     _terrainList = [];
+    typeGrpController.text =  await PreferenceUtil.getString(key: PreferenceValue.grpType);
     _weatherList = WeatherModel.getWeatherData();
     _terrainList = TerrainModel.getTerrainData();
     await fetchAlignSheet(context: event.context);
@@ -114,9 +133,40 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
     _eventComplete(emit);
   }
 
+  _sectionLength(SelectSectionLengthEvent event, emit) {
+    final chainageFromValue = double.parse(chainageFromController.text.toString());
+    final chainageToValue = double.parse(chainageToController.text.toString());
+    log("sectionLengthController${sectionLengthController}");
+    sectionLengthController.text = (chainageToValue - chainageFromValue).toString();
+    _eventComplete(emit);
+  }
+
+  _selectCameraCapture(SelectCameraCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.cameraCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _selectGalleryCapture(SelectGalleryCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.galleryCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+  _submit(ClearingGradingSubmitEvent event, emit){
+
+  }
+
   _eventComplete(Emitter<ClearingGradingState>emit) {
     emit(ClearingGradingFetchDataState(
-      isPageLoader: isPageLoader ,
+      isPageLoader: isPageLoader,
+      isLoader: isLoader,
+      photo: photo,
       dateController:  dateController,
       reportNumberController: reportNumberController ,
       alignSheetValue: alignSheetValue,
@@ -125,18 +175,19 @@ class ClearingGradingBloc extends Bloc<ClearingGradingEvent, ClearingGradingStat
       weatherList: weatherList ,
       chainageFromController: chainageFromController ,
       chainageToController: chainageToController ,
-      sectionLengthController: sectionLengthController ,
-      ipNoFromController: ipNoFromController ,
+      sectionLengthController: sectionLengthController,
+      ipNoFromController: ipNoFromController,
       ipNoToController: ipNoToController ,
-      tpNoFromController: tpNoFromController ,
-      tpNoToController: tpNoToController ,
-      terrainValue:terrainValue ,
-      terrainList: terrainList ,
-      structureNameController: structureNameController ,
-      chainageController: chainageController ,
-      locationBoundaryController: locationBoundaryController ,
-      distanceController: distanceController ,
-      activityRemarkController: activityRemarkController ,
+      tpNoFromController: tpNoFromController,
+      tpNoToController: tpNoToController,
+      terrainValue:terrainValue,
+      terrainList: terrainList,
+      structureNameController: structureNameController,
+      chainageController: chainageController,
+      locationBoundaryController: locationBoundaryController,
+      distanceController: distanceController,
+      typeGrpController: typeGrpController,
+      activityRemarkController: activityRemarkController,
     ));
   }
 

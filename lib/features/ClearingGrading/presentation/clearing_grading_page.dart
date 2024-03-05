@@ -1,14 +1,19 @@
+import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
+import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/ClearingGrading/domain/bloc/clearing_grading_bloc.dart';
 import 'package:bsppl/features/ClearingGrading/domain/bloc/clearing_grading_event.dart';
 import 'package:bsppl/features/ClearingGrading/domain/bloc/clearing_grading_state.dart';
 import 'package:bsppl/features/ClearingGrading/domain/model/terrain_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,10 +86,14 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
             _verticalSpace(),
             _distanceController(dataState: dataState),
             _verticalSpace(),
+            _groundTypeController(dataState: dataState),
+            _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
+            _photo(dataState: dataState),
             _verticalSpace(),
-            _button(),
+            _verticalSpace(),
+            _button(dataState: dataState),
           ],
         ),
       ),
@@ -93,9 +102,10 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _dateController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
+      star: AppString.star,
       label: AppString.date,
       hintText: AppString.date,
+      enabled: true,
       controller: dataState.dateController,
       onTap: () {
         BlocProvider.of<ClearingGradingBloc>(context).add(
@@ -106,6 +116,7 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _reportNumberController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
       controller: dataState.reportNumberController,
@@ -114,9 +125,10 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _alignmentDropdown({required ClearingGradingFetchDataState dataState}) {
     return DropdownWidget<AlignSheetModel>(
-      dropdownValue:  dataState.alignSheetValue!.alignmentId != null ? dataState.alignSheetValue : null,
+      star: AppString.star,
       label: AppString.selectAlignment,
       hint: AppString.selectAlignment,
+      dropdownValue:  dataState.alignSheetValue!.alignmentId != null ? dataState.alignSheetValue : null,
       items: dataState.alignSheetList,
       onChanged: (value) {
         BlocProvider.of<ClearingGradingBloc>(context).add(
@@ -141,6 +153,7 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _chainageFromController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageFrom,
       hintText: AppString.chainageFrom,
@@ -150,6 +163,7 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _chainageToController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageTo,
       hintText: AppString.chainageTo,
@@ -159,9 +173,11 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _sectionLengthController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
-      keyboardType: TextInputType.number,
+      star: AppString.star,
       label: AppString.sectionLength,
       hintText: AppString.sectionLength,
+      enabled: false,
+      keyboardType: TextInputType.number,
       controller: dataState.sectionLengthController,
     );
   }
@@ -216,7 +232,7 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
 
   Widget _structureNameController({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 2,
+      maxLine: 2,
       label: AppString.structureName,
       hintText: AppString.structureName,
       controller: dataState.structureNameController,
@@ -249,21 +265,98 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
     );
   }
 
+  Widget _groundTypeController({required ClearingGradingFetchDataState dataState}) {
+    return TextFieldWidget(
+      enabled: false,
+      keyboardType: TextInputType.text,
+      label: AppString.groundType,
+      hintText: AppString.groundType,
+      controller: dataState.typeGrpController,
+    );
+  }
+
+  Widget _photo({required ClearingGradingFetchDataState dataState}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width/3,
+      height:MediaQuery.of(context).size.width/3,
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              enableDrag: true,
+              isScrollControlled: true,
+              context: context, builder: (BuildContext context){
+            return  ImagePopWidget(
+              onTapCamera: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<ClearingGradingBloc>(context).add(SelectCameraCaptureEvent());
+              },
+              onTapGallery: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<ClearingGradingBloc>(context).add(SelectGalleryCaptureEvent());
+              },
+            );
+          });
+        },
+        child: DottedBorder(
+          color: AppColor.grey,
+          strokeWidth: 1,
+          child: dataState.photo.path == ""
+              ||dataState.photo.path.isEmpty ?
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(child: Icon(Icons.photo_camera_back_outlined),),
+              Padding(
+                padding:  EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                child: TextWidget(AppString.photo,
+                  fontSize: 12,
+                  color: AppColor.grey,),
+              ),
+            ],
+          ):Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.file(
+                    dataState.photo,
+                    fit: BoxFit.fill,
+                    width: MediaQuery.of(context).size.width/3,
+                    height: MediaQuery.of(context).size.width/4.5 ,
+                  )
+                ],
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width/3,
+                  height:MediaQuery.of(context).size.width/3,
+                  color : Colors.white.withOpacity(0.6),
+                  child: Center(child: Icon(Icons.refresh, color: AppColor.appBlueColor,))),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _activityRemark({required ClearingGradingFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
       controller: dataState.activityRemarkController,
     );
   }
 
-  Widget _button() {
-    return  ButtonWidget(text: "Submit",
+  Widget _button({required ClearingGradingFetchDataState dataState}) {
+    return dataState.isLoader == false ? ButtonWidget(
+        text: AppString.submit,
         onPressed: () {
-          //    BlocProvider.of<AddClearingGradingBloc>(context).add(AddClearingGradingSubmitDataEvent(context: context));
+              BlocProvider.of<ClearingGradingBloc>(context).add(ClearingGradingSubmitEvent(context: context));
         }
-    );
+    ) : const DottedLoaderWidget();
   }
 
 

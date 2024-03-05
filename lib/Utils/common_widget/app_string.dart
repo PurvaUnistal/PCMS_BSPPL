@@ -6,6 +6,10 @@ class AppString{
 
 
 
+  static String photo = "Photo";
+  static String star = "* ";
+
+
   static String login = "Login";
   static String qrScan = "Scan any QR";
   static String submit = "Submit";
@@ -35,7 +39,7 @@ class AppString{
 
 
   static get date => "Date";
-  static get selectAlignment => "Select Sheet No.";
+  static get selectAlignment => "Select Alignment Sheet No.";
   static get selectWeather => "Select Weather";
   static get chainageFrom => "Chainage From";
   static get enterNrcd => "Enter NRCD";
@@ -74,7 +78,7 @@ class AppString{
   ///
   static get yes => "Yes";
   static get no => "No";
-  static get coatingOk => "Coating Ok";
+  static get coatingOk => "Concrete Coating";
   static get km => "KM";
   static get jointNo => "Joint Number";
   static get suffix => "Suffix";
@@ -103,7 +107,7 @@ class AppString{
   static get manufacturingDate => "Manufacturing Date";
   static get expectedDate => "Expected Date";
   static get selectCustomerComplaint => "Select Customer Complaint";
-  static get routeSurvey => "Route Survey";
+  static get routeSurvey => " Activity - Route Survey";
   static get yardReceiving => "Yard Receiving";
   static get hoto => "Hoto";
   static get clearingGrading => "Clearing & Grading";
@@ -287,6 +291,7 @@ class AppValidation{
   static String passwordValidation = "Please enter password";
   static String dateValid = "Select the date";
   static String reportNoValid = "Enter the Report Number";
+  static String alignmentSheetValid = "Enter the Alignment Sheet";
   static String chainageFromValid = "Enter the Chainage From";
   static String chainageToValid = "Enter the Chainage To";
 }
@@ -299,4 +304,9 @@ class Assets{
 class PreferenceValue {
   static get email => "emailKey";
   static get password => "passwordKey";
+  static get loginValue => "loginValue";
+  static get grpType => "grpType";
+  static get userId => "userId";
+  static get userName => "userName";
+  static get sectionId => "sectionId";
 }

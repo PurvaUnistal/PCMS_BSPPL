@@ -1,5 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_event.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_state.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
@@ -15,12 +19,21 @@ class RouteSurveyBloc extends Bloc<RouteSurveyEvent, RouteSurveyState>{
     on<SelectDateEvent>(_selectDate);
     on<SelectAlignmentEvent>(_selectAlignment);
     on<SelectWeatherEvent>(_selectWeather);
+    on<SelectSectionLengthEvent>(_sectionLength);
+    on<SelectCameraCaptureEvent>(_selectCameraCapture);
+    on<SelectGalleryCaptureEvent>(_selectGalleryCapture);
     on<RouteSurveySubmitEvent>(_submit);
 
   }
 
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
+
+  bool _isLoader = false;
+  bool get isLoader => _isLoader;
+
+  File _photo = File("");
+  File get photo => _photo;
 
   AlignSheetModel? alignSheetValue;
   WeatherModel? weatherValue;
@@ -45,6 +58,8 @@ class RouteSurveyBloc extends Bloc<RouteSurveyEvent, RouteSurveyState>{
   _pageLoad(RouteSurveyPageLoadEvent event, emit) async {
     emit(RouteSurveyPageLoadState());
     _isPageLoader = false;
+    _isLoader = false;
+    _photo = File("");
     dateController.text = "";
     reportNumberController.text = "";
     chainageFromController.text = "";
@@ -59,6 +74,7 @@ class RouteSurveyBloc extends Bloc<RouteSurveyEvent, RouteSurveyState>{
     alignSheetValue = AlignSheetModel();
     weatherValue = WeatherModel();
     _weatherList = WeatherModel.getWeatherData();
+    typeGrpController.text =  await PreferenceUtil.getString(key: PreferenceValue.grpType);
     await fetchAlignSheet(context: event.context);
     _eventComplete(emit);
   }
@@ -95,12 +111,88 @@ class RouteSurveyBloc extends Bloc<RouteSurveyEvent, RouteSurveyState>{
     _eventComplete(emit);
   }
 
-  _submit(RouteSurveySubmitEvent event, state){
-
+  _sectionLength(SelectSectionLengthEvent event, emit) {
+    final chainageFromValue = double.parse(chainageFromController.text.toString());
+    final chainageToValue = double.parse(chainageToController.text.toString());
+    log("sectionLengthController${sectionLengthController}");
+    sectionLengthController.text = (chainageToValue - chainageFromValue).toString();
+    _eventComplete(emit);
   }
+
+  _selectCameraCapture(SelectCameraCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.cameraCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _selectGalleryCapture(SelectGalleryCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.galleryCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _submit(RouteSurveySubmitEvent event, emit) async {
+    var validationCheck = await RouteSurveyHelper.validation(
+        context: event.context,
+        date: dateController.text.toString(),
+        reportNumber: reportNumberController.text.toString(),
+        alignmentSheet : alignSheetValue!.alignmentId.toString(),
+        chainageFrom: chainageFromController.text.toString(),
+        chainageTo: chainageToController.text.toString());
+    if(validationCheck != null){
+      _isLoader =  true;
+      _eventComplete(emit);
+      var res = await RouteSurveyHelper.submitData(
+          context: event.context,
+          date: dateController.text.trim().toString(),
+          mrChainageFrom: chainageFromController.text.trim().toString(),
+          mrChainageTo: chainageToController.text.trim().toString(),
+          trReportNumber: reportNumberController.text.trim().toString(),
+          alignmentSheet: alignSheetValue!.alignmentId.toString(),
+          weather: weatherValue!.id.toString(),
+          bearingangle: "",
+          ipChainage: "",
+          nameStructure: "",
+          ipNo: tpIpController.text.trim().toString(),
+          tpRemark: noteController.text.trim().toString(),
+          terrian: "",
+          chainage: "",
+          others: structureDetailController.text.trim().toString(),
+          remarks: activityRemarkController.text.trim().toString(),
+          photo: photo.path.toString());
+      _isLoader =  false;
+      _eventComplete(emit);
+      if(res != null){
+        _isPageLoader = false;
+        _isLoader = false;
+        _photo = File("");
+        dateController.text = "";
+        reportNumberController.text = "";
+        chainageFromController.text = "";
+        chainageToController.text = "";
+        sectionLengthController.text = "";
+        typeGrpController.text = "";
+        tpIpController.text = "";
+        noteController.text = "";
+        structureDetailController.text = "";
+        activityRemarkController.text = "";
+        alignSheetValue = AlignSheetModel();
+        weatherValue = WeatherModel();
+      }
+    }
+    }
+
   _eventComplete(Emitter<RouteSurveyState>emit) {
     emit(FetchRouteSurveyDataState(
       isPageLoader: isPageLoader,
+      isLoader: isLoader,
+      photo: photo,
       dateController: dateController,
       reportNumberController: reportNumberController,
       alignSheetValue: alignSheetValue,
@@ -113,8 +205,8 @@ class RouteSurveyBloc extends Bloc<RouteSurveyEvent, RouteSurveyState>{
       typeGrpController: typeGrpController,
       tpIpController:tpIpController ,
       noteController: noteController,
-      structureDetailController:structureDetailController ,
-      activityRemarkController:activityRemarkController ,
+      structureDetailController:structureDetailController,
+      activityRemarkController:activityRemarkController,
 
     ));
   }

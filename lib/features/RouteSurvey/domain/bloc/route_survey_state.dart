@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:equatable/equatable.dart';
@@ -17,6 +19,8 @@ class RouteSurveyPageLoadState extends RouteSurveyInitialState {
 
 class FetchRouteSurveyDataState extends RouteSurveyInitialState{
   final bool isPageLoader;
+  final bool isLoader;
+  final File photo;
   final TextEditingController dateController;
   final TextEditingController reportNumberController;
   final AlignSheetModel? alignSheetValue;
@@ -34,6 +38,8 @@ class FetchRouteSurveyDataState extends RouteSurveyInitialState{
 
   FetchRouteSurveyDataState({
     required this.isPageLoader,
+    required this.isLoader,
+    required this.photo,
     required this.dateController,
     required this.reportNumberController,
     required this.alignSheetValue,
@@ -53,6 +59,8 @@ class FetchRouteSurveyDataState extends RouteSurveyInitialState{
   @override
   List<Object> get props => [
     isPageLoader,
+    isLoader,
+    photo,
     dateController,
     reportNumberController,
     alignSheetValue!,

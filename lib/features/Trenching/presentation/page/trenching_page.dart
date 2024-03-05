@@ -2,8 +2,12 @@ import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
+import 'package:bsppl/Utils/common_widget/img_layout.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
+import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_bloc.dart';
@@ -11,6 +15,7 @@ import 'package:bsppl/features/Trenching/domain/bloc/trenching_event.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_state.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
 import 'package:bsppl/features/Trenching/presentation/widget/card_widget.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -77,8 +82,10 @@ class _TrenchingPageState extends State<TrenchingPage> {
             _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
+            _photo(dataState: dataState),
             _verticalSpace(),
-            _button(),
+            _verticalSpace(),
+            _button(dataState: dataState),
           ],
         ),
       ),
@@ -87,6 +94,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _dateController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       enabled: true,
       label: AppString.date,
       hintText: AppString.date,
@@ -99,6 +107,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _reportNumberController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
         controller: dataState.reportNumberController,
@@ -108,6 +117,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _alignmentDropdown({required TrenchingFetchDataState dataState}) {
     return DropdownWidget<AlignSheetModel>(
+      star: AppString.star,
       dropdownValue:  dataState.alignSheetValue!.alignmentId != null ? dataState.alignSheetValue : null,
       hint: AppString.selectAlignment,
       label: AppString.selectAlignment,
@@ -124,7 +134,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
   Widget _jointFromCard({required TrenchingFetchDataState dataState}){
     return CardWidget(
       children: [
-        Text("Joint From",
+        Text("*  Joint From",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -167,6 +177,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _kmFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.km,
       hintText: AppString.km,
@@ -176,6 +187,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointTypeFromDropDown({required TrenchingFetchDataState dataState}) {
     return DropdownWidget<JointTypeModel>(
+      star: AppString.star,
       hint: AppString.selectJointType,
       label: AppString.selectJointType,
       dropdownValue: dataState.jointTypeFromValue?.name != null ? dataState.jointTypeFromValue : null,
@@ -189,6 +201,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointNoFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.jointNo,
       hintText: AppString.jointNo,
@@ -198,6 +211,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _suffixFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.text,
       label: AppString.suffix,
       hintText: AppString.suffix,
@@ -207,6 +221,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _kmToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.km,
       hintText: AppString.km,
@@ -216,6 +231,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointTypeToDropDown({required TrenchingFetchDataState dataState}) {
     return DropdownWidget<JointTypeModel>(
+      star: AppString.star,
       hint: AppString.selectJointType,
       label: AppString.selectJointType,
       dropdownValue: dataState.jointTypeToValue?.name != null ? dataState.jointTypeToValue : null,
@@ -229,6 +245,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointNoToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.jointNo,
       hintText: AppString.jointNo,
@@ -238,6 +255,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _suffixToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.text,
       label: AppString.suffix,
       hintText: AppString.suffix,
@@ -247,24 +265,33 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _chainageFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageFrom,
       hintText: AppString.chainageFrom,
        controller: dataState.chainageFromController,
+      onChanged: (val){
+        BlocProvider.of<TrenchingBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _chainageToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageTo,
       hintText: AppString.chainageTo,
          controller: dataState.chainageToController,
+      onChanged: (val){
+        BlocProvider.of<TrenchingBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _sectionLengthController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.sectionLength,
       hintText: AppString.sectionLength,
@@ -274,6 +301,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _trenchDepthController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.trenchingDepth,
       hintText: AppString.trenchingDepth,
@@ -314,18 +342,34 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _activityRemark({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
        controller: dataState.activityRemarkController,
     );
   }
-  Widget _button() {
-    return ButtonWidget(text: AppString.submit,
-        onPressed: () {
-          //    BlocProvider.of<AddLevellingBloc>(context).add(AddLevellingSubmitDataEvent(context: context));
-        }
+
+  Widget _photo({required TrenchingFetchDataState dataState}) {
+    return ImgLayoutWidget(
+      file: dataState.photo,
+      onTapCamera: () async {
+        Navigator.of(context).pop();
+        BlocProvider.of<TrenchingBloc>(context).add(SelectCameraCaptureEvent());
+      },
+      onTapGallery: () async {
+        Navigator.of(context).pop();
+        BlocProvider.of<TrenchingBloc>(context).add(SelectCameraCaptureEvent());
+      },
     );
+  }
+
+  Widget _button({required TrenchingFetchDataState dataState}) {
+    return dataState.isLoader == false ? ButtonWidget(
+        text: AppString.submit,
+        onPressed: () {
+              BlocProvider.of<TrenchingBloc>(context).add(TrenchingSubmitEvent(context: context));
+        }
+    ): const DottedLoaderWidget();
   }
 
 
@@ -335,4 +379,3 @@ class _TrenchingPageState extends State<TrenchingPage> {
     );
   }
 }
-

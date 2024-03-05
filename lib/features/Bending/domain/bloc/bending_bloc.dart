@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_event.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_state.dart';
 import 'package:bsppl/features/Bending/domain/model/bend_model.dart';
@@ -20,10 +22,19 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
     on<SelectGuagingEvent>(_selectGuaging);
     on<SelectDisbondingEvent>(_selectDisbonding);
     on<SelectHolidayEvent>(_selectHoliday);
+    on<SelectCameraCaptureEvent>(_selectCameraCapture);
+    on<SelectGalleryCaptureEvent>(_selectGalleryCapture);
+    on<BendSubmitEvent>(_submit);
   }
 
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
+
+  bool _isLoader = false;
+  bool get isLoader => _isLoader;
+
+  File _photo = File("");
+  File get photo => _photo;
 
   WeatherModel? weatherValue;
   BendModel? bendValue;
@@ -63,6 +74,8 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
 
   _pageLoad(BendPageLoadEvent event,emit) {
     _isPageLoader = false;
+    _isLoader = false;
+    _photo = File("");
     dateController.text = "";
     reportNumberController.text = "";
     chainageController.text = "";
@@ -141,9 +154,32 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
   }
 
 
+  _selectCameraCapture(SelectCameraCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.cameraCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _selectGalleryCapture(SelectGalleryCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.galleryCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+  _submit(BendSubmitEvent event, emit){
+
+  }
+
   _eventComplete(Emitter<BendState>emit) {
     emit(BendFetchDataState(
-      isPageLoader: isPageLoader ,
+      isPageLoader: isPageLoader,
+      isLoader: isLoader,
+      photo: photo,
       weatherValue: weatherValue ,
       bendValue: bendValue ,
       visualValue: visualValue ,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/Bending/domain/model/bend_model.dart';
 import 'package:bsppl/features/Bending/domain/model/check_model.dart';
 import 'package:bsppl/features/Bending/domain/model/holiday_model.dart';
@@ -19,6 +21,8 @@ class BendPageLoadState extends BendState {
 
 class BendFetchDataState extends BendState {
   bool isPageLoader;
+  final bool isLoader;
+  final File photo;
   WeatherModel? weatherValue;
   BendModel? bendValue;
   CheckModel? visualValue;
@@ -44,6 +48,8 @@ class BendFetchDataState extends BendState {
 
   BendFetchDataState({
     required this.isPageLoader,
+    required this.isLoader,
+    required this.photo,
     required this.weatherValue,
     required this.bendValue,
     required this.visualValue,
@@ -68,14 +74,16 @@ class BendFetchDataState extends BendState {
     required this.activityRemarkController,
 });
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     isPageLoader,
-    weatherValue!,
-    bendValue!,
-    visualValue!,
-    guagingValue!,
-    disbondingValue!,
-    holidayValue!,
+    isLoader,
+    photo,
+    weatherValue,
+    bendValue,
+    visualValue,
+    guagingValue,
+    disbondingValue,
+    holidayValue,
     weatherList,
     bendList,
     visualList,

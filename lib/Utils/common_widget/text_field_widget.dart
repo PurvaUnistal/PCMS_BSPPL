@@ -93,7 +93,7 @@ class TextFieldWidget extends StatelessWidget {
         ),
         hintStyle: Styles.labels,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+        contentPadding:  EdgeInsets.symmetric(horizontal: 5.0, vertical: maxLine != null ? 8 : 0),
         border: border,
         focusedBorder: border,
         disabledBorder: border,

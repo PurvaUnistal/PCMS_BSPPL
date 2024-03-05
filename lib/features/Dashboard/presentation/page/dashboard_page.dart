@@ -26,9 +26,6 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context, state) {
         if(state is FetchDashboardDataState){
           return const PhoneDashboardWidget();
-          /*return AppConfig.getDeviceType(context: context) == DeviceType.phone
-              ? const PhoneDashboardWidget()
-              : const TabletDashboardWidget();*/
         } else {
           return const Center(child: CenterLoaderWidget());
         }

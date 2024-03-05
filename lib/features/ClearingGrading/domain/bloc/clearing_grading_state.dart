@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/ClearingGrading/domain/model/terrain_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
@@ -16,31 +18,36 @@ class ClearingGradingPageLoadState extends ClearingGradingInitialState {
   List<Object> get props => [];
 }
 
-class ClearingGradingFetchDataState extends ClearingGradingInitialState{
-  final bool isPageLoader;
-  final TextEditingController dateController;
-  final TextEditingController reportNumberController;
-  final AlignSheetModel? alignSheetValue;
-  final List<AlignSheetModel> alignSheetList;
-  final WeatherModel? weatherValue;
-  final List<WeatherModel> weatherList;
-  final TextEditingController chainageFromController;
-  final TextEditingController chainageToController;
-  final TextEditingController sectionLengthController;
-  final TextEditingController ipNoFromController;
-  final TextEditingController ipNoToController;
-  final TextEditingController tpNoFromController;
-  final TextEditingController tpNoToController;
-  final TerrainModel? terrainValue;
-  final List<TerrainModel> terrainList;
-  final TextEditingController structureNameController;
-  final TextEditingController chainageController;
-  final TextEditingController locationBoundaryController;
-  final TextEditingController distanceController;
-  final TextEditingController activityRemarkController;
+class ClearingGradingFetchDataState extends ClearingGradingState{
+   bool isPageLoader;
+   bool isLoader;
+   File photo;
+   TextEditingController dateController;
+   TextEditingController reportNumberController;
+   AlignSheetModel? alignSheetValue;
+   List<AlignSheetModel> alignSheetList;
+   WeatherModel? weatherValue;
+   List<WeatherModel> weatherList;
+   TextEditingController chainageFromController;
+   TextEditingController chainageToController;
+   TextEditingController sectionLengthController;
+   TextEditingController ipNoFromController;
+   TextEditingController ipNoToController;
+   TextEditingController tpNoFromController;
+   TextEditingController tpNoToController;
+   TerrainModel? terrainValue;
+   List<TerrainModel> terrainList;
+   TextEditingController structureNameController;
+   TextEditingController chainageController;
+   TextEditingController locationBoundaryController;
+   TextEditingController distanceController;
+   TextEditingController typeGrpController;
+   TextEditingController activityRemarkController;
 
   ClearingGradingFetchDataState({
     required this.isPageLoader,
+    required this.isLoader,
+    required this.photo,
     required this.dateController,
     required this.reportNumberController,
     required this.alignSheetValue,
@@ -60,17 +67,19 @@ class ClearingGradingFetchDataState extends ClearingGradingInitialState{
     required this.chainageController,
     required this.locationBoundaryController,
     required this.distanceController,
+    required this.typeGrpController,
     required this.activityRemarkController,
   });
-
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     isPageLoader,
+    isLoader,
+    photo,
     dateController,
     reportNumberController,
-    alignSheetValue!,
+    alignSheetValue,
     alignSheetList,
-    weatherValue!,
+    weatherValue,
     weatherList,
     chainageFromController,
     chainageToController,
@@ -79,12 +88,13 @@ class ClearingGradingFetchDataState extends ClearingGradingInitialState{
     ipNoToController,
     tpNoFromController,
     tpNoToController,
-    terrainValue!,
+    terrainValue,
     terrainList,
     structureNameController,
     chainageController,
     locationBoundaryController,
     distanceController,
+    typeGrpController,
     activityRemarkController,
   ];
 }

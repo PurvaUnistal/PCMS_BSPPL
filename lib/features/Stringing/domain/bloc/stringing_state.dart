@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Stringing/domain/model/coating_ok_model.dart';
 import 'package:equatable/equatable.dart';
@@ -19,6 +21,8 @@ class StringingFetchDataState extends StringingState {
   bool isPageLoader;
   dynamic isYesValue;
   dynamic isNoValue;
+  final bool isLoader;
+  final File photo;
   WeatherModel? weatherValue;
   List<WeatherModel> weatherList;
   List<CoatingOkModel> coatingOkList;
@@ -32,6 +36,8 @@ class StringingFetchDataState extends StringingState {
     required this.isPageLoader,
     required this.isYesValue,
     required this.isNoValue,
+    required this.isLoader,
+    required this.photo,
     required this.weatherValue,
     required this.weatherList,
     required this.coatingOkList,
@@ -42,11 +48,13 @@ class StringingFetchDataState extends StringingState {
     required this.activityRemarkController,
   });
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     isPageLoader,
     isYesValue,
     isNoValue,
-    weatherValue!,
+    isLoader,
+    photo,
+    weatherValue,
     weatherList,
     coatingOkList,
     dateController,

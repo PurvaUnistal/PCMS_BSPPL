@@ -91,11 +91,7 @@ class _LoginViewState extends State<LoginView> {
     return TextFormFieldWidget(
       labelText: AppString.userName,
       hintText: AppString.userName,
-      /*prefixIcon: Icon(
-        Icons.email,
-        color: AppColor.appColor1,
-      ),
-      focusNode: emailFocusNode,*/
+      prefix: Icon(Icons.email, color: AppColor.appBlueColor),
       autofillHints: const [AutofillHints.email],
       onChanged: (val) {
         BlocProvider.of<LoginBloc>(context).add(
@@ -108,8 +104,7 @@ class _LoginViewState extends State<LoginView> {
     return TextFormFieldWidget(
       labelText: AppString.password,
       hintText: AppString.password,
-     /* prefixIcon: Icon(Icons.lock_outline, color: AppColor.appColor1),
-      focusNode: passwordFocusNode,*/
+      prefix: Icon(Icons.password, color: AppColor.appBlueColor),
       autofillHints: const [AutofillHints.password],
       obscureText: dataState.isPassword,
       suffixIcon: IconButton(

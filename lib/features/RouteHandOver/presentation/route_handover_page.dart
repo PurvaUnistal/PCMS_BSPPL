@@ -4,13 +4,17 @@ import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_search_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
+import 'package:bsppl/features/ClearingGrading/domain/model/terrain_model.dart';
 import 'package:bsppl/features/RouteHandOver/domain/bloc/route_hand_over_bloc.dart';
 import 'package:bsppl/features/RouteHandOver/domain/bloc/route_hand_over_event.dart';
 import 'package:bsppl/features/RouteHandOver/domain/bloc/route_hand_over_state.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,7 +65,9 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
             _verticalSpace(),
             _chainageToController(dataState: dataState),
             _verticalSpace(),
-            _terrainController(dataState: dataState),
+            _sectionLengthController(dataState: dataState),
+            _verticalSpace(),
+            _terrainDropDown(dataState: dataState),
             _verticalSpace(),
             _skippingController(dataState: dataState),
             _verticalSpace(),
@@ -71,8 +77,10 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
             _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
+            _photo(dataState: dataState),
             _verticalSpace(),
-            _button(),
+            _verticalSpace(),
+            _button(dataState: dataState),
           ],
         ),
       ),
@@ -81,11 +89,18 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
 
   Widget _dateController({required RouteHandOverFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.date,
-      enabled: false,
-      prefixIcon: Icon(
-        Icons.calendar_today,
-        color: AppColor.appBlueColor,
+      enabled: true,
+      suffixIcon:IconButton(
+        icon:  Icon(
+          Icons.calendar_today,
+          color: AppColor.appBlueColor,
+        ),
+        onPressed: (){
+          BlocProvider.of<RouteHandOverBloc>(context).add(
+              SelectDateEvent(context: context,));
+        },
       ),
       controller: dataState.dateController,
       onTap: () {
@@ -97,16 +112,17 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
 
   Widget _reportNumberController({required RouteHandOverFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
       keyboardType: TextInputType.number,
-      
-     // controller: dataState.reportNumberController,
+      controller: dataState.reportNumberController,
     );
   }
 
   Widget _weatherDropDown({required RouteHandOverFetchDataState dataState}) {
     return DropdownWidget<WeatherModel>(
+      star: AppString.star,
       label: AppString.selectWeather,
       hint: AppString.selectWeather,
       dropdownValue: dataState.weatherValue?.name != null ? dataState.weatherValue : null,
@@ -120,27 +136,51 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
 
   Widget _chainageFromController({required RouteHandOverFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.km,
-      hintText: AppString.km,
+      star: AppString.star,
+      label: AppString.chainageFrom,
+      hintText: AppString.chainageFrom,
       keyboardType: TextInputType.number,
      controller: dataState.chainageFromController,
+      onChanged: (val){
+        BlocProvider.of<RouteHandOverBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _chainageToController({required RouteHandOverFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.chainageTo,
       hintText: AppString.chainageTo,
       keyboardType: TextInputType.number,
       controller: dataState.chainageToController,
+      onChanged: (val){
+        BlocProvider.of<RouteHandOverBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
-  Widget _terrainController({required RouteHandOverFetchDataState dataState}) {
+  Widget _sectionLengthController({required RouteHandOverFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
+      enabled: false,
+      label: AppString.sectionLength,
+      hintText: AppString.sectionLength,
+      keyboardType: TextInputType.number,
+      controller: dataState.sectionLengthController,
+    );
+  }
+
+  Widget _terrainDropDown({required RouteHandOverFetchDataState dataState}) {
+    return DropdownWidget<TerrainModel>(
       label: AppString.terrain,
-      hintText: AppString.terrain,
-      controller: dataState.terrainController,
+      hint: AppString.terrain,
+      dropdownValue: dataState.terrainValue?.name != null ? dataState.terrainValue : null,
+      onChanged: (value) {
+        BlocProvider.of<RouteHandOverBloc>(context).add(
+            SelectTerrainEvent(terrainValue: value));
+      },
+      items:dataState.terrainList,
     );
   }
 
@@ -175,20 +215,86 @@ class _RouteHandOverPageState extends State<RouteHandOverPage> {
     return TextFieldWidget(
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
-      maxLength: 3,
+      maxLine: 3,
       controller: dataState.remarkController,
+    );
+  }
+
+  Widget _photo({required RouteHandOverFetchDataState dataState}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width/3,
+      height:MediaQuery.of(context).size.width/3,
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              enableDrag: true,
+              isScrollControlled: true,
+              context: context, builder: (BuildContext context){
+            return  ImagePopWidget(
+              onTapCamera: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<RouteHandOverBloc>(context).add(SelectCameraCaptureEvent());
+              },
+              onTapGallery: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<RouteHandOverBloc>(context).add(SelectGalleryCaptureEvent());
+              },
+            );
+          });
+        },
+        child: DottedBorder(
+          color: AppColor.grey,
+          strokeWidth: 1,
+          child: dataState.photo.path == ""
+              ||dataState.photo.path.isEmpty ?
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(child: Icon(Icons.photo_camera_back_outlined),),
+              Padding(
+                padding:  EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                child: TextWidget(AppString.photo,
+                  fontSize: 12,
+                  color: AppColor.grey,),
+              ),
+            ],
+          ):Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.file(
+                    dataState.photo,
+                    fit: BoxFit.fill,
+                    width: MediaQuery.of(context).size.width/3,
+                    height: MediaQuery.of(context).size.width/4.5 ,
+                  )
+                ],
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width/3,
+                  height:MediaQuery.of(context).size.width/3,
+                  color : Colors.white.withOpacity(0.6),
+                  child: Center(child: Icon(Icons.refresh, color: AppColor.appBlueColor,))),
+
+            ],
+          ),
+        ),
+      ),
     );
   }
 
 
 
-
-  Widget _button() {
-    return ButtonWidget(text: AppString.submit,
+  Widget _button({required RouteHandOverFetchDataState dataState}) {
+    return dataState.isLoader == false  ?ButtonWidget(
+        text: AppString.submit,
         onPressed: () {
-       //   BlocProvider.of<AddRouHandoverBloc>(context).add(AddRouHandoverSubmitDataEvent(context: context));
+          BlocProvider.of<RouteHandOverBloc>(context).add(RouteHandOverSubmitEvent(context: context));
         }
-    );
+    ): const DottedLoaderWidget();
   }
 
 

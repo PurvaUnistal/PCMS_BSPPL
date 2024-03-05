@@ -3,6 +3,8 @@ import 'package:bsppl/Utils/common_widget/app_font.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
+import 'package:bsppl/features/Login/presentation/login_view.dart';
 import 'package:flutter/material.dart';
 
 class LogoutWidget extends StatelessWidget {
@@ -38,12 +40,12 @@ class LogoutWidget extends StatelessWidget {
 
           ButtonWidget(text: AppString.logout,
               onPressed: () async {
-               /* Navigator.pushAndRemoveUntil(
+                Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreenPage()),
+                    MaterialPageRoute(builder: (context) => const LoginView()),
                         (route) => false
                 );
-                SharedPreferencesUtils.clearAll();*/
+               await PreferenceUtil.clearAll();
               }
           ),
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Utils {
 
 
-  static successSnackBar({required String msg, required BuildContext context}) {
+  static Future<void> successSnackBar({required String msg, required BuildContext context}) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -20,7 +20,7 @@ class Utils {
     );
   }
 
-  static warningSnackBar({required String msg, required BuildContext context}) {
+  static Future<void> warningSnackBar({required String msg, required BuildContext context}) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -38,7 +38,7 @@ class Utils {
   }
 
 
-  static errorSnackBar({required String msg, required BuildContext context}) {
+  static  Future<void> errorSnackBar({required String msg, required BuildContext context}) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(

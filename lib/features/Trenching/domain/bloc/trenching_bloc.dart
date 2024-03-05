@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/RouteSurvey/helper/route_survey_helper.dart';
@@ -17,10 +19,20 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     on<SelectJointTypeFromEvent>(_jointTypeFrom);
     on<SelectJointTypeToEvent>(_jointTypeTo);
     on<SelectWeatherEvent>(_selectWeather);
+    on<SelectSectionLengthEvent>(_sectionLength);
+    on<SelectCameraCaptureEvent>(_selectCameraCapture);
+    on<SelectGalleryCaptureEvent>(_selectGalleryCapture);
+    on<TrenchingSubmitEvent>(_submit);
   }
 
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
+
+  bool _isLoader = false;
+  bool get isLoader => _isLoader;
+
+  File _photo = File("");
+  File get photo => _photo;
 
   AlignSheetModel? alignSheetValue;
   JointTypeModel? jointTypeFromValue;
@@ -59,6 +71,8 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
   _pageLoad(TrenchingPageLoadEvent event, emit) async {
     emit(TrenchingPageLoadState());
     _isPageLoader = false;
+    _isLoader = false;
+    _photo = File("");
     dateController.text = "";
     reportNumberController.text = "";
     kmFromController.text = "";
@@ -131,9 +145,41 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     _eventComplete(emit);
   }
 
+  _sectionLength(SelectSectionLengthEvent event, emit) {
+    final chainageFromValue = double.parse(chainageFromController.text.toString());
+    final chainageToValue = double.parse(chainageToController.text.toString());
+    log("sectionLengthController${sectionLengthController}");
+    sectionLengthController.text = (chainageToValue - chainageFromValue).toString();
+    _eventComplete(emit);
+  }
+
+  _selectCameraCapture(SelectCameraCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.cameraCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _selectGalleryCapture(SelectGalleryCaptureEvent event, emit) async {
+    var imgCapture = await ApiServer.galleryCapture();
+    log("imgCapture-->$imgCapture");
+    if(imgCapture != null){
+      _photo  = imgCapture;
+    }
+    _eventComplete(emit);
+  }
+
+  _submit(TrenchingSubmitEvent event, emit){
+
+  }
+
   _eventComplete(Emitter<TrenchingState>emit) {
     emit(TrenchingFetchDataState(
       isPageLoader:isPageLoader,
+      isLoader:isLoader,
+      photo:photo,
       alignSheetValue:alignSheetValue,
       jointTypeFromValue:jointTypeFromValue,
       jointTypeToValue:jointTypeToValue,

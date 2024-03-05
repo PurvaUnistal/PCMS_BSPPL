@@ -1,14 +1,18 @@
+import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
-import 'package:bsppl/Utils/common_widget/dropdown_search_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
+import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_bloc.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_event.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_state.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,6 +67,8 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
             _verticalSpace(),
             _sectionLengthController(dataState:dataState),
             _verticalSpace(),
+            _typeGrpController(dataState:dataState),
+            _verticalSpace(),
             _tpIpChainageController(dataState:dataState),
             _verticalSpace(),
             _tpRemarkController(dataState:dataState),
@@ -71,8 +77,10 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
             _verticalSpace(),
             _activityRemark(dataState:dataState),
             _verticalSpace(),
+            _photo(dataState:dataState),
             _verticalSpace(),
-            _button(),
+            _verticalSpace(),
+            _button(dataState:dataState),
           ],
         ),
       ),
@@ -81,9 +89,17 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
 
   Widget _dateController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       enabled: true,
       label: AppString.date,
       hintText: AppString.date,
+      suffixIcon: IconButton(
+        icon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
+        onPressed: (){
+          BlocProvider.of<RouteSurveyBloc>(context).add(
+              SelectDateEvent(context: context,));
+        },
+      ),
       controller: dataState.dateController,
      onTap: () {
        BlocProvider.of<RouteSurveyBloc>(context).add(
@@ -94,13 +110,16 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
 
   Widget _reportNumberController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
+      keyboardType: TextInputType.number,
       controller: dataState.reportNumberController,
     );
   }
   Widget _alignmentDropdown({required FetchRouteSurveyDataState dataState}) {
     return  DropdownWidget<AlignSheetModel>(
+      star: AppString.star,
       hint: AppString.selectAlignment,
       label: AppString.selectAlignment,
       dropdownValue:  dataState.alignSheetValue!.alignmentId != null ? dataState.alignSheetValue : null,
@@ -127,28 +146,48 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
 
   Widget _chainageFromController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageFrom,
       hintText: AppString.chainageFrom,
        controller: dataState.chainageFromController,
+      onChanged: (val){
+        BlocProvider.of<RouteSurveyBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _chainageToController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       hintText: AppString.chainageTo,
       label: AppString.chainageTo,
         controller: dataState.chainageToController,
+      onChanged: (val){
+        BlocProvider.of<RouteSurveyBloc>(context).add(SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _sectionLengthController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
+      enabled: false,
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.sectionLength,
       hintText: AppString.sectionLength,
         controller: dataState.sectionLengthController,
+    );
+  }
+
+  Widget _typeGrpController({required FetchRouteSurveyDataState dataState}) {
+    return TextFieldWidget(
+      enabled: false,
+      keyboardType: TextInputType.text,
+      label: AppString.typeofGround,
+      hintText: AppString.typeofGround,
+      controller: dataState.typeGrpController,
     );
   }
 
@@ -173,7 +212,7 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
 
   Widget _tpRemarkController({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 2,
+      maxLine: 2,
       label: AppString.tpRemark,
       hintText: AppString.tpRemark,
      controller: dataState.noteController,
@@ -184,22 +223,89 @@ class _RouteSurveyPageState extends State<RouteSurveyPage> {
 
   Widget _activityRemark({required FetchRouteSurveyDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
       controller: dataState.activityRemarkController,
     );
   }
 
+  Widget _photo({required FetchRouteSurveyDataState dataState}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width/3,
+      height:MediaQuery.of(context).size.width/3,
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              enableDrag: true,
+              isScrollControlled: true,
+              context: context, builder: (BuildContext context){
+            return  ImagePopWidget(
+              onTapCamera: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<RouteSurveyBloc>(context).add(SelectCameraCaptureEvent());
+              },
+              onTapGallery: () async {
+                Navigator.of(context).pop();
+                BlocProvider.of<RouteSurveyBloc>(context).add(SelectGalleryCaptureEvent());
+              },
+            );
+          });
+        },
+        child: DottedBorder(
+          color: AppColor.grey,
+          strokeWidth: 1,
+          child: dataState.photo.path == ""
+              ||dataState.photo.path.isEmpty ?
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(child: Icon(Icons.photo_camera_back_outlined),),
+              Padding(
+                padding:  EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                child: TextWidget(AppString.photo,
+                  fontSize: 12,
+                  color: AppColor.grey,),
+              ),
+            ],
+          ):Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.file(
+                    dataState.photo,
+                    fit: BoxFit.fill,
+                    width: MediaQuery.of(context).size.width/3,
+                    height: MediaQuery.of(context).size.width/4.5 ,
+                  )
+                ],
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width/3,
+                  height:MediaQuery.of(context).size.width/3,
+                  color : Colors.white.withOpacity(0.6),
+                  child: Center(child: Icon(Icons.refresh, color: AppColor.appBlueColor,))),
 
-  Widget _button() {
-   // return dataState.isLoader == false ?
-   return ButtonWidget(text: "Submit",
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _button({required FetchRouteSurveyDataState dataState}) {
+    return dataState.isLoader == false ?
+    ButtonWidget(
+       text:AppString.submit,
         onPressed: () {
-      //    BlocProvider.of<AddRouteSurveyBloc>(context).add(AddRouteSurveySubmitDataEvent(context: context));
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.focusedChild?.unfocus();
+          BlocProvider.of<RouteSurveyBloc>(context).add(RouteSurveySubmitEvent(context: context));
         }
-   );
-  //  ): const DottedLoaderWidget();
+        ): const DottedLoaderWidget();
   }
 
 

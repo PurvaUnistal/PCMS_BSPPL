@@ -1,10 +1,10 @@
 import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
-import 'package:bsppl/Utils/common_widget/dropdown_search_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Stringing/presentation/widget/check_box_widget.dart';
@@ -135,7 +135,7 @@ class _WeldingPageState extends State<WeldingPage> {
                 _activityRemark(dataState: dataState),
                 _verticalSpace(),
                 _verticalSpace(),
-                _button(),
+                _button(dataState: dataState),
               ],
             )
         )
@@ -563,20 +563,18 @@ class _WeldingPageState extends State<WeldingPage> {
       maxLength: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
-      // controller: dataState.activityRemarkController,
+       controller: dataState.activityRemarkController,
     );
   }
 
 
-  Widget _button() {
-    //  return dataState.isLoader == false ?
-    return ButtonWidget(
+  Widget _button({required WeldingFetchDataState dataState}) {
+     return dataState.isLoader == false ? ButtonWidget(
         text: AppString.submit,
         onPressed: () {
-          //   BlocProvider.of<AddWeldingBloc>(context).add(AddWeldingSubmitDataEvent(context: context));
+             BlocProvider.of<WeldingBloc>(context).add(WeldingSubmitEvent(context: context));
         }
-    );
-    //  ): const DottedLoaderWidget();
+      ): const DottedLoaderWidget();
   }
 
   Widget _verticalSpace() {

@@ -73,6 +73,7 @@ class ApiServer {
     required var body, required BuildContext context, required String filePath, required String keyWord}) async {
     try{
       var request = MultipartRequest("POST", Uri.parse(AppUrl.submitAll));
+      log("submitURL-->${AppUrl.submitAll}");
       if(filePath.isNotEmpty){
         final mimeTypeData =
         lookupMimeType(filePath, headerBytes: [0xFF, 0xD8])!.split('/');

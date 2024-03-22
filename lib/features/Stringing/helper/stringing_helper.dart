@@ -19,11 +19,26 @@ class StringingHelper{
 
   static Future<dynamic> submitData({required BuildContext context}) async {
     var param = {
-      "type": "",
+      "type": "stringing",
       "SectionID": "",
+      "UserID": "",
+      "TR_Stringing_Date": "",
+      "TR_Report_Number": "",
+      "Alignment_Sheet": "",
+      "Weather": "",
+      "MR_Chainage_From": "",
+      "PipeDia": "",
+      "PipeMaterial": "",
+      "PipeID": "",
+      "latitude": "",
+      "longitude": "",
+      "ConcreteCoating": "",
+      "TN_Remarks": "",
     };
     try{
-      var res = await ApiServer.postData(context: context,body: param);
+      var res = await ApiServer.postDataWithFile(
+          keyWord: "Photo",filePath:"",
+          context: context,body: param);
       if(res != null){
         //  return alignSheetModelFromJson(res);
       }

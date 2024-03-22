@@ -145,3 +145,11 @@ class SelectWeldVisualEvent extends WeldingEvent{
   @override
   List<Object?> get props => [weldVisualValue];
 }
+
+
+class WeldingSubmitEvent extends WeldingEvent{
+ final BuildContext context;
+  WeldingSubmitEvent({ required this.context});
+  @override
+  List<Object?> get props => [context];
+}

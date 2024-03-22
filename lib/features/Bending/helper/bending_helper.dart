@@ -18,11 +18,32 @@ class BendingHelper{
 
   static Future<dynamic> submitData({required BuildContext context}) async {
     var param = {
-      "type": "",
+      "type": "bending",
       "SectionID": "",
+      "UserID": "",
+      "Alignment_Sheet": "",
+      "Weather": "",
+      "TR_Date": "",
+      "TR_Report_Number": "",
+      "TN_Chainage": "",
+      "Pipe_Number": "",
+      "Bend_Number": "",
+      "TN_Degree": "",
+      "TR_BEND": "",
+      "TN_Min": "",
+      "TN_Sec": "",
+      "TN_TP": "",
+      "TN_Visual": "",
+      "TN_Disbonding": "",
+      "TN_Gauging": "",
+      "TN_Holiday": "",
+      "TN_Ovality": "",
+      "TN_Remarks": "",
     };
     try{
-      var res = await ApiServer.postData(context: context,body: param);
+      var res = await ApiServer.postDataWithFile(
+          keyWord: "Photo",filePath:"",
+          context: context,body: param);
       if(res != null){
         //  return alignSheetModelFromJson(res);
       }

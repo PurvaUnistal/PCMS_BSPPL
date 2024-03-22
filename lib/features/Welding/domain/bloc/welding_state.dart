@@ -22,6 +22,7 @@ class WeldingPageLoadState extends WeldingState{
 
 class WeldingFetchDataState extends WeldingState{
   bool isPageLoader;
+  bool isLoader;
   bool isFitUpValue;
   bool isWeldVisualValue;
   AlignSheetModel? alignSheetValue;
@@ -77,9 +78,11 @@ class WeldingFetchDataState extends WeldingState{
   TextEditingController pipeThickController;
   TextEditingController processController;
   TextEditingController materialController;
+  TextEditingController activityRemarkController;
 
   WeldingFetchDataState({
     required this.isPageLoader,
+    required this.isLoader,
     required this.isFitUpValue,
     required this.isWeldVisualValue,
     required this.alignSheetValue,
@@ -135,12 +138,14 @@ class WeldingFetchDataState extends WeldingState{
     required this.pipeThickController,
     required this.processController,
     required this.materialController,
+    required this.activityRemarkController,
 
 });
   @override
   // TODO: implement props
   List<Object?> get props => [
    isPageLoader,
+    isLoader,
    isFitUpValue,
    isWeldVisualValue,
    alignSheetValue,
@@ -196,5 +201,6 @@ class WeldingFetchDataState extends WeldingState{
    pipeThickController,
    processController,
    materialController,
+    activityRemarkController,
   ];
 }

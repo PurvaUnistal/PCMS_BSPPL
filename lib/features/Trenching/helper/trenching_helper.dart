@@ -18,11 +18,28 @@ class TrenchingHelper{
 
   static Future<dynamic> submitData({required BuildContext context}) async {
     var param = {
-      "type": "",
+      "type": "trenching",
       "SectionID": "",
+      "UserID": "",
+      "TR_Trenching_Date": "",
+      "TR_Report_Number": "",
+      "ChainageFrom": "",
+      "ChainageTo": "",
+      "TN_Trenching_Lower_Width": "",
+      "Alignment_Sheet": "",
+      "TN_JointNumber_From": "",
+      "TN_JointNumber_To": "",
+      "MR_Distance_Cleared": "",
+      "MN_Trenching_Depth": "",
+      "MN_Trenching_UpperWidth": "",
+      "TypeofTerrain": "",
+      "Weather": "",
+      "TN_Remarks": "",
     };
     try{
-      var res = await ApiServer.postData(context: context,body: param);
+      var res = await ApiServer.postDataWithFile(
+          keyWord: "ImageData",filePath:"",
+          context: context,body: param);
       if(res != null){
         //  return alignSheetModelFromJson(res);
       }

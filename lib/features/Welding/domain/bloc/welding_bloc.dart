@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
@@ -36,10 +38,14 @@ class WeldingBloc extends Bloc<WeldingEvent, WeldingState>{
     on<SelectCapping2Welder2Event>(_selectCapping2Welder2);
     on<SelectFitUpEvent>(_selectFitUp);
     on<SelectWeldVisualEvent>(_selectWeldVisual);
+    on<WeldingSubmitEvent>(_weldingSubmit);
   }
 
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
+
+  bool _isLoader =  false;
+  bool get isLoader => _isLoader;
 
   bool _isFitUpValue = false;
   bool get isFitUpValue => _isFitUpValue;
@@ -47,6 +53,7 @@ class WeldingBloc extends Bloc<WeldingEvent, WeldingState>{
   bool _isWeldVisualValue = false;
   bool get isWeldVisualValue => _isWeldVisualValue;
 
+  File file =  File("");
 
   AlignSheetModel? alignSheetValue;
   WeatherModel? weatherValue;
@@ -130,10 +137,18 @@ class WeldingBloc extends Bloc<WeldingEvent, WeldingState>{
   TextEditingController electrodeDiaE9045p2BatchController = TextEditingController();
   TextEditingController electrodeDiaE81t8gController = TextEditingController();
   TextEditingController electrodeDiaE81t8gBatchController = TextEditingController();
+  TextEditingController electrodeEiaE8010p1BatchController = TextEditingController();
+  TextEditingController electrodeEiaE8010p1Controller = TextEditingController();
+  TextEditingController electrodeBatch806012Controller = TextEditingController();
+  TextEditingController electrodeDia806012Controller = TextEditingController();
+  TextEditingController electrodeDiaB22B221868Controller = TextEditingController();
+  TextEditingController electrodeDiaB22B221868BatchController = TextEditingController();
+  TextEditingController electrodeDiaE8010Controller = TextEditingController();
   TextEditingController pipeDiameterController = TextEditingController();
   TextEditingController pipeThickController = TextEditingController();
   TextEditingController processController = TextEditingController();
   TextEditingController materialController = TextEditingController();
+  TextEditingController activityRemarkController = TextEditingController();
 
   _pageLoad(WeldingPageLoadEvent event, emit) async {
     emit(WeldingPageLoadState());
@@ -315,6 +330,92 @@ class WeldingBloc extends Bloc<WeldingEvent, WeldingState>{
     _eventComplete(emit);
   }
 
+  _weldingSubmit(WeldingSubmitEvent event, emit) async {
+    _isLoader =  true;
+    _eventComplete(emit);
+    var res = await WeldingHelper.submitData(
+      context: event.context,
+      alignmentData: alignSheetValue!,
+      reportNumber: reportNumberController.text.toString(),
+      date: dateController.text.toString(),
+      activityRemark: activityRemarkController.text.toString(),
+      rootWelders1Data: rootWelders1Value!,
+      rootWelders2Data: rootWelders2Value!,
+      hotWelders1Data: hotWelders1Value!,
+      hotWelders2Data: hotWelders2Value!,
+      filler1Welders1Data: filler1Welders1Value!,
+      filler1Welders2Data: filler1Welders2Value!,
+      filler2Welders1Data: filler2Welders1Value!,
+      filler2Welders2Data: filler2Welders2Value!,
+      filler3Welders1Data: filler3Welders1Value!,
+      filler3Welders2Data: filler3Welders2Value!,
+      cappingWelder1Data: cappingWelder1Value!,
+      cappingWelder2Data: cappingWelder2Value!,
+      electrodeDiaE81t8gBatch: electrodeDiaE81t8gBatchController.text.toString(),
+      electrodeDiaE81t8g: electrodeDiaE81t8gController.text.toString(),
+      electrodeDiaE6010Batch: electrodeDiaE6010BatchController.text.toString(),
+      electrodeDiaE6010: electrodeDiaE6010Controller.text.toString(),
+      electrodeDiaE9045p2Batch: electrodeDiaE9045p2BatchController.text.toString(),
+      electrodeDiaE9045p2: electrodeDiaE9045p2Controller.text.toString(),
+      electrodeEiaE8010p1Batch: electrodeEiaE8010p1BatchController.text.toString(),
+      electrodeEiaE8010p1: electrodeEiaE8010p1Controller.text.toString(),
+     electrodeBatch806012: electrodeBatch806012Controller.text.trim().toString(),
+      electrodeDia806012: electrodeDia806012Controller.text.trim().toString(),
+      electrodeDiaB22B221868: electrodeDiaB22B221868Controller.text.trim().toString(),
+      electrodeDiaB22B221868Batch: electrodeDiaB22B221868BatchController.text.trim().toString(),
+      electrodeDiaE8010: electrodeDiaE8010Controller.text.trim().toString(),
+      fitUp: "",
+      leftPipeNumber: leftPipeNumberController.text.trim().toString(),
+      material: materialController.text.trim().toString(),
+      pipeDia: pipeDiameterController.text.trim().toString(),
+      pipeThick: pipeThickController.text.trim().toString(),
+      process: processController.text.trim().toString(),
+      rightPipeNumber: rightPipeNumberController.text.trim().toString(),
+      weather: weatherValue!,
+      weldVisual: "",
+      wpsNo: wpsValue!,
+      chainageFrom: chainageFromController.text.toString(),
+      chainageTo: chainageToController.text.toString(),
+
+    );
+    _isLoader =  false;
+    _eventComplete(emit);
+    if(res != null){
+      _isLoader =  false;
+      file =  File("");
+      dateController.text = "";
+      reportNumberController.text = "";
+      activityRemarkController.text = "";
+      electrodeDiaE81t8gBatchController.text = "";
+      electrodeDiaE81t8gController.text = "";
+      electrodeDiaE6010BatchController.text = "";
+      electrodeDiaE6010Controller.text = "";
+      electrodeDiaE9045p2BatchController.text = "";
+      electrodeDiaE9045p2Controller.text = "";
+      electrodeEiaE8010p1BatchController.text = "";
+      electrodeEiaE8010p1Controller.text = "";
+      leftPipeNumberController.text = "";
+      rightPipeNumberController.text = "";
+      rootWelders1Value = WelderModel();
+      rootWelders2Value = WelderModel();
+      hotWelders1Value = WelderModel();
+      hotWelders2Value = WelderModel();
+      filler1Welders1Value = WelderModel();
+      filler1Welders2Value = WelderModel();
+      filler2Welders1Value = WelderModel();
+      filler2Welders2Value = WelderModel();
+      filler3Welders1Value = WelderModel();
+      filler3Welders2Value = WelderModel();
+      cappingWelder1Value = WelderModel();
+      cappingWelder2Value = WelderModel();
+      chainageFromController.text = "";
+      chainageToController.text = "";
+      weatherValue =  WeatherModel();
+    }
+    _eventComplete(emit);
+  }
+
+
   _eventComplete(Emitter<WeldingState>emit) {
     emit(WeldingFetchDataState(
       isPageLoader: isPageLoader,
@@ -373,6 +474,9 @@ class WeldingBloc extends Bloc<WeldingEvent, WeldingState>{
       pipeThickController: pipeThickController,
       processController: processController,
       materialController: materialController,
+      activityRemarkController: activityRemarkController,
+      isLoader: isLoader,
     ));
   }
+
 }

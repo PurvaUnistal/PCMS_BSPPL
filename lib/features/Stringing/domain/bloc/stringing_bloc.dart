@@ -1,10 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_event.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_state.dart';
 import 'package:bsppl/features/Stringing/domain/model/coating_ok_model.dart';
+import 'package:bsppl/features/Stringing/helper/stringing_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +23,9 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
     on<StringingSubmitEvent>(_submit);
   }
 
+  String userId = '';
+  String sectionId = '';
+
   bool _isPageLoader = false;
   bool get isPageLoader => _isPageLoader;
 
@@ -29,14 +35,9 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
   File _photo = File("");
   File get photo => _photo;
 
-  bool _isYesValue = false;
-  bool get isYesValue => _isYesValue;
-
-  bool _isNoValue = false;
-  bool get isNoValue => _isNoValue;
-
 
   WeatherModel? weatherValue;
+  CoatingOkModel? coatingValue;
 
   List<WeatherModel> _weatherList = [];
   List<WeatherModel> get weatherList => _weatherList;
@@ -50,22 +51,27 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
   TextEditingController reportNumberController = TextEditingController();
   TextEditingController chainageController =  TextEditingController();
   TextEditingController pipeNumberController =  TextEditingController();
+  TextEditingController pipeMeterialController =  TextEditingController();
+  TextEditingController pipeDiameterController =  TextEditingController();
   TextEditingController activityRemarkController = TextEditingController();
 
-  _pageLoad(StringingPageLoadEvent event,emit) {
+  _pageLoad(StringingPageLoadEvent event,emit) async {
     _isPageLoader = false;
-    _isYesValue = false;
-    _isNoValue = false;
     _isLoader = false;
     _photo = File("");
     dateController.text = "";
     reportNumberController.text = "";
     chainageController.text = "";
     pipeNumberController.text = "";
+    pipeMeterialController.text = "";
+    pipeDiameterController.text = "";
     activityRemarkController.text = "";
+    coatingValue = CoatingOkModel();
     weatherValue = WeatherModel();
     _weatherList = [];
     _coatingOkList = [];
+    userId = await PreferenceUtil.getString(key: PreferenceValue.userId);
+    sectionId = await PreferenceUtil.getString(key: PreferenceValue.sectionId);
     _weatherList = WeatherModel.getWeatherData();
     _coatingOkList = CoatingOkModel.getCoatingOkData();
     _eventComplete(emit);
@@ -92,8 +98,7 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
   }
 
   _coatingOkValue(SelectCoatingOkValueEvent event,emit) {
-    _isYesValue = event.checkYes;
-    _isNoValue = event.checkNo;
+    coatingValue = event.coatingValue;
     _eventComplete(emit);
   }
 
@@ -114,8 +119,57 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
     }
     _eventComplete(emit);
   }
-  _submit(StringingSubmitEvent event, emit){
 
+
+  _submit(StringingSubmitEvent event, emit) async {
+    try{
+      var validationCheck = await StringingHelper.validation(
+          context: event.context,
+          date: dateController.text.trim().toString(),
+          reportNo: reportNumberController.text.trim().toString(),
+          pipeNumber: pipeNumberController.text.trim().toString());
+      if(await validationCheck == true){
+        _isLoader =  true;
+        _eventComplete(emit);
+        var res = await StringingHelper.submitData(
+            context: event.context,
+            sectionId: sectionId,
+            userId: userId,
+            date: dateController.text.trim().toString(),
+            reportNo: reportNumberController.text.trim().toString(),
+            alignmentSheet: "0",
+            weather: weatherValue!.id.toString(),
+            mrChainageFrom: chainageController.text.trim().toString(),
+            pipeDia: pipeDiameterController.text.trim().toString(),
+            pipeMaterial: pipeMeterialController.text.trim().toString(),
+            pipeID:  pipeNumberController.text.trim().toString(),
+            latitude: "0.0",
+            longitude: "0.0",
+            concreteCoating: coatingValue.toString(),
+            tnRemarks: activityRemarkController.text.trim().toString(),
+            photo: photo);
+        _isLoader =  false;
+        _eventComplete(emit);
+        if(res != null){
+          _isPageLoader = false;
+          _isLoader = false;
+          _photo = File("");
+          dateController.text = "";
+          reportNumberController.text = "";
+          chainageController.text = "";
+          chainageController.text = "";
+          pipeDiameterController.text = "";
+          pipeMeterialController.text = "";
+          activityRemarkController.text = "";
+          weatherValue = WeatherModel();
+        }
+        _eventComplete(emit);
+      }
+    }catch(e){
+      _isLoader =  false;
+      _eventComplete(emit);
+      log("StringCatch${e.toString()}");
+    }
   }
 
 
@@ -123,10 +177,9 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
   _eventComplete(Emitter<StringingState>emit) {
     emit(StringingFetchDataState(
       isPageLoader : isPageLoader,
-      isYesValue : isYesValue,
-      isNoValue :  isNoValue,
       isLoader: isLoader,
       photo: photo,
+      coatingValue : coatingValue,
       weatherValue:weatherValue,
       weatherList :  weatherList,
       coatingOkList :  coatingOkList,
@@ -134,6 +187,8 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
       reportNumberController :  reportNumberController,
       chainageController :  chainageController,
       pipeNumberController :  pipeNumberController,
+      pipeDiameterController :  pipeDiameterController,
+      pipeMeterialController :  pipeMeterialController,
       activityRemarkController :  activityRemarkController,
     ));
   }

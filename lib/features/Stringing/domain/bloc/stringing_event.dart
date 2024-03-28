@@ -27,11 +27,10 @@ class SelectWeatherEvent extends StringingEvent{
 }
 
 class SelectCoatingOkValueEvent extends StringingEvent{
-  final bool checkYes;
-  final bool checkNo;
-  SelectCoatingOkValueEvent({required this.checkYes, required this.checkNo});
+  final dynamic coatingValue;
+  SelectCoatingOkValueEvent({required this.coatingValue});
   @override
-  List<Object?> get props => [checkYes,checkNo];
+  List<Object?> get props => [coatingValue];
 }
 
 class SelectCameraCaptureEvent extends StringingEvent{

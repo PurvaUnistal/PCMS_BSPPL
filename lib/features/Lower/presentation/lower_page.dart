@@ -2,14 +2,21 @@ import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
+import 'package:bsppl/Utils/common_widget/local_img.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
+import 'package:bsppl/Utils/loader/dotted_loader.dart';
+import 'package:bsppl/features/AllCommonModel/check_model.dart';
+import 'package:bsppl/features/AllCommonModel/completed_not_model.dart';
+import 'package:bsppl/features/AllCommonModel/provide_not_model.dart';
 import 'package:bsppl/features/Lower/domain/bloc/lower_bloc.dart';
 import 'package:bsppl/features/Lower/domain/bloc/lower_event.dart';
 import 'package:bsppl/features/Lower/domain/bloc/lower_state.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
+import 'package:bsppl/features/Trenching/presentation/widget/RowWidget.dart';
 import 'package:bsppl/features/Trenching/presentation/widget/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +62,13 @@ class _LowerPageState extends State<LowerPage> {
             _verticalSpace(),
             _reportNumberController(dataState: dataState),
             _verticalSpace(),
+
+            _pipeDiameterController(dataState: dataState),
+            _verticalSpace(),
+            _pipeMeterialController(dataState: dataState),
+            _verticalSpace(),
+            _pipeNoController(dataState: dataState),
+            _verticalSpace(),
             _alignmentDropdown(dataState: dataState),
             _verticalSpace(),
             _chainageFromController(dataState: dataState),
@@ -79,10 +93,32 @@ class _LowerPageState extends State<LowerPage> {
             _verticalSpace(),
             _repairDamagesController(dataState: dataState),
             _verticalSpace(),
+            _paddingTypeDropDown(dataState: dataState),
+            _verticalSpace(),
+            _prePaddingTypeDropDown(dataState: dataState),
+            _verticalSpace(),
+            _deWateringTypeDropDown(dataState: dataState),
+            _verticalSpace(),
+            _kmDELA_FROMController(dataState: dataState),
+            _verticalSpace(),
+            _kmPANA_LA_TOController(dataState: dataState),
+            _verticalSpace(),
+            _dailyProgressController(dataState: dataState),
+            _verticalSpace(),
+            _sectionNoController(dataState: dataState),
+            _verticalSpace(),
+            _coatingRepairController(dataState: dataState),
+            _verticalSpace(),
+            _trenchAcceptanceController(dataState: dataState),
+            _verticalSpace(),
+            _visualInspController(dataState: dataState),
+            _verticalSpace(),
+            _photo(dataState: dataState),
+            _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
             _verticalSpace(),
-            _button(),
+            _button(dataState: dataState),
           ],
         ),
       ),
@@ -91,6 +127,7 @@ class _LowerPageState extends State<LowerPage> {
 
   Widget _dateController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       enabled: true,
       label: AppString.date,
       hintText: AppString.date,
@@ -103,12 +140,44 @@ class _LowerPageState extends State<LowerPage> {
 
   Widget _reportNumberController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
       controller: dataState.reportNumberController,
     );
   }
 
+  Widget _pipeDiameterController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      hintText: AppString.pipeDiameter,
+      label: AppString.pipeDiameter,
+      controller: dataState.pipeDiameterController,
+    );
+  }
+
+  Widget _pipeMeterialController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      hintText: AppString.pipeMeterial,
+      label: AppString.pipeMeterial,
+      controller: dataState.pipeMeterialController,
+    );
+  }
+
+  Widget _pipeNoController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      star: AppString.star,
+      keyboardType: TextInputType.number,
+      hintText: AppString.pipeNo,
+      label: AppString.pipeNo,
+      controller: dataState.pipeNumberController,
+      suffixIcon: IconButton(
+        icon: Icon(Icons.qr_code_scanner_outlined, color: AppColor.appBlueColor,),
+        onPressed: (){},
+      ),
+    );
+  }
 
   Widget _alignmentDropdown({required LowerFetchDataState dataState}) {
     return DropdownWidget<AlignSheetModel>(
@@ -128,13 +197,7 @@ class _LowerPageState extends State<LowerPage> {
   Widget _jointFromCard({required LowerFetchDataState dataState}){
     return CardWidget(
       children: [
-        Text("Joint From",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: AppColor.appBlueColor
-          ),),
+        RowWidget(title: "Joint From${dataState.jointFrom == "" ?"":"(${dataState.jointFrom})"}"),
         _verticalSpace(),
         _kmFromController(dataState: dataState),
         _verticalSpace(),
@@ -150,13 +213,7 @@ class _LowerPageState extends State<LowerPage> {
   Widget _jointToCard({required LowerFetchDataState dataState}){
     return CardWidget(
       children: [
-        Text("Joint To",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: AppColor.appBlueColor
-          ),),
+        RowWidget(title: "Joint To${dataState.jointTo == "" ?"":"(${dataState.jointTo})"}"),
         _verticalSpace(),
         _kmToController(dataState: dataState),
         _verticalSpace(),
@@ -174,7 +231,11 @@ class _LowerPageState extends State<LowerPage> {
       keyboardType: TextInputType.number,
       hintText: AppString.km,
       label: AppString.km,
-      //   controller: dataState.gpsCoordinateNorthController,
+      controller: dataState.kmFromController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
@@ -197,6 +258,10 @@ class _LowerPageState extends State<LowerPage> {
       label: AppString.jointNo,
       hintText: AppString.jointNo,
       controller: dataState.jointNoFromController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
@@ -206,6 +271,10 @@ class _LowerPageState extends State<LowerPage> {
       label: AppString.suffix,
       hintText: AppString.suffix,
       controller: dataState.suffixFromController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
@@ -215,6 +284,10 @@ class _LowerPageState extends State<LowerPage> {
       label: AppString.km,
       hintText: AppString.km,
       controller: dataState.kmToController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointToEvent());
+      },
     );
   }
 
@@ -237,6 +310,11 @@ class _LowerPageState extends State<LowerPage> {
       label: AppString.jointNo,
       hintText: AppString.jointNo,
       controller: dataState.jointNoToController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointToEvent());
+      },
+
     );
   }
 
@@ -246,29 +324,45 @@ class _LowerPageState extends State<LowerPage> {
       label: AppString.suffix,
       hintText: AppString.suffix,
       controller: dataState.suffixToController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectJointToEvent());
+      },
     );
   }
 
   Widget _chainageFromController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageFrom,
       hintText: AppString.chainageFrom,
       controller: dataState.chainageFromController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectSectionLengthEvent());
+      },
     );
+
   }
 
   Widget _chainageToController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageTo,
       hintText: AppString.chainageTo,
       controller: dataState.chainageToController,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectSectionLengthEvent());
+      },
     );
   }
 
   Widget _sectionLengthController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.sectionLength,
       hintText: AppString.sectionLength,
@@ -334,20 +428,142 @@ class _LowerPageState extends State<LowerPage> {
     );
   }
 
+  Widget _paddingTypeDropDown({required LowerFetchDataState dataState}) {
+    return DropdownWidget<ProvideModel>(
+      label: AppString.paddingType,
+      hint: AppString.paddingType,
+      dropdownValue: dataState.paddingValue?.name != null ? dataState.paddingValue : null,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectPaddingValueEvent(paddingValue: value));
+      },
+      items:dataState.paddingList,
+    );
+  }
+
+  Widget _prePaddingTypeDropDown({required LowerFetchDataState dataState}) {
+    return DropdownWidget<CheckModel>(
+      label: AppString.prePaddingType,
+      hint: AppString.prePaddingType,
+      dropdownValue: dataState.prePaddingValue?.name != null ? dataState.prePaddingValue : null,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectPrePaddingValueEvent(prePaddingValue: value));
+      },
+      items:dataState.prePaddingList,
+    );
+  }
+
+  Widget _deWateringTypeDropDown({required LowerFetchDataState dataState}) {
+    return DropdownWidget<CompletedModel>(
+      label: AppString.deWateringType,
+      hint: AppString.deWateringType,
+      dropdownValue: dataState.deWateringValue?.name != null ? dataState.deWateringValue : null,
+      onChanged: (value) {
+        BlocProvider.of<LowerBloc>(context).add(
+            SelectDeWateringValueEvent(deWateringValue: value));
+      },
+      items:dataState.deWateringList,
+    );
+  }
+  Widget _sectionNoController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.sectionNo,
+      hintText: AppString.sectionNo,
+      controller: dataState.sectionNoController,
+    );
+  }
+  Widget _kmDELA_FROMController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmDELA_FROM,
+      hintText: AppString.kmDELA_FROM,
+      controller: dataState.kmFromController,
+    );
+  }
+
+  Widget _kmPANA_LA_TOController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmPANA_LA_TO,
+      hintText: AppString.kmPANA_LA_TO,
+      controller: dataState.toKmController,
+    );
+  }
+
+  Widget _dailyProgressController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.dailyProgress,
+      hintText: AppString.dailyProgress,
+      controller: dataState.dailyProgressController,
+    );
+  }
+
+  Widget _coatingRepairController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.coatingRepair,
+      hintText: AppString.coatingRepair,
+      controller: dataState.coatingRepairController,
+    );
+  }
+
+  Widget _trenchAcceptanceController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.trenchAcceptance,
+      hintText: AppString.trenchAcceptance,
+      controller: dataState.trenchAcceptanceController,
+    );
+  }
+  Widget _visualInspController({required LowerFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.visualInsp,
+      hintText: AppString.visualInsp,
+      controller: dataState.visualInspController,
+    );
+  }
+  Widget _photo({required LowerFetchDataState dataState}) {
+    return  LocalImgWidget(
+        file: dataState.photo,
+        onTap: () {
+          showModalBottomSheet(
+              enableDrag: true,
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                return ImagePopWidget(
+                  onTapCamera: () async {
+                    Navigator.of(context).pop();
+                    BlocProvider.of<LowerBloc>(context).add(SelectCameraCaptureEvent());
+                  },
+                  onTapGallery: () async {
+                    Navigator.of(context).pop();
+                    BlocProvider.of<LowerBloc>(context).add(SelectGalleryCaptureEvent());
+                  },
+                );
+              });
+        },
+      );
+  }
+
   Widget _activityRemark({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
       controller: dataState.activityRemarkController,
     );
   }
-  Widget _button() {
-    return ButtonWidget(text: AppString.submit,
+  Widget _button({required LowerFetchDataState dataState}) {
+    return dataState.isLoader == false ? ButtonWidget(text: AppString.submit,
         onPressed: () {
-          //    BlocProvider.of<AddLevellingBloc>(context).add(AddLevellingSubmitDataEvent(context: context));
+             BlocProvider.of<LowerBloc>(context).add(LowerSubmitEvent(context: context));
         }
-    );
+    ): const DottedLoaderWidget();
   }
 
 

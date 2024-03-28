@@ -1,7 +1,6 @@
 import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:flutter/material.dart';
-
 class ImagePopWidget extends StatelessWidget {
   final void Function()? onTapGallery, onTapCamera;
   const ImagePopWidget(

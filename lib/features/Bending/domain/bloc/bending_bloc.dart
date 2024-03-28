@@ -2,11 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_event.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_state.dart';
-import 'package:bsppl/features/Bending/domain/model/bend_model.dart';
-import 'package:bsppl/features/Bending/domain/model/check_model.dart';
-import 'package:bsppl/features/Bending/domain/model/holiday_model.dart';
+import 'package:bsppl/features/AllCommonModel/bend_model.dart';
+import 'package:bsppl/features/AllCommonModel/check_model.dart';
+import 'package:bsppl/features/AllCommonModel/holiday_model.dart';
+import 'package:bsppl/features/Bending/helper/bending_helper.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +64,9 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
   List<HolidayModel> _holidayList = [];
   List<HolidayModel> get holidayList => _holidayList;
 
+  String userId = '';
+  String sectionId = '';
+
   TextEditingController dateController = TextEditingController();
   TextEditingController reportNumberController = TextEditingController();
   TextEditingController chainageController =  TextEditingController();
@@ -70,9 +76,14 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
   TextEditingController minuteController =  TextEditingController();
   TextEditingController bendSecondController =  TextEditingController();
   TextEditingController tpNoController =  TextEditingController();
+  TextEditingController toKmController =  TextEditingController();
+  TextEditingController fromKmController =  TextEditingController();
+  TextEditingController dailyProgressController =  TextEditingController();
+  TextEditingController bendChainageToController =  TextEditingController();
+  TextEditingController bendDirectionController =  TextEditingController();
   TextEditingController activityRemarkController = TextEditingController();
 
-  _pageLoad(BendPageLoadEvent event,emit) {
+  _pageLoad(BendPageLoadEvent event,emit) async {
     _isPageLoader = false;
     _isLoader = false;
     _photo = File("");
@@ -85,6 +96,11 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
     minuteController.text = "";
     bendSecondController.text = "";
     tpNoController.text = "";
+    toKmController.text = "";
+    fromKmController.text = "";
+    dailyProgressController.text = "";
+    bendChainageToController.text = "";
+    bendDirectionController.text = "";
     activityRemarkController.text = "";
     weatherValue = WeatherModel();
     bendValue = BendModel();
@@ -98,6 +114,8 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
     _guagingList = [];
     _disbondingList = [];
     _holidayList = [];
+    userId = await PreferenceUtil.getString(key: PreferenceValue.userId);
+    sectionId = await PreferenceUtil.getString(key: PreferenceValue.sectionId);
     _weatherList = WeatherModel.getWeatherData();
     _bendList = BendModel.getBendData();
     _visualList = CheckModel.getCheckData();
@@ -171,7 +189,85 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
     }
     _eventComplete(emit);
   }
-  _submit(BendSubmitEvent event, emit){
+  _submit(BendSubmitEvent event, emit) async {
+    try{
+      var validationCheck = await  BendingHelper.validation(
+          context: event.context,
+          date: dateController.text.trim().toString(),
+          reportNo: reportNumberController.text.trim().toString(),
+          chainage: chainageController.text.trim().toString(),
+          pipeNo: pipeNumberController.text.trim().toString(),
+          bendNo: bendValue!.id.toString(),
+          bendDegree: bendDegreeController.text.trim().toString(),
+          minuteValue: minuteController.text.trim().toString(),
+          secondValue: bendSecondController.text.trim().toString(),
+          tpNo: tpNoController.text.trim().toString());
+      if(await validationCheck == true){
+        _isLoader =  true;
+        _eventComplete(emit);
+        var res = await BendingHelper.submitData(
+            context: event.context,
+            sectionId: sectionId,
+            userId: userId,
+            alignmentSheet: "",
+            weather: weatherValue!.id.toString(),
+            trDate: dateController.text.trim().toString(),
+            trReportNumber: reportNumberController.text.trim().toString(),
+            trChainage: chainageController.text.trim().toString(),
+            pipeNumber: pipeNumberController.text.trim().toString(),
+            bendNumber: bendNumberController.text.trim().toString(),
+            tnDegree: bendDegreeController.text.trim().toString(),
+            trBend: bendValue!.id.toString(),
+            tnMin: minuteController.text.trim().toString(),
+            tnSec: bendSecondController.text.trim().toString(),
+            tnTP: tpNoController.text.trim().toString(),
+            tnVisual: visualValue!.id.toString(),
+            tnDisbonding: disbondingValue!.id.toString(),
+            tnGauging: guagingValue!.id.toString(),
+            tnHoliday: holidayValue!.id.toString(),
+            tnOvality: "",
+            toKm: toKmController.text.trim().toString(),
+            fromKm: fromKmController.text.trim().toString(),
+            dailyProgress: dailyProgressController.text.trim().toString(),
+            bendChainageTo: bendChainageToController.text.trim().toString(),
+            bendDirection: bendDirectionController.text.trim().toString(),
+            tnRemarks: activityRemarkController.text.trim().toString(),
+            photo: photo);
+        _isLoader =  false;
+        _eventComplete(emit);
+        if(res != null){
+          _isPageLoader = false;
+          _isLoader = false;
+          _photo = File("");
+          dateController.text = "";
+          reportNumberController.text = "";
+          chainageController.text = "";
+          pipeNumberController.text = "";
+          bendNumberController.text = "";
+          bendDegreeController.text = "";
+          minuteController.text = "";
+          bendSecondController.text = "";
+          tpNoController.text = "";
+          toKmController.text = "";
+          fromKmController.text = "";
+          dailyProgressController.text = "";
+          bendChainageToController.text = "";
+          bendDirectionController.text = "";
+          activityRemarkController.text = "";
+          weatherValue = WeatherModel();
+          bendValue = BendModel();
+          visualValue = CheckModel();
+          guagingValue = CheckModel();
+          disbondingValue = CheckModel();
+          holidayValue = HolidayModel();
+        }
+        _eventComplete(emit);
+      }
+    }catch(e){
+      _isLoader =  false;
+      _eventComplete(emit);
+      log("BendingCatch-->${e.toString()}");
+    }
 
   }
 
@@ -202,6 +298,11 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
       bendSecondController: bendSecondController ,
       tpNoController:tpNoController  ,
       activityRemarkController:  activityRemarkController,
+      bendChainageToController: bendChainageToController,
+      bendDirectionController: bendDirectionController,
+       dailyProgressController: dailyProgressController,
+      fromKmController: fromKmController,
+      toKmController: toKmController,
     ));
   }
 }

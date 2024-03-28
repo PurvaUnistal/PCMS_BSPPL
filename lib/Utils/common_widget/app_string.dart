@@ -1,6 +1,10 @@
 class AppString{
 
   static String appName = "PBGPL MDPL";
+  static String rel = "Release Date";
+  static String relDate = "28-03-2024";
+
+
   static String userName = "Enter Your Username";
   static String password = "Enter Your Password";
 
@@ -54,6 +58,29 @@ class AppString{
   /////
   static get rouHandover => "Route HandOver";
   static get terrain => "Terrain";
+  static get methodOfTrenching => "Method of Trenching";
+  static get beddingAccepted => "Bedding Accepted";
+  static get visualInsp => "Visual Insp";
+  static get preHeat => "Pre Heat";
+  static get dftCheck => "DFT Check";
+  static get trenchAcceptance => "Trench Acceptance";
+  static get coatingRepair => "Coating Repair";
+  static get dailyProgress => "Daily Progress";
+  static get bendDirection => "Bend Direction";
+  static get kmDELA_FROM => "KM DELA FROM";
+  static get relativeHumidity => "Relative Humidity";
+  static get airTemperature => "Air Temperature";
+  static get dewPointProgess => "Dew Point Progress";
+  static get pipeTemperature => "Pipe Temperature";
+  static get manufacture => "Manufacture";
+  static get materialType1 => "Material Type 1";
+  static get materialType2 => "Material Type 2";
+  static get materialBatch => "Material Batch";
+  static get defectLocation => "Defect Location";
+  static get repairArea => "Repair Area";
+  static get surfaceRemoval => "Surface Removal";
+  static get sectionNo => "Section Number";
+  static get kmPANA_LA_TO => "KM PANA LA TO";
   static get skipping => "Detail of Skipping";
   static get hindrance => "Detail of Hindrance";
   static get panchnama => "Ref No of Panchnama";
@@ -84,6 +111,8 @@ class AppString{
   static get suffix => "Suffix";
   static get trenchingDepth => "Trenching Depth";
   static get trenchWidth => "Trench Width";
+  static get trenchTopWidth => "Trench Top Width";
+  static get trenchBottomWidth => "Trench Bottom Width";
   static get coupler => "Coupler, End Cap, Joint Pit";
 
 
@@ -108,6 +137,7 @@ class AppString{
   static get expectedDate => "Expected Date";
   static get selectCustomerComplaint => "Select Customer Complaint";
   static get routeSurvey => " Activity - Route Survey";
+  static get pipeCoating => " Activity - Pipe Coating";
   static get yardReceiving => "Yard Receiving";
   static get hoto => "Hoto";
   static get clearingGrading => "Clearing & Grading";
@@ -200,6 +230,9 @@ class AppString{
   static get hdpeDuct => "HDPE Duct";
   static get ofcSplicing => "OFC Splicing/Jointing";
   static get selectJointType => "Select Joint Type";
+  static get paddingType => "Select Padding Type";
+  static get prePaddingType => "Select Pre Padding Type";
+  static get deWateringType => "Select DeWatering Type";
   static get selectYardName => "Select Yard Name";
   static get selectJointNumber => "Select Joint Number";
   static get selectFromJointNumber => "Select From Joint Number";
@@ -233,26 +266,29 @@ class AppString{
   static get cappingWelder1 => "Capping Welder 1";
   static get cappingWelder2 => "Capping Welder 2";
   static get electrodeDiaE6010 => "Electrode Dia E6010";
-  static get electrodeDiaE6010Batch => "Electrode Dia E6010 Batch";
-  static get electrodeDiaE8010p1 => "Electrode Dia E8010P1";
+  static get electrodeBatch806012 => "Electrode Batch 806012";
+  static get electrodeBatchB22B221868 => "Electrode Batch B22B221868";
+  static get electrodeBatchE6010 => "Electrode Batch E6010";
+  static get electrodeBatchE8010 => "Electrode Batch E8010";
   static get electrodeDiaE8010p1Batch => "Electrode Dia E8010P1 Batch";
   static get electrodeDiaE9045p2 => "Electrode Dia E9045P2";
-  static get electrodeDiaE9045p2Batch => "Electrode Dia E9045P2 Batch";
-  static get electrodeDiaE81t8g => "Electrode Dia E8118G";
-  static get electrodeDiaE81t8gBatch => "Electrode Dia E8118G Batch";
+  static get electrodeDiaE9045 => "Electrode Dia E9045";
+  static get electrodeDiaE8010 => "Electrode Dia E8010";
+  static get electrodeDiaB22B221868 => "Electrode Dia B22B221868";
+  static get electrodeDia806012 => "Electrode Dia 806012";
+  static get electrodeBatchE9045p2 => "Electrode Batch E9045p2";
   static get pipeDiameter => "Pipe Diameter";
+  static get pipeMeterial => "Pipe Material";
   static get pipeThick => "Pipe Thick";
   static get batchNo => "Batch Number";
   static get roughness => "Roughness";
   static get dustContainment => "Dust Containment";
   static get primerA => "Primer A";
   static get primerB => "Primer B";
-  static get relativeHumidity => "Relative Humidity";
   static get coatingType => "Coating Type";
   static get sleeveOption=> "Sleeve Option";
   static get onBody => "On Body US Pos Avg";
   static get onSeam => "On Seam Pos Avg";
-  static get pipeCoating => "Pipe Coating Thickness";
   static get jointCoatingThickness => "Joint Coating Thickness";
   static get process => "Process";
   static get material => "Material";

@@ -118,6 +118,71 @@ class SelectFiller3Welder2Event extends WeldingEvent{
   List<Object?> get props => [filler3Welder2Value];
 }
 
+class SelectFiller4Welder1Event extends WeldingEvent{
+  final dynamic filler4Welder1Value;
+  SelectFiller4Welder1Event({ required this.filler4Welder1Value});
+  @override
+  List<Object?> get props => [filler4Welder1Value];
+}
+
+class SelectFiller4Welder2Event extends WeldingEvent{
+  final dynamic filler4Welder2Value;
+  SelectFiller4Welder2Event({ required this.filler4Welder2Value});
+  @override
+  List<Object?> get props => [filler4Welder2Value];
+}
+class SelectFiller5Welder1Event extends WeldingEvent{
+  final dynamic filler5Welder1Value;
+  SelectFiller5Welder1Event({ required this.filler5Welder1Value});
+  @override
+  List<Object?> get props => [filler5Welder1Value];
+}
+
+class SelectFiller5Welder2Event extends WeldingEvent{
+  final dynamic filler5Welder2Value;
+  SelectFiller5Welder2Event({ required this.filler5Welder2Value});
+  @override
+  List<Object?> get props => [filler5Welder2Value];
+}
+class SelectFiller6Welder1Event extends WeldingEvent{
+  final dynamic filler6Welder1Value;
+  SelectFiller6Welder1Event({ required this.filler6Welder1Value});
+  @override
+  List<Object?> get props => [filler6Welder1Value];
+}
+
+class SelectFiller6Welder2Event extends WeldingEvent{
+  final dynamic filler6Welder2Value;
+  SelectFiller6Welder2Event({ required this.filler6Welder2Value});
+  @override
+  List<Object?> get props => [filler6Welder2Value];
+}
+class SelectFiller7Welder1Event extends WeldingEvent{
+  final dynamic filler7Welder1Value;
+  SelectFiller7Welder1Event({ required this.filler7Welder1Value});
+  @override
+  List<Object?> get props => [filler7Welder1Value];
+}
+
+class SelectFiller7Welder2Event extends WeldingEvent{
+  final dynamic filler7Welder2Value;
+  SelectFiller7Welder2Event({ required this.filler7Welder2Value});
+  @override
+  List<Object?> get props => [filler7Welder2Value];
+}
+class SelectFiller8Welder1Event extends WeldingEvent{
+  final dynamic filler8Welder1Value;
+  SelectFiller8Welder1Event({ required this.filler8Welder1Value});
+  @override
+  List<Object?> get props => [filler8Welder1Value];
+}
+
+class SelectFiller8Welder2Event extends WeldingEvent{
+  final dynamic filler8Welder2Value;
+  SelectFiller8Welder2Event({ required this.filler8Welder2Value});
+  @override
+  List<Object?> get props => [filler8Welder2Value];
+}
 class SelectCapping1Welder1Event extends WeldingEvent{
   final dynamic capping1Welder1Value;
   SelectCapping1Welder1Event({ required this.capping1Welder1Value});
@@ -146,6 +211,17 @@ class SelectWeldVisualEvent extends WeldingEvent{
   List<Object?> get props => [weldVisualValue];
 }
 
+class SelectCameraCaptureEvent extends WeldingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends WeldingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 class WeldingSubmitEvent extends WeldingEvent{
  final BuildContext context;

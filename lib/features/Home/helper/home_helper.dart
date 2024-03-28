@@ -12,6 +12,7 @@ import 'package:bsppl/features/JointCoating/presentation/joint_coating_page.dart
 import 'package:bsppl/features/Levelling/presentation/levelling_page.dart';
 import 'package:bsppl/features/Lower/presentation/lower_page.dart';
 import 'package:bsppl/features/OFCBlowing/presentation/ofc_blowing_page.dart';
+import 'package:bsppl/features/PipeCoating/presentation/pipe_coating_view.dart';
 import 'package:bsppl/features/Radiography/presentation/radiography_page.dart';
 import 'package:bsppl/features/RouteHandOver/presentation/route_handover_page.dart';
 import 'package:bsppl/features/RouteSurvey/presentation/route_survey_page.dart';
@@ -31,6 +32,9 @@ class HomeHelper {
 
        drawerList.add(DrawerModel(widget: const RouteSurveyPage(), icon: Icons.alt_route_sharp,
            label: AppString.routeSurvey, sublist: [],  isSelected: false, actionButtonWidget: null));
+
+       drawerList.add(DrawerModel(widget: const PipeCoatingPage(), icon: Icons.precision_manufacturing_outlined,
+           label: AppString.pipeCoating, sublist: [],  isSelected: false, actionButtonWidget: null));
 
        drawerList.add(DrawerModel(widget: const RouteHandOverPage(), icon: Icons.handshake_outlined,
            label: AppString.rouHandover, sublist: [],  isSelected: false, actionButtonWidget: null));

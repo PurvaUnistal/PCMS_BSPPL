@@ -23,6 +23,8 @@ class TrenchingFetchDataState extends TrenchingState{
   final bool isPageLoader;
   final bool isLoader;
   final File photo;
+  final String jointFrom;
+  final String jointTo;
   final AlignSheetModel? alignSheetValue;
   final JointTypeModel? jointTypeFromValue;
   final JointTypeModel? jointTypeToValue;
@@ -43,13 +45,22 @@ class TrenchingFetchDataState extends TrenchingState{
   final TextEditingController chainageToController;
   final TextEditingController sectionLengthController;
   final TextEditingController trenchingDepthController;
-  final TextEditingController trenchWidthController;
+  final TextEditingController trenchTopWidthController;
+  final TextEditingController trenchBottomWidthController;
   final TextEditingController terrainController;
   final TextEditingController activityRemarkController;
+  final TextEditingController kmDELA_FROMController;
+  final TextEditingController kmPANA_LA_TOController;
+  final TextEditingController dailyProgressController;
+  final TextEditingController methodOfTrenchingController;
+  final TextEditingController beddingAcceptedController;
+  final TextEditingController sectionNoController;
   TrenchingFetchDataState({
     required this.isPageLoader,
     required this.isLoader,
     required this.photo,
+    required this.jointFrom,
+    required this.jointTo,
     required this.alignSheetValue,
     required this.jointTypeFromValue,
     required this.jointTypeToValue,
@@ -70,9 +81,16 @@ class TrenchingFetchDataState extends TrenchingState{
     required this.chainageToController,
     required this.sectionLengthController,
     required this.trenchingDepthController,
-    required this.trenchWidthController,
+    required this.trenchTopWidthController,
+    required this.trenchBottomWidthController,
     required this.terrainController,
     required this.activityRemarkController,
+    required this.beddingAcceptedController,
+    required this.kmDELA_FROMController,
+    required this.kmPANA_LA_TOController,
+    required this.dailyProgressController,
+    required this.methodOfTrenchingController,
+    required this.sectionNoController,
 });
   @override
   // TODO: implement props
@@ -80,6 +98,8 @@ class TrenchingFetchDataState extends TrenchingState{
    isPageLoader,
     isLoader,
     photo,
+    jointFrom,
+    jointTo,
    alignSheetValue,
    jointTypeFromValue,
    jointTypeToValue,
@@ -100,8 +120,15 @@ class TrenchingFetchDataState extends TrenchingState{
    chainageToController,
    sectionLengthController,
    trenchingDepthController,
-   trenchWidthController,
+   trenchTopWidthController,
+    trenchBottomWidthController,
    terrainController,
    activityRemarkController,
+    beddingAcceptedController,
+    kmDELA_FROMController,
+    kmPANA_LA_TOController,
+    dailyProgressController,
+    methodOfTrenchingController,
+    sectionNoController,
   ];
 }

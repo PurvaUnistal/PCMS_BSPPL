@@ -2,6 +2,8 @@ import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
+import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
+import 'package:bsppl/Utils/common_widget/local_img.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
@@ -101,6 +103,25 @@ class _WeldingPageState extends State<WeldingPage> {
                 _verticalSpace(),
                 _filler3Welders2Controller(dataState: dataState),
                 _verticalSpace(),
+                _filler4Welders1Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler4Welders2Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler5Welders1Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler5Welders2Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler6Welders1Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler6Welders2Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler7Welders1Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler7Welders2Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler8Welders1Controller(dataState: dataState),
+                _verticalSpace(),
+                _filler8Welders2Controller(dataState: dataState),
                 _verticalSpace(),
                 _cappingWelder1Controller(dataState: dataState),
                 _verticalSpace(),
@@ -108,19 +129,23 @@ class _WeldingPageState extends State<WeldingPage> {
                 _verticalSpace(),
                 _electrodeDiaE6010Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeDiaE6010BatchController(dataState: dataState),
+                _electrodeBatch806012Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeEiaE8010p1Controller(dataState: dataState),
+                _electrodeBatchB22B221868Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeEiaE8010p1BatchController(dataState: dataState),
+                _electrodeBatchE6010Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeDiaE9045p2Controller(dataState: dataState),
+                _electrodeBatchE8010Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeDiaE9045p2BatchController(dataState: dataState),
+                _electrodeDiaE9045Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeDiaE81t8gController(dataState: dataState),
+                _electrodeDiaE8010Controller(dataState: dataState),
                 _verticalSpace(),
-                _electrodeDiaE81t8gBatchController(dataState: dataState),
+                _electrodeDiaB22B221868Controller(dataState: dataState),
+                _verticalSpace(),
+                _electrodeDia806012Controller(dataState: dataState),
+                _verticalSpace(),
+                _electrodeBatchE9045p2Controller(dataState: dataState),
                 _verticalSpace(),
                 _pipeDiameterController(dataState: dataState),
                 _verticalSpace(),
@@ -131,6 +156,8 @@ class _WeldingPageState extends State<WeldingPage> {
                 _materialController(dataState: dataState),
                 _verticalSpace(),
                 _fitUpWeldVisualCheckBox(dataState: dataState),
+                _verticalSpace(),
+                _photo(dataState: dataState),
                 _verticalSpace(),
                 _activityRemark(dataState: dataState),
                 _verticalSpace(),
@@ -144,6 +171,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _dateController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       enabled: true,
       label: AppString.date,
       hintText: AppString.date,
@@ -157,6 +185,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _reportNumberController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.reportNumber,
       hintText: AppString.reportNumber,
       controller: dataState.reportNumberController,
@@ -191,6 +220,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _chainageFromController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageFrom,
       hintText: AppString.chainageFrom,
@@ -200,6 +230,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _chainageToController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.chainageTo,
       hintText: AppString.chainageTo,
@@ -209,6 +240,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _leftPipeController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       keyboardType: TextInputType.text,
       label: AppString.leftPipeNumber,
       hintText: AppString.leftPipeNumber,
@@ -222,6 +254,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _rightPipeController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       hintText: AppString.rightPipeNumber,
       label: AppString.rightPipeNumber,
       keyboardType: TextInputType.text,
@@ -244,6 +277,8 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _jointTypeDropDown({required WeldingFetchDataState dataState}) {
     return DropdownWidget<JointTypeModel>(
+      star: AppString.star,
+      label: AppString.selectJointType,
       hint: AppString.selectJointType,
       dropdownValue: dataState.jointTypeValue?.name != null ? dataState.jointTypeValue : null,
       onChanged: (value) {
@@ -256,6 +291,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _jointNoController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
+      star: AppString.star,
       label: AppString.jointNo,
       hintText: AppString.jointNo,
       keyboardType: TextInputType.number,
@@ -274,6 +310,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _wpsDropdown({required WeldingFetchDataState dataState}) {
     return DropdownWidget<WpsModel>(
+      label: AppString.selectWPS,
       hint: AppString.selectWPS,
       dropdownValue: dataState.wpsValue?.wpsName != null ? dataState.wpsValue : null,
       onChanged: (value) {
@@ -286,6 +323,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _rootWelders1Dropdown({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+      label: AppString.rootWelders1,
       hint: AppString.rootWelders1,
       dropdownValue: dataState.rootWelders1Value?.welderName != null ? dataState.rootWelders1Value : null,
       onChanged: (value) {
@@ -298,6 +336,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _rootWelders2Dropdown({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+      label: AppString.rootWelders2,
       hint: AppString.rootWelders2,
       dropdownValue: dataState.rootWelders2Value?.welderName != null ? dataState.rootWelders2Value : null,
       onChanged: (value) {
@@ -310,6 +349,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _hotWelders1Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.hotWelders1,
         hint: AppString.hotWelders1,
         dropdownValue: dataState.hotWelders1Value?.welderName != null ? dataState.hotWelders1Value : null,
         onChanged: (value) {
@@ -322,6 +362,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _hotWelders2Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.hotWelders2,
         hint: AppString.hotWelders2,
         dropdownValue: dataState.hotWelders2Value?.welderName != null ? dataState.hotWelders2Value : null,
         onChanged: (value) {
@@ -334,6 +375,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler1Welders1Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler1Welders1,
         hint: AppString.filler1Welders1,
         dropdownValue: dataState.filler1Welders1Value?.welderName != null ? dataState.filler1Welders1Value : null,
         onChanged: (value) {
@@ -346,6 +388,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler1Welders2Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler1Welders2,
         hint: AppString.filler1Welders2,
         dropdownValue: dataState.filler1Welders2alue?.welderName != null ? dataState.filler1Welders2alue : null,
         onChanged: (value) {
@@ -358,6 +401,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler2Welders1Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler2Welders1,
         hint: AppString.filler2Welders1,
         dropdownValue: dataState.filler2Welders1Value?.welderName != null ? dataState.filler2Welders1Value : null,
         onChanged: (value) {
@@ -370,6 +414,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler2Welders2Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler2Welders2,
         hint: AppString.filler2Welders2,
         dropdownValue: dataState.filler2Welders2Value?.welderName != null ? dataState.filler2Welders2Value : null,
         onChanged: (value) {
@@ -382,6 +427,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler3Welders1Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler3Welders1,
         hint: AppString.filler3Welders1,
         dropdownValue: dataState.filler3Welders1Value?.welderName != null ? dataState.filler3Welders1Value : null,
         onChanged: (value) {
@@ -394,6 +440,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _filler3Welders2Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.filler3Welders2,
         hint: AppString.filler3Welders2,
         dropdownValue: dataState.filler3Welders2Value?.welderName != null ? dataState.filler3Welders2Value : null,
         onChanged: (value) {
@@ -403,10 +450,136 @@ class _WeldingPageState extends State<WeldingPage> {
         items:dataState.filler3Welders2List
     );
   }
+  Widget _filler4Welders1Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler4Welders1,
+        hint: AppString.filler4Welders1,
+        dropdownValue: dataState.filler4Welders1Value?.welderName != null ? dataState.filler4Welders1Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller4Welder1Event(filler4Welder1Value: value));
+        },
+        items:dataState.filler4Welders1List
+    );
+  }
+
+  Widget _filler4Welders2Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        hint: AppString.filler4Welders2,
+        label: AppString.filler4Welders2,
+        dropdownValue: dataState.filler4Welders2Value?.welderName != null ? dataState.filler4Welders2Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller4Welder2Event(filler4Welder2Value: value));
+        },
+        items:dataState.filler4Welders2List
+    );
+  }
+  Widget _filler5Welders1Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler5Welders1,
+        hint: AppString.filler5Welders1,
+        dropdownValue: dataState.filler5Welders1Value?.welderName != null ? dataState.filler5Welders1Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller5Welder1Event(filler5Welder1Value: value));
+        },
+        items:dataState.filler5Welders1List
+    );
+  }
+
+  Widget _filler5Welders2Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler5Welders2,
+        hint: AppString.filler5Welders2,
+        dropdownValue: dataState.filler5Welders2Value?.welderName != null ? dataState.filler5Welders2Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller5Welder2Event(filler5Welder2Value: value));
+        },
+        items:dataState.filler5Welders2List
+    );
+  }
+  Widget _filler6Welders1Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler6Welders1,
+        hint: AppString.filler6Welders1,
+        dropdownValue: dataState.filler6Welders1Value?.welderName != null ? dataState.filler6Welders1Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller6Welder1Event(filler6Welder1Value: value));
+        },
+        items:dataState.filler6Welders1List
+    );
+  }
+
+  Widget _filler6Welders2Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler6Welders2,
+        hint: AppString.filler6Welders2,
+        dropdownValue: dataState.filler6Welders2Value?.welderName != null ? dataState.filler6Welders2Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller6Welder2Event(filler6Welder2Value: value));
+        },
+        items:dataState.filler6Welders2List
+    );
+  }
+  Widget _filler7Welders1Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler7Welders1,
+        hint: AppString.filler7Welders1,
+        dropdownValue: dataState.filler7Welders1Value?.welderName != null ? dataState.filler7Welders1Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller7Welder1Event(filler7Welder1Value: value));
+        },
+        items:dataState.filler7Welders1List
+    );
+  }
+
+  Widget _filler7Welders2Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler7Welders2,
+        hint: AppString.filler7Welders2,
+        dropdownValue: dataState.filler7Welders2Value?.welderName != null ? dataState.filler7Welders2Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller7Welder2Event(filler7Welder2Value: value));
+        },
+        items:dataState.filler7Welders2List
+    );
+  }
+  Widget _filler8Welders1Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler8Welders1,
+        hint: AppString.filler8Welders1,
+        dropdownValue: dataState.filler8Welders1Value?.welderName != null ? dataState.filler8Welders1Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller8Welder1Event(filler8Welder1Value: value));
+        },
+        items:dataState.filler8Welders1List
+    );
+  }
+
+  Widget _filler8Welders2Controller({required WeldingFetchDataState dataState}) {
+    return  DropdownWidget<WelderModel>(
+        label: AppString.filler8Welders2,
+        hint: AppString.filler8Welders2,
+        dropdownValue: dataState.filler8Welders2Value?.welderName != null ? dataState.filler8Welders2Value : null,
+        onChanged: (value) {
+          BlocProvider.of<WeldingBloc>(context).add(
+              SelectFiller8Welder2Event(filler8Welder2Value: value));
+        },
+        items:dataState.filler8Welders2List
+    );
+  }
 
 
   Widget _cappingWelder1Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.cappingWelder1,
         hint: AppString.cappingWelder1,
         dropdownValue: dataState.cappingWelder1Value?.welderName != null ? dataState.cappingWelder1Value : null,
         onChanged: (value) {
@@ -419,6 +592,7 @@ class _WeldingPageState extends State<WeldingPage> {
 
   Widget _cappingWelder2Controller({required WeldingFetchDataState dataState}) {
     return  DropdownWidget<WelderModel>(
+        label: AppString.cappingWelder2,
         hint: AppString.cappingWelder2,
         dropdownValue: dataState.cappingWelder2Value?.welderName != null ? dataState.cappingWelder2Value : null,
         onChanged: (value) {
@@ -439,64 +613,81 @@ class _WeldingPageState extends State<WeldingPage> {
     );
   }
 
-  Widget _electrodeDiaE6010BatchController({required WeldingFetchDataState dataState}) {
+  Widget _electrodeBatch806012Controller({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.electrodeDiaE6010Batch,
-      hintText: AppString.electrodeDiaE6010Batch,
-      controller: dataState.electrodeDiaE6010BatchController,
+      label: AppString.electrodeBatch806012,
+      hintText: AppString.electrodeBatch806012,
+      controller: dataState.electrodeBatch806012Controller,
     );
   }
 
-  Widget _electrodeEiaE8010p1Controller({required WeldingFetchDataState dataState}) {
+  Widget _electrodeBatchB22B221868Controller({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
       keyboardType: TextInputType.number,
-      label: AppString.electrodeDiaE8010p1,
-      hintText: AppString.electrodeDiaE8010p1,
-      controller: dataState.electrodeDiaE8010p1Controller,
+      label: AppString.electrodeBatchB22B221868,
+      hintText: AppString.electrodeBatchB22B221868,
+      controller: dataState.electrodeBatchB22B221868Controller,
     );
   }
 
-  Widget _electrodeEiaE8010p1BatchController({required WeldingFetchDataState dataState}) {
+  Widget _electrodeBatchE6010Controller({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.electrodeDiaE8010p1Batch,
-      hintText: AppString.electrodeDiaE8010p1Batch,
-      controller: dataState.electrodeDiaE8010p1BatchController,
+      label: AppString.electrodeBatchE6010,
+      hintText: AppString.electrodeBatchE6010,
+      controller: dataState.electrodeBatchE6010Controller,
     );
   }
 
-  Widget _electrodeDiaE9045p2Controller({required WeldingFetchDataState dataState}) {
-    return TextFieldWidget(
-      keyboardType: TextInputType.number,
-      label: AppString.electrodeDiaE9045p2,
-      hintText: AppString.electrodeDiaE9045p2,
-      controller: dataState.electrodeDiaE9045p2Controller,
-    );
-  }
-
-  Widget _electrodeDiaE9045p2BatchController({required WeldingFetchDataState dataState}) {
-    return TextFieldWidget(
-      label: AppString.electrodeDiaE9045p2Batch,
-      hintText: AppString.electrodeDiaE9045p2Batch,
-      controller: dataState.electrodeDiaE9045p2BatchController,
-    );
-  }
-
-  Widget _electrodeDiaE81t8gController({required WeldingFetchDataState dataState}) {
+  Widget _electrodeBatchE8010Controller({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
       keyboardType: TextInputType.number,
-      label: AppString.electrodeDiaE81t8g,
-      hintText: AppString.electrodeDiaE81t8g,
-      controller: dataState.electrodeDiaE81t8gController,
+      label: AppString.electrodeBatchE8010,
+      hintText: AppString.electrodeBatchE8010,
+      controller: dataState.electrodeBatchE8010Controller,
     );
   }
 
-  Widget _electrodeDiaE81t8gBatchController({required WeldingFetchDataState dataState}) {
+  Widget _electrodeDiaE9045Controller({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.electrodeDiaE81t8gBatch,
-      hintText: AppString.electrodeDiaE81t8gBatch,
-      controller: dataState.electrodeDiaE81t8gBatchController,
+      label: AppString.electrodeDiaE9045,
+      hintText: AppString.electrodeDiaE9045,
+      controller: dataState.electrodeDiaE9045Controller,
     );
   }
+
+  Widget _electrodeDiaE8010Controller({required WeldingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      label: AppString.electrodeDiaE8010,
+      hintText: AppString.electrodeDiaE8010,
+      controller: dataState.electrodeDiaE8010Controller,
+    );
+  }
+
+  Widget _electrodeDiaB22B221868Controller({required WeldingFetchDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.electrodeDiaB22B221868,
+      hintText: AppString.electrodeDiaB22B221868,
+      controller: dataState.electrodeDiaB22B221868Controller,
+    );
+  }
+
+  Widget _electrodeDia806012Controller({required WeldingFetchDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.electrodeDia806012,
+      hintText: AppString.electrodeDia806012,
+      controller: dataState.electrodeDia806012Controller,
+    );
+  }
+
+  Widget _electrodeBatchE9045p2Controller({required WeldingFetchDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.electrodeBatchE9045p2,
+      hintText: AppString.electrodeBatchE9045p2,
+      controller: dataState.electrodeBatchE9045p2Controller,
+    );
+  }
+
 
   Widget _pipeDiameterController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
@@ -556,11 +747,33 @@ class _WeldingPageState extends State<WeldingPage> {
       ],
     );
   }
-
+  Widget _photo({required WeldingFetchDataState dataState}) {
+    return  LocalImgWidget(
+      file: dataState.photo,
+      onTap: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<WeldingBloc>(context).add(SelectCameraCaptureEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<WeldingBloc>(context).add(SelectGalleryCaptureEvent());
+                },
+              );
+            });
+      },
+    );
+  }
 
   Widget _activityRemark({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
        controller: dataState.activityRemarkController,

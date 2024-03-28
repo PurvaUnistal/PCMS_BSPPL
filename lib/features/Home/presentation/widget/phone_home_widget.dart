@@ -1,6 +1,7 @@
 import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_font.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/common_widget/styles_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/features/Home/domain/bloc/home_bloc.dart';
@@ -43,6 +44,14 @@ class _PhoneHomeWidgetState extends State<PhoneHomeWidget> {
                     return const SizedBox.shrink();
                   }
                 }
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(AppString.rel,style: Styles.rel),
+                Text(AppString.relDate,style: Styles.rel),
+              ],
             ),
           ],
           flexibleSpace: Container(

@@ -67,9 +67,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           _eventCompleted(emit);
           if (res.posts?.status.type == "Success") {
             _loginModel = res;
-            Utils.successSnackBar(msg:
-                "${res.posts!.status.type.toString()}fully Login",
-              context:   event.context);
+            Utils.successSnackBar(
+                msg: "${res.posts!.status.type.toString()}fully Login",
+                context:   event.context);
             await PreferenceUtil.setString(key: PreferenceValue.email, value: emailId.toString());
             await PreferenceUtil.setString(key: PreferenceValue.password, value: password.toString());
             await PreferenceUtil.setString(key: PreferenceValue.userId, value: res.posts!.status.value.split(",")[0].toString());

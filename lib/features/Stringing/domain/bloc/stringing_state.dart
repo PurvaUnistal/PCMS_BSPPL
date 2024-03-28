@@ -19,23 +19,23 @@ class StringingPageLoadState extends StringingState {
 
 class StringingFetchDataState extends StringingState {
   bool isPageLoader;
-  dynamic isYesValue;
-  dynamic isNoValue;
   final bool isLoader;
   final File photo;
   WeatherModel? weatherValue;
+  CoatingOkModel? coatingValue;
   List<WeatherModel> weatherList;
   List<CoatingOkModel> coatingOkList;
   TextEditingController dateController;
   TextEditingController reportNumberController;
   TextEditingController chainageController;
   TextEditingController pipeNumberController;
+  TextEditingController pipeDiameterController;
+  TextEditingController pipeMeterialController;
   TextEditingController activityRemarkController;
 
   StringingFetchDataState({
     required this.isPageLoader,
-    required this.isYesValue,
-    required this.isNoValue,
+    required this.coatingValue,
     required this.isLoader,
     required this.photo,
     required this.weatherValue,
@@ -45,13 +45,14 @@ class StringingFetchDataState extends StringingState {
     required this.reportNumberController,
     required this.chainageController,
     required this.pipeNumberController,
+    required this.pipeDiameterController,
+    required this.pipeMeterialController,
     required this.activityRemarkController,
   });
   @override
   List<Object?> get props => [
     isPageLoader,
-    isYesValue,
-    isNoValue,
+    coatingValue,
     isLoader,
     photo,
     weatherValue,
@@ -61,6 +62,8 @@ class StringingFetchDataState extends StringingState {
     reportNumberController,
     chainageController,
     pipeNumberController,
+    pipeDiameterController,
+    pipeMeterialController,
     activityRemarkController,
   ];
 }

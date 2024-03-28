@@ -63,3 +63,66 @@ class SelectHolidayCheckEvent extends LowerEvent{
   // TODO: implement props
   List<Object?> get props => [isHolidayCheck];
 }
+
+class SelectPrePaddingValueEvent extends LowerEvent{
+  final dynamic prePaddingValue;
+  SelectPrePaddingValueEvent({ required this.prePaddingValue});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [prePaddingValue];
+}
+
+class SelectDeWateringValueEvent extends LowerEvent{
+  final dynamic deWateringValue;
+  SelectDeWateringValueEvent({ required this.deWateringValue});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [deWateringValue];
+}
+
+class SelectPaddingValueEvent extends LowerEvent{
+  final dynamic paddingValue;
+  SelectPaddingValueEvent({ required this.paddingValue});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [paddingValue];
+}
+
+class SelectJointFromEvent extends LowerEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectJointToEvent extends LowerEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectCameraCaptureEvent extends LowerEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectGalleryCaptureEvent extends LowerEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectSectionLengthEvent extends LowerEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+
+class LowerSubmitEvent extends LowerEvent{
+  final BuildContext context;
+  LowerSubmitEvent({ required this.context});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [context];
+}

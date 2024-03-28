@@ -7,18 +7,17 @@ class DropdownWidget<T> extends StatelessWidget {
   final String hint;
   final String? label;
   final String? star;
-//  final ValueChanged<T?> onChanged;
   final void Function(T?)? onChanged;
   final List<T> items;
 
-   DropdownWidget({
+  const DropdownWidget({
     Key? key,
     required this.dropdownValue,
     required this.onChanged,
     required this.items,
     required this.hint,
-    this.star,
     this.label,
+    this.star,
   }) : super(key: key);
 
   @override
@@ -26,13 +25,14 @@ class DropdownWidget<T> extends StatelessWidget {
     return DropdownButtonFormField<T>(
         borderRadius: BorderRadius.circular(5),
         decoration: InputDecoration(
-          fillColor: AppColor.white,
+          fillColor: AppColor.black,
+          // labelText: label,
           isDense: false,
           contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-          enabledBorder: border,
-          disabledBorder:  border,
-          border:  border,
-          focusedBorder: border,
+          enabledBorder: _border(),
+          disabledBorder:_border(),
+          border: _border(),
+          focusedBorder: _border(),
           label: Padding(
             padding: const EdgeInsets.only(left: 2.0),
             child: Row(
@@ -40,14 +40,15 @@ class DropdownWidget<T> extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(child: Text(star??"", style:Styles.stars)),
-                Flexible(flex : 6,child: Text(label  ?? "", style:Styles.labels)),
+                Flexible(child: Text(star??"",  style:Styles.stars)),
+                Flexible(child: Text(label  ?? "", style:Styles.labels),
+                ),
               ],
             ),
           ),
         ),
-        hint: Text(hint, style:Styles.labels),
-        style: Styles.labels,
+        hint: Text(hint, style: Styles.labels),
+        style: Styles.texts,
         isExpanded: true,
         value: dropdownValue != null ? dropdownValue : null,
         items: items.map<DropdownMenuItem<T>>((T value) {
@@ -60,11 +61,17 @@ class DropdownWidget<T> extends StatelessWidget {
           );
         }).toList(),
         onChanged: onChanged
-        );
+    );
   }
 
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.appBlueColor, style: BorderStyle.solid, width: 0.80),
-  );
+  OutlineInputBorder _border(){
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        width: 0.80,
+        color: AppColor.appBlueColor,
+      ),
+    );
+  }
 }

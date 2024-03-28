@@ -16,6 +16,7 @@ import 'package:bsppl/features/Levelling/domain/bloc/levelling_bloc.dart';
 import 'package:bsppl/features/Login/domain/bloc/login_bloc.dart';
 import 'package:bsppl/features/Lower/domain/bloc/lower_bloc.dart';
 import 'package:bsppl/features/OfcBlowing/domain/bloc/ofc_blowing_bloc.dart';
+import 'package:bsppl/features/PipeCoating/domain/bloc/pipe_coating_bloc.dart';
 import 'package:bsppl/features/Radiography/domain/bloc/radiography_bloc.dart';
 import 'package:bsppl/features/RouteHandOver/domain/bloc/route_hand_over_bloc.dart';
 import 'package:bsppl/features/RouteSurvey/domain/bloc/route_survey_bloc.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => OfcBlowingBloc()),
         BlocProvider(create: (BuildContext context) => YardReceivingBloc()),
         BlocProvider(create: (BuildContext context) => IssueToContractorBloc()),
+        BlocProvider(create: (BuildContext context) => PipeCoatingBloc()),
       ],
       child: MaterialApp(
         theme: ThemeData(

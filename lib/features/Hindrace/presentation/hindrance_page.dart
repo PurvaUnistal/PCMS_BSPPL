@@ -2,7 +2,6 @@ import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_font.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
-import 'package:bsppl/Utils/common_widget/dropdown_search_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
@@ -87,11 +86,12 @@ class _HindrancePageState extends State<HindrancePage> {
 
 
   Widget _alignmentDropdown() {
-    return  DropDownSearchWidget(
-      selectedItem:null,
+    return  DropdownWidget(
+      star: AppString.appName,
       hint: AppString.selectAlignment,
-      items: [],
-      itemAsString: (alignmentData) => alignmentData.alignmentName.toString(),
+      label: AppString.selectAlignment,
+      dropdownValue:"",
+      items:[],
       onChanged: (value) {
       },
     );

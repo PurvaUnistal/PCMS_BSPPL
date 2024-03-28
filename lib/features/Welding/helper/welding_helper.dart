@@ -1,10 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Server/app_url.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/Utils/utils.dart';
+import 'package:bsppl/features/Backfilling/domain/model/SubmitDataModel.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Welding/domain/model/welder_model.dart';
@@ -51,9 +52,44 @@ class WeldingHelper{
     return null;
   }
 
-  static Future<dynamic> validation({required BuildContext context}) async{
+  static Future<dynamic> validation({
+    required BuildContext context,
+    required String date,
+    required String reportNo,
+    required String chainageFrom,
+    required String chainageTo,
+    required String rightPipeNumber,
+    required String leftPipeNumber,
+    required String jointType,
+    required String jointNo,
+  }) async{
     try{
-
+      if(date.isEmpty){
+        Utils.errorSnackBar(msg: "The Date field is required".toString(),context:  context);
+        return false;
+      } else if(reportNo.isEmpty){
+        Utils.errorSnackBar(msg: "The Report Number field is required".toString(),context:  context);
+        return false;
+      } else if(chainageFrom.isEmpty){
+        Utils.errorSnackBar(msg: "The Chainage From field is required".toString(),context:  context);
+        return false;
+      } else if(chainageTo.isEmpty){
+        Utils.errorSnackBar(msg: "The Chainage To field is required".toString(),context:  context);
+        return false;
+      } else if(leftPipeNumber.isEmpty){
+        Utils.errorSnackBar(msg: "The Left Pipe Number field is required".toString(),context:  context);
+        return false;
+      } else if(rightPipeNumber.isEmpty){
+        Utils.errorSnackBar(msg: "The Right Pipe Number field is required".toString(),context:  context);
+        return false;
+      } else if(jointType == "null"){
+        Utils.errorSnackBar(msg: "The Joint Type field is required".toString(),context:  context);
+        return false;
+      }else if(jointNo.isEmpty){
+        Utils.errorSnackBar(msg: "The Joint Number field is required".toString(),context:  context);
+        return false;
+      }
+      return true;
     }catch(e){
       log("catchLogin-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(),context:  context);
@@ -65,6 +101,7 @@ class WeldingHelper{
     required BuildContext context,
     required AlignSheetModel alignmentData,
     required String reportNumber,
+    required String JointId,
     required String date,
     required String leftPipeNumber,
     required String rightPipeNumber,
@@ -80,21 +117,28 @@ class WeldingHelper{
     required WelderModel filler2Welders2Data,
     required WelderModel filler3Welders1Data,
     required WelderModel filler3Welders2Data,
+    required WelderModel filler4Welders1Data,
+    required WelderModel filler4Welders2Data,
+    required WelderModel filler5Welders1Data,
+    required WelderModel filler5Welders2Data,
+    required WelderModel filler6Welders1Data,
+    required WelderModel filler6Welders2Data,
+    required WelderModel filler7Welders1Data,
+    required WelderModel filler7Welders2Data,
+    required WelderModel filler8Welders1Data,
+    required WelderModel filler8Welders2Data,
     required WelderModel cappingWelder1Data,
     required WelderModel cappingWelder2Data,
     required String electrodeDiaE8010,
-    required String electrodeDiaE81t8gBatch,
-    required String electrodeDiaE81t8g,
-    required String electrodeDiaE6010Batch,
     required String electrodeDiaE6010,
-    required String electrodeDiaE9045p2Batch,
+    required String electrodeBatchE6010,
+    required String electrodeBatchE8010,
     required String electrodeDiaB22B221868,
-    required String electrodeDiaB22B221868Batch,
-    required String electrodeDiaE9045p2,
+    required String electrodeBatchB22B221868,
+    required String electrodeDiaE9045,
+    required String electrodeBatchE9045p2,
     required String electrodeDia806012,
-    required String electrodeEiaE8010p1Batch,
     required String electrodeBatch806012,
-    required String electrodeEiaE8010p1,
     required String pipeDia,
     required String pipeThick,
     required WeatherModel weather,
@@ -104,7 +148,8 @@ class WeldingHelper{
     required String material,
     required String fitUp,
     required String weldVisual,
-}) async {
+    required File photo,
+  }) async {
     String userId =  await PreferenceUtil.getString(key: PreferenceValue.userId);
     String sectionId =  await PreferenceUtil.getString(key: PreferenceValue.sectionId);
     Map<String, String> param = {
@@ -113,7 +158,7 @@ class WeldingHelper{
       "UserID": userId,
       "TR_Welding_Date": date,
       "TR_Report_Number": reportNumber,
-      "JointID": "",
+      "JointID": JointId,
       "LeftPipeNumber": leftPipeNumber,
       "RightPipeNumber": rightPipeNumber,
       "WPSNo": wpsNo.wpsId ?? "",
@@ -127,16 +172,26 @@ class WeldingHelper{
       "F2WelderNumber2": filler2Welders2Data.welderId ?? "",
       "F3WelderNumber1": filler3Welders1Data.welderId ?? "",
       "F3WelderNumber2": filler3Welders2Data.welderId ?? "",
+      "F4WelderNumber1": filler4Welders1Data.welderId ?? "",
+      "F4WelderNumber2": filler4Welders2Data.welderId ?? "",
+      "F5WelderNumber1": filler5Welders1Data.welderId ?? "",
+      "F5WelderNumber2": filler5Welders2Data.welderId ?? "",
+      "F6WelderNumber1": filler6Welders1Data.welderId ?? "",
+      "F6WelderNumber2": filler6Welders2Data.welderId ?? "",
+      "F7WelderNumber1": filler7Welders1Data.welderId ?? "",
+      "F7WelderNumber2": filler7Welders2Data.welderId ?? "",
+      "F8WelderNumber1": filler8Welders1Data.welderId ?? "",
+      "F8WelderNumber2": filler8Welders1Data.welderId ?? "",
       "CWelderNumber1": cappingWelder1Data.welderId ?? "",
       "CWelderNumber2": cappingWelder2Data.welderId ?? "",
       "electrode_e6010_dia": electrodeDiaE6010,
-      "electrode_e6010_batch": electrodeDiaE6010Batch,
+      "electrode_e6010_batch": electrodeBatchE6010,
       "electrode_e8010_dia": electrodeDiaE8010,
-      "electrode_e8010_batch": electrodeDiaE6010Batch,
-      "electrode_e9045_dia": electrodeDiaE9045p2,
-      "electrode_e9045_batch": electrodeDiaE9045p2Batch,
+      "electrode_e8010_batch": electrodeBatchE8010,
+      "electrode_e9045_dia": electrodeDiaE9045,
+      "electrode_e9045_batch": electrodeBatchE9045p2,
       "electrode_B221868_dia": electrodeDiaB22B221868,
-      "electrode_B221868_batch": electrodeDiaB22B221868Batch,
+      "electrode_B221868_batch": electrodeBatchB22B221868,
       "electrode_806012_dia": electrodeDia806012,
       "electrode_806012_batch": electrodeBatch806012,
       "Pipe_dia": pipeDia,
@@ -154,14 +209,18 @@ class WeldingHelper{
     log("param-->${param}");
     try{
       var res = await ApiServer.postDataWithFile(
-
-        keyWord: "Photo",filePath:"",
+          keyWord: "ImageData",filePath: photo.path.toString(),
           context: context,body: param);
-      if(res != null){
-        //  return alignSheetModelFromJson(res);
+      if(res != null && res["status"] == "success"){
+        Utils.successSnackBar(msg: res["message"],context:  context);
+        return SubmitDataModel.fromJson(res);
+      }
+      else if(res != null && res["status"] == "error"){
+        Utils.errorSnackBar(msg: res["message"],context:  context);
+        return null;
       }
     } catch(e){
-      log("catchLogin-->${e.toString()}");
+      log("catchBindingHelper-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(),context:  context);
       return null;
     }

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:bsppl/features/Bending/domain/model/bend_model.dart';
-import 'package:bsppl/features/Bending/domain/model/check_model.dart';
-import 'package:bsppl/features/Bending/domain/model/holiday_model.dart';
+import 'package:bsppl/features/AllCommonModel/bend_model.dart';
+import 'package:bsppl/features/AllCommonModel/check_model.dart';
+import 'package:bsppl/features/AllCommonModel/holiday_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +44,11 @@ class BendFetchDataState extends BendState {
   TextEditingController minuteController;
   TextEditingController bendSecondController;
   TextEditingController tpNoController;
+  TextEditingController toKmController;
+  TextEditingController fromKmController;
+  TextEditingController dailyProgressController;
+  TextEditingController bendChainageToController;
+  TextEditingController bendDirectionController;
   TextEditingController activityRemarkController;
 
   BendFetchDataState({
@@ -71,8 +76,14 @@ class BendFetchDataState extends BendState {
     required this.minuteController,
     required this.bendSecondController,
     required this.tpNoController,
+    required this.toKmController,
+    required this.fromKmController,
+    required this.dailyProgressController,
+    required this.bendChainageToController,
+    required this.bendDirectionController,
     required this.activityRemarkController,
 });
+
   @override
   List<Object?> get props => [
     isPageLoader,
@@ -99,6 +110,11 @@ class BendFetchDataState extends BendState {
     minuteController,
     bendSecondController,
     tpNoController,
+    toKmController,
+    fromKmController,
+    dailyProgressController,
+    bendChainageToController,
+    bendDirectionController,
     activityRemarkController,
   ];
 }

@@ -1,5 +1,6 @@
 import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/common_widget/auto_complete_text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
@@ -9,10 +10,12 @@ import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_bloc.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_state.dart';
+import 'package:bsppl/features/Stringing/domain/model/coating_ok_model.dart';
 import 'package:bsppl/features/Stringing/presentation/widget/check_box_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_event.dart';
 
 class StringingPage extends StatefulWidget {
@@ -30,7 +33,7 @@ class _StringingPageState extends State<StringingPage> {
     BlocProvider.of<StringingBloc>(context).add(StringingPageLoadEvent(context: context));
     super.initState();
   }
-
+  GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,13 +60,17 @@ class _StringingPageState extends State<StringingPage> {
             _verticalSpace(),
             _reportNumberController(dataState: dataState),
             _verticalSpace(),
+            _pipeNoController(dataState: dataState),
+            _verticalSpace(),
             _chainageController(dataState: dataState),
             _verticalSpace(),
             _weatherDropDown(dataState: dataState),
             _verticalSpace(),
-            _coatingCheckBox(dataState: dataState),
+            _coatingDown(dataState: dataState),
             _verticalSpace(),
-            _pipeNoController(dataState: dataState),
+            _pipeDiameterController(dataState: dataState),
+            _verticalSpace(),
+            _pipeMeterialController(dataState: dataState),
             _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
@@ -124,39 +131,40 @@ class _StringingPageState extends State<StringingPage> {
     );
   }
 
-  Widget _coatingCheckBox({required StringingFetchDataState dataState}){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(flex: 6,child: Text(AppString.coatingOk,)),
-        Flexible(
-          flex: 6,
-          child: Row(
-            children: [
-              CheckBoxWidget(
-                label: AppString.yes,
-                selectedValue: dataState.isYesValue,
-                onChanged: (value){
-                  BlocProvider.of<StringingBloc>(context).add(
-                      SelectCoatingOkValueEvent(checkYes: true,checkNo: false));
-                },
-              ),
-              CheckBoxWidget(
-                label: AppString.no,
-                selectedValue: dataState.isNoValue,
-                onChanged: (value){
-                  BlocProvider.of<StringingBloc>(context).add(
-                      SelectCoatingOkValueEvent(checkYes: false,checkNo: true));
-                },
-              ),
-            ],
-          ),
-        )
-      ],
+  Widget _coatingDown({required StringingFetchDataState dataState}) {
+    return DropdownWidget<CoatingOkModel>(
+      hint: AppString.coatingType,
+      label: AppString.coatingType,
+      dropdownValue: dataState.coatingValue?.name != null ? dataState.coatingValue : null,
+      onChanged: (value) {
+        BlocProvider.of<StringingBloc>(context).add(
+            SelectCoatingOkValueEvent(coatingValue: value));
+      },
+      items:dataState.coatingOkList,
     );
   }
-  Widget _pipeNoController({required StringingFetchDataState dataState}) {
+
+
+  Widget _pipeDiameterController({required StringingFetchDataState dataState}) {
     return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      hintText: AppString.pipeDiameter,
+      label: AppString.pipeDiameter,
+      controller: dataState.pipeDiameterController,
+    );
+  }
+
+  Widget _pipeMeterialController({required StringingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      hintText: AppString.pipeMeterial,
+      label: AppString.pipeMeterial,
+      controller: dataState.pipeMeterialController,
+    );
+  }
+
+  Widget _pipeNoController({required StringingFetchDataState dataState}) {
+   /* return TextFieldWidget(
       star: AppString.star,
       keyboardType: TextInputType.number,
       hintText: AppString.pipeNo,
@@ -166,7 +174,13 @@ class _StringingPageState extends State<StringingPage> {
         icon: Icon(Icons.qr_code_scanner_outlined, color: AppColor.appBlueColor,),
         onPressed: (){},
       ),
-    );
+    );*/
+   //  return SimpleAutoCompleteTextField(
+     return AutoCompleteTextFieldWidget(
+      controller: dataState.pipeNumberController,
+       suggestions: [],
+       keys: key,
+     );
   }
 
   Widget _activityRemark({required StringingFetchDataState dataState}) {

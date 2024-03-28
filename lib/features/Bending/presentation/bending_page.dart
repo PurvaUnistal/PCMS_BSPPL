@@ -3,6 +3,7 @@ import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
+import 'package:bsppl/Utils/common_widget/local_img.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
@@ -10,9 +11,9 @@ import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_bloc.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_event.dart';
 import 'package:bsppl/features/Bending/domain/bloc/bending_state.dart';
-import 'package:bsppl/features/Bending/domain/model/bend_model.dart';
-import 'package:bsppl/features/Bending/domain/model/check_model.dart';
-import 'package:bsppl/features/Bending/domain/model/holiday_model.dart';
+import 'package:bsppl/features/AllCommonModel/bend_model.dart';
+import 'package:bsppl/features/AllCommonModel/check_model.dart';
+import 'package:bsppl/features/AllCommonModel/holiday_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,16 @@ class _BendingPageState extends State<BendingPage> {
             _disbondingDropDown(dataState: dataState),
             _verticalSpace(),
             _holidayDropDown(dataState: dataState),
+            _verticalSpace(),
+            _kmDELA_FROMController(dataState: dataState),
+            _verticalSpace(),
+            _kmPANA_LA_TOController(dataState: dataState),
+            _verticalSpace(),
+            _dailyProgressController(dataState: dataState),
+            _verticalSpace(),
+            _bendChainageToController(dataState: dataState),
+            _verticalSpace(),
+            _bendDirectionController(dataState: dataState),
             _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
@@ -267,11 +278,54 @@ class _BendingPageState extends State<BendingPage> {
       items:dataState.holidayList,
     );
   }
-  
+
+  Widget _kmDELA_FROMController({required BendFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmDELA_FROM,
+      hintText: AppString.kmDELA_FROM,
+      controller: dataState.fromKmController,
+    );
+  }
+
+  Widget _kmPANA_LA_TOController({required BendFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmPANA_LA_TO,
+      hintText: AppString.kmPANA_LA_TO,
+      controller: dataState.toKmController,
+    );
+  }
+
+  Widget _dailyProgressController({required BendFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.dailyProgress,
+      hintText: AppString.dailyProgress,
+      controller: dataState.dailyProgressController,
+    );
+  }
+
+  Widget _bendChainageToController({required BendFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.coatingRepair,
+      hintText: AppString.coatingRepair,
+      controller: dataState.bendChainageToController,
+    );
+  }
+  Widget _bendDirectionController({required BendFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.bendDirection,
+      hintText: AppString.bendDirection,
+      controller: dataState.bendDirectionController,
+    );
+  }
 
   Widget _activityRemark({required BendFetchDataState dataState}) {
     return TextFieldWidget(
-      maxLength: 3,
+      maxLine: 3,
       label: AppString.activityRemark,
       hintText: AppString.activityRemark,
       controller: dataState.activityRemarkController,
@@ -279,68 +333,26 @@ class _BendingPageState extends State<BendingPage> {
   }
 
   Widget _photo({required BendFetchDataState dataState}) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width/3,
-      height:MediaQuery.of(context).size.width/3,
-      child: InkWell(
-        onTap: () {
-          showModalBottomSheet(
-              enableDrag: true,
-              isScrollControlled: true,
-              context: context, builder: (BuildContext context){
-            return  ImagePopWidget(
-              onTapCamera: () async {
-                Navigator.of(context).pop();
-                BlocProvider.of<BendingBloc>(context).add(SelectCameraCaptureEvent());
-              },
-              onTapGallery: () async {
-                Navigator.of(context).pop();
-                BlocProvider.of<BendingBloc>(context).add(SelectGalleryCaptureEvent());
-              },
-            );
-          });
-        },
-        child: DottedBorder(
-          color: AppColor.grey,
-          strokeWidth: 1,
-          child: dataState.photo.path == ""
-              ||dataState.photo.path.isEmpty ?
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Center(child: Icon(Icons.photo_camera_back_outlined),),
-              Padding(
-                padding:  EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-                child: TextWidget(AppString.photo,
-                  fontSize: 12,
-                  color: AppColor.grey,),
-              ),
-            ],
-          ):Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.file(
-                    dataState.photo,
-                    fit: BoxFit.fill,
-                    width: MediaQuery.of(context).size.width/3,
-                    height: MediaQuery.of(context).size.width/4.5 ,
-                  )
-                ],
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width/3,
-                  height:MediaQuery.of(context).size.width/3,
-                  color : Colors.white.withOpacity(0.6),
-                  child: Center(child: Icon(Icons.refresh, color: AppColor.appBlueColor,))),
-
-            ],
-          ),
-        ),
-      ),
+    return  LocalImgWidget(
+      file: dataState.photo,
+      onTap: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<BendingBloc>(context).add(SelectCameraCaptureEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<BendingBloc>(context).add(SelectGalleryCaptureEvent());
+                },
+              );
+            });
+      },
     );
   }
 

@@ -2,7 +2,6 @@ import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_font.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
-import 'package:bsppl/Utils/common_widget/dropdown_search_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
@@ -87,13 +86,14 @@ class _ContractorRowPageState extends State<ContractorRowPage> {
 
 
   Widget _alignmentDropdown() {
-    return  DropDownSearchWidget(
-      selectedItem:null,
+    return DropdownWidget(
+      star: AppString.star,
+      label: AppString.selectAlignment,
       hint: AppString.selectAlignment,
-      items: [],
-      itemAsString: (alignmentData) => alignmentData.alignmentName.toString(),
+      dropdownValue:"",
       onChanged: (value) {
       },
+      items:[],
     );
   }
 

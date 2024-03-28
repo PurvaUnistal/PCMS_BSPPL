@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
@@ -21,6 +23,7 @@ class WeldingPageLoadState extends WeldingState{
 }
 
 class WeldingFetchDataState extends WeldingState{
+  File photo;
   bool isPageLoader;
   bool isLoader;
   bool isFitUpValue;
@@ -39,6 +42,16 @@ class WeldingFetchDataState extends WeldingState{
   WelderModel? filler2Welders2Value;
   WelderModel? filler3Welders1Value;
   WelderModel? filler3Welders2Value;
+  WelderModel? filler4Welders1Value;
+  WelderModel? filler4Welders2Value;
+  WelderModel? filler5Welders1Value;
+  WelderModel? filler5Welders2Value;
+  WelderModel? filler6Welders1Value;
+  WelderModel? filler6Welders2Value;
+  WelderModel? filler7Welders1Value;
+  WelderModel? filler7Welders2Value;
+  WelderModel? filler8Welders1Value;
+  WelderModel? filler8Welders2Value;
   WelderModel? cappingWelder1Value;
   WelderModel? cappingWelder2Value;
   List<AlignSheetModel> alignSheetList;
@@ -55,6 +68,16 @@ class WeldingFetchDataState extends WeldingState{
   List<WelderModel> filler2Welders2List;
   List<WelderModel> filler3Welders1List;
   List<WelderModel> filler3Welders2List;
+  List<WelderModel> filler4Welders1List;
+  List<WelderModel> filler4Welders2List;
+  List<WelderModel> filler5Welders1List;
+  List<WelderModel> filler5Welders2List;
+  List<WelderModel> filler6Welders1List;
+  List<WelderModel> filler6Welders2List;
+  List<WelderModel> filler7Welders1List;
+  List<WelderModel> filler7Welders2List;
+  List<WelderModel> filler8Welders1List;
+  List<WelderModel> filler8Welders2List;
   List<WelderModel> cappingWelder1List;
   List<WelderModel> cappingWelder2List;
   TextEditingController dateController;
@@ -66,14 +89,16 @@ class WeldingFetchDataState extends WeldingState{
   TextEditingController kmController;
   TextEditingController jointNoController;
   TextEditingController suffixController;
+  TextEditingController electrodeDiaE8010Controller;
   TextEditingController electrodeDiaE6010Controller;
-  TextEditingController electrodeDiaE6010BatchController;
-  TextEditingController electrodeDiaE8010p1Controller;
-  TextEditingController electrodeDiaE8010p1BatchController;
-  TextEditingController electrodeDiaE9045p2Controller;
-  TextEditingController electrodeDiaE9045p2BatchController;
-  TextEditingController electrodeDiaE81t8gController;
-  TextEditingController electrodeDiaE81t8gBatchController;
+  TextEditingController electrodeBatchE6010Controller;
+  TextEditingController electrodeBatchE8010Controller;
+  TextEditingController electrodeDiaB22B221868Controller;
+  TextEditingController electrodeBatchB22B221868Controller;
+  TextEditingController electrodeDiaE9045Controller;
+  TextEditingController electrodeBatchE9045p2Controller;
+  TextEditingController electrodeDia806012Controller;
+  TextEditingController electrodeBatch806012Controller;
   TextEditingController pipeDiameterController;
   TextEditingController pipeThickController;
   TextEditingController processController;
@@ -81,6 +106,7 @@ class WeldingFetchDataState extends WeldingState{
   TextEditingController activityRemarkController;
 
   WeldingFetchDataState({
+    required this.photo,
     required this.isPageLoader,
     required this.isLoader,
     required this.isFitUpValue,
@@ -99,6 +125,16 @@ class WeldingFetchDataState extends WeldingState{
     required this.filler2Welders2Value,
     required this.filler3Welders1Value,
     required this.filler3Welders2Value,
+    required this.filler4Welders1Value,
+    required this.filler4Welders2Value,
+    required this.filler5Welders1Value,
+    required this.filler5Welders2Value,
+    required this.filler6Welders1Value,
+    required this.filler6Welders2Value,
+    required this.filler7Welders1Value,
+    required this.filler7Welders2Value,
+    required this.filler8Welders1Value,
+    required this.filler8Welders2Value,
     required this.cappingWelder1Value,
     required this.cappingWelder2Value,
     required this.alignSheetList,
@@ -115,6 +151,16 @@ class WeldingFetchDataState extends WeldingState{
     required this.filler2Welders2List,
     required this.filler3Welders1List,
     required this.filler3Welders2List,
+    required this.filler4Welders1List,
+    required this.filler4Welders2List,
+    required this.filler5Welders1List,
+    required this.filler5Welders2List,
+    required this.filler6Welders1List,
+    required this.filler6Welders2List,
+    required this.filler7Welders1List,
+    required this.filler7Welders2List,
+    required this.filler8Welders1List,
+    required this.filler8Welders2List,
     required this.cappingWelder1List,
     required this.cappingWelder2List,
     required this.dateController,
@@ -127,80 +173,105 @@ class WeldingFetchDataState extends WeldingState{
     required this.jointNoController,
     required this.suffixController,
     required this.electrodeDiaE6010Controller,
-    required this.electrodeDiaE6010BatchController,
-    required this.electrodeDiaE8010p1Controller,
-    required this.electrodeDiaE8010p1BatchController,
-    required this.electrodeDiaE9045p2Controller,
-    required this.electrodeDiaE9045p2BatchController,
-    required this.electrodeDiaE81t8gController,
-    required this.electrodeDiaE81t8gBatchController,
+    required this.electrodeDiaE8010Controller,
+    required this.electrodeBatchE6010Controller,
+    required this.electrodeBatchE8010Controller,
+    required this.electrodeDiaB22B221868Controller,
+    required this.electrodeBatchB22B221868Controller,
+    required this.electrodeDiaE9045Controller,
+    required this.electrodeBatchE9045p2Controller,
+    required this.electrodeDia806012Controller,
+    required this.electrodeBatch806012Controller,
     required this.pipeDiameterController,
     required this.pipeThickController,
     required this.processController,
     required this.materialController,
     required this.activityRemarkController,
 
-});
+  });
   @override
   // TODO: implement props
   List<Object?> get props => [
-   isPageLoader,
+    photo,
+    isPageLoader,
     isLoader,
-   isFitUpValue,
-   isWeldVisualValue,
-   alignSheetValue,
-   weatherValue,
-   jointTypeValue,
-   wpsValue,
-   rootWelders1Value,
-   rootWelders2Value,
-   hotWelders1Value,
-   hotWelders2Value,
-   filler1Welders1Value,
-   filler1Welders2alue,
-   filler2Welders1Value,
-   filler2Welders2Value,
-   filler3Welders1Value,
-   filler3Welders2Value,
-   cappingWelder1Value,
-   cappingWelder2Value,
-   alignSheetList,
-   weatherList,
-   jointTypeList,
-   wpsList,
-   rootWelders1List,
+    isFitUpValue,
+    isWeldVisualValue,
+    alignSheetValue,
+    weatherValue,
+    jointTypeValue,
+    wpsValue,
+    rootWelders1Value,
+    rootWelders2Value,
+    hotWelders1Value,
+    hotWelders2Value,
+    filler1Welders1Value,
+    filler1Welders2alue,
+    filler2Welders1Value,
+    filler2Welders2Value,
+    filler3Welders1Value,
+    filler3Welders2Value,
+    filler4Welders1Value,
+    filler4Welders2Value,
+    filler5Welders1Value,
+    filler5Welders2Value,
+    filler6Welders1Value,
+    filler6Welders2Value,
+    filler7Welders1Value,
+    filler7Welders2Value,
+    filler8Welders1Value,
+    filler8Welders2Value,
+    cappingWelder1Value,
+    cappingWelder2Value,
+    alignSheetList,
+    weatherList,
+    jointTypeList,
+    wpsList,
+    rootWelders1List,
     rootWelders2List,
-   hotWelders1List,
-   hotWelders2List,
-   filler1Welders1List,
-   filler1Welders2List,
-   filler2Welders1List,
-   filler2Welders2List,
-   filler3Welders1List,
-   filler3Welders2List,
-   cappingWelder1List,
-   cappingWelder2List,
-   dateController,
-   reportNumberController,
-   chainageFromController,
-   chainageToController,
-   leftPipeNumberController,
-   rightPipeNumberController,
-   kmController,
-   jointNoController,
-   suffixController,
-   electrodeDiaE6010Controller,
-   electrodeDiaE6010BatchController,
-   electrodeDiaE8010p1Controller,
-   electrodeDiaE8010p1BatchController,
-   electrodeDiaE9045p2Controller,
-   electrodeDiaE9045p2BatchController,
-   electrodeDiaE81t8gController,
-   electrodeDiaE81t8gBatchController,
-   pipeDiameterController,
-   pipeThickController,
-   processController,
-   materialController,
+    hotWelders1List,
+    hotWelders2List,
+    filler1Welders1List,
+    filler1Welders2List,
+    filler2Welders1List,
+    filler2Welders2List,
+    filler3Welders1List,
+    filler3Welders2List,
+    filler4Welders1List,
+    filler4Welders2List,
+    filler5Welders1List,
+    filler5Welders2List,
+    filler6Welders1List,
+    filler6Welders2List,
+    filler7Welders1List,
+    filler7Welders2List,
+    filler8Welders1List,
+    filler8Welders2List,
+    cappingWelder1List,
+    cappingWelder2List,
+    dateController,
+    reportNumberController,
+    chainageFromController,
+    chainageToController,
+    leftPipeNumberController,
+    rightPipeNumberController,
+    kmController,
+    jointNoController,
+    suffixController,
+    electrodeDiaE6010Controller,
+    electrodeDiaE8010Controller,
+    electrodeBatchE6010Controller,
+    electrodeBatchE8010Controller,
+    electrodeDiaB22B221868Controller,
+    electrodeBatchB22B221868Controller,
+    electrodeDiaE9045Controller,
+    electrodeBatchE9045p2Controller,
+    electrodeDia806012Controller,
+    electrodeBatch806012Controller,
+    pipeDiameterController,
+    pipeThickController,
+    processController,
+    materialController,
     activityRemarkController,
   ];
 }

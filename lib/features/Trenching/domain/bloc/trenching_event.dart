@@ -63,6 +63,20 @@ class SelectGalleryCaptureEvent extends TrenchingEvent{
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+class SelectJointFromEvent extends TrenchingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class SelectJointToEvent extends TrenchingEvent{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+
 class TrenchingSubmitEvent extends TrenchingEvent{
   final BuildContext context;
   TrenchingSubmitEvent({ required this.context});

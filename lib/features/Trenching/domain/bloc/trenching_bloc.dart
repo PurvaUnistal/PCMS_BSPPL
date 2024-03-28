@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/preference_utils.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/weather_model.dart';
 import 'package:bsppl/features/RouteSurvey/helper/route_survey_helper.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_event.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_state.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
+import 'package:bsppl/features/Trenching/helper/trenching_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +25,8 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     on<SelectSectionLengthEvent>(_sectionLength);
     on<SelectCameraCaptureEvent>(_selectCameraCapture);
     on<SelectGalleryCaptureEvent>(_selectGalleryCapture);
+    on<SelectJointFromEvent>(_selectJointFrom);
+    on<SelectJointToEvent>(_selectJointTo);
     on<TrenchingSubmitEvent>(_submit);
   }
 
@@ -33,6 +38,11 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
 
   File _photo = File("");
   File get photo => _photo;
+
+  String userId = '';
+  String sectionId = '';
+  String jointFrom = "";
+  String jointTo = "";
 
   AlignSheetModel? alignSheetValue;
   JointTypeModel? jointTypeFromValue;
@@ -64,8 +74,15 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
   TextEditingController chainageToController =  TextEditingController();
   TextEditingController sectionLengthController =  TextEditingController();
   TextEditingController trenchingDepthController =  TextEditingController();
-  TextEditingController trenchWidthController =  TextEditingController();
+  TextEditingController trenchTopWidthController =  TextEditingController();
+  TextEditingController trenchBottomWidthController =  TextEditingController();
   TextEditingController terrainController =  TextEditingController();
+  TextEditingController kmDELA_FROMController =  TextEditingController();
+  TextEditingController kmPANA_LA_TOController =  TextEditingController();
+  TextEditingController dailyProgressController =  TextEditingController();
+  TextEditingController methodOfTrenchingController =  TextEditingController();
+  TextEditingController sectionNoController =  TextEditingController();
+  TextEditingController beddingAcceptedController =  TextEditingController();
   TextEditingController activityRemarkController = TextEditingController();
 
   _pageLoad(TrenchingPageLoadEvent event, emit) async {
@@ -73,6 +90,8 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     _isPageLoader = false;
     _isLoader = false;
     _photo = File("");
+    jointFrom = "";
+    jointTo = "";
     dateController.text = "";
     reportNumberController.text = "";
     kmFromController.text = "";
@@ -85,9 +104,16 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     chainageToController.text = "";
     sectionLengthController.text = "";
     trenchingDepthController.text = "";
-    trenchWidthController.text = "";
+    trenchTopWidthController.text = "";
+    trenchBottomWidthController.text = "";
     terrainController.text = "";
+    beddingAcceptedController.text = "";
+    kmDELA_FROMController.text = "";
+    kmPANA_LA_TOController.text = "";
+    dailyProgressController.text = "";
+    methodOfTrenchingController.text = "";
     activityRemarkController.text = "";
+    sectionNoController.text = "";
     alignSheetValue = AlignSheetModel();
     jointTypeFromValue = JointTypeModel();
     jointTypeToValue = JointTypeModel();
@@ -96,7 +122,10 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     _jointTypeFromList = [];
     _jointTypeToList = [];
     _weatherList = [];
-     await fetchAlignSheet(context: event.context);
+
+    userId = await PreferenceUtil.getString(key: PreferenceValue.userId);
+    sectionId = await PreferenceUtil.getString(key: PreferenceValue.sectionId);
+    await fetchAlignSheet(context: event.context);
     _jointTypeFromList = JointTypeModel.getJointTypeData();
     _jointTypeToList = JointTypeModel.getJointTypeData();
     _weatherList = WeatherModel.getWeatherData();
@@ -132,11 +161,21 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
 
   _jointTypeFrom(SelectJointTypeFromEvent event, emit) {
     jointTypeFromValue = event.jointTypeFromValue;
+    if(jointTypeFromValue!.name != null){
+      jointFrom = kmFromController.text + jointTypeFromValue!.name!.trim()+ jointNoFromController.text.trim() + suffixFromController.text.trim();
+    }else{
+      jointFrom = kmFromController.text.trim() + "" + jointNoFromController.text.trim() + suffixFromController.text.trim();
+    }
     _eventComplete(emit);
   }
 
   _jointTypeTo(SelectJointTypeToEvent event, emit) {
     jointTypeToValue = event.jointTypeToValue;
+    if(jointTypeToValue!.name != null){
+      jointTo = kmToController.text.trim() + jointTypeToValue!.name!.trim()+ jointNoToController.text.trim() + suffixToController.text.trim();
+    }else{
+      jointTo = kmToController.text.trim() + "" +jointNoToController.text.trim() + suffixToController.text.trim();
+    }
     _eventComplete(emit);
   }
 
@@ -171,8 +210,106 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
     _eventComplete(emit);
   }
 
-  _submit(TrenchingSubmitEvent event, emit){
+  _selectJointFrom(SelectJointFromEvent event, emit) {
+    if(jointTypeFromValue!.name == null){
+      jointFrom = kmFromController.text.trim() + ""+ jointNoFromController.text.trim() + suffixFromController.text.trim();
+    }else {
+      jointFrom = kmFromController.text.trim() + jointTypeFromValue!.name.toString() + jointNoFromController.text.trim() + suffixFromController.text.trim();
+    }
+    _eventComplete(emit);
+  }
 
+  _selectJointTo(SelectJointToEvent event, emit) {
+    if(jointTypeToValue!.name == null){
+      jointTo = kmToController.text.trim() +""+jointNoToController.text.trim() + suffixToController.text.trim();
+    } else{
+      jointTo = kmToController.text.trim() +jointTypeToValue!.name!.trim()+jointNoToController.text.trim() + suffixToController.text.trim();
+    }
+    _eventComplete(emit);
+  }
+
+
+  _submit(TrenchingSubmitEvent event, emit) async{
+    try{
+      var validationCheck = await TrenchingHelper.validation(
+        context: event.context,
+        date: dateController.text.trim().toString(),
+        reportNo: reportNumberController.text.trim().toString(),
+        alignmentSheet: alignSheetValue.toString(),
+        chainageFrom: chainageFromController.text.trim().toString(),
+        chainageTo: chainageToController.text.trim().toString(),
+        distanceCleared: sectionLengthController.text.trim().toString()
+      );
+      if(await validationCheck == true){
+        _isLoader =  true;
+        _eventComplete(emit);
+        var res = await TrenchingHelper.submitData(
+            context: event.context,
+            sectionId: sectionId,
+            userId: userId,
+            trTrenchingDate: dateController.text.trim().toString(),
+            trReportNumber: reportNumberController.text.trim().toString(),
+            chainageFrom: chainageFromController.text.trim().toString(),
+            chainageTo: chainageToController.text.trim().toString(),
+            tnTrenchingLowerWidth: trenchBottomWidthController.text.trim().toString(),
+            alignmentSheet: alignSheetValue!.alignmentId.toString(),
+            tnJointNumberFrom: jointFrom.toString(),
+            tnJointNumberTo: jointTo.toString(),
+            mrDistanceCleared: sectionLengthController.text.trim().toString(),
+            mnTrenchingDepth: trenchingDepthController.text.trim().toString(),
+            mnTrenchingUpperWidth: trenchTopWidthController.text.trim().toString(),
+            typeOfTerrain: terrainController.text.trim().toString(),
+            weather: weatherValue!.id.toString(),
+            tnRemarks: activityRemarkController.text.trim().toString(),
+            beddingAccepted: beddingAcceptedController.text.trim().toString(),
+            dailyProgress:  dailyProgressController.text.trim().toString(),
+            from_km:  kmDELA_FROMController.text.trim().toString(),
+            methodOfTrenching: methodOfTrenchingController.text.trim().toString(),
+            sectionNo: sectionNoController.text.trim().toString(),
+            to_km: kmPANA_LA_TOController.text.trim().toString(),
+            photo: photo);
+        _isLoader =  false;
+        _eventComplete(emit);
+        if(res != null){
+          _isPageLoader = false;
+          _isLoader = false;
+          _photo = File("");
+          jointFrom = "";
+          jointTo = "";
+          dateController.text = "";
+          reportNumberController.text = "";
+          kmFromController.text = "";
+          jointNoFromController.text = "";
+          suffixFromController.text = "";
+          kmToController.text = "";
+          jointNoToController.text = "";
+          suffixToController.text = "";
+          chainageFromController.text = "";
+          chainageToController.text = "";
+          sectionLengthController.text = "";
+          trenchingDepthController.text = "";
+          trenchTopWidthController.text = "";
+          trenchBottomWidthController.text = "";
+          terrainController.text = "";
+          beddingAcceptedController.text = "";
+          kmDELA_FROMController.text = "";
+          kmPANA_LA_TOController.text = "";
+          dailyProgressController.text = "";
+          methodOfTrenchingController.text = "";
+          activityRemarkController.text = "";
+          sectionNoController.text = "";
+          alignSheetValue = AlignSheetModel();
+          jointTypeFromValue = JointTypeModel();
+          jointTypeToValue = JointTypeModel();
+          weatherValue = WeatherModel();
+        }
+      }
+      _eventComplete(emit);
+    }catch(e){
+      _isLoader =  false;
+      _eventComplete(emit);
+      log("TrenchingCatch${e.toString()}");
+    }
   }
 
   _eventComplete(Emitter<TrenchingState>emit) {
@@ -180,6 +317,8 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
       isPageLoader:isPageLoader,
       isLoader:isLoader,
       photo:photo,
+      jointFrom: jointFrom,
+      jointTo: jointTo,
       alignSheetValue:alignSheetValue,
       jointTypeFromValue:jointTypeFromValue,
       jointTypeToValue:jointTypeToValue,
@@ -200,9 +339,17 @@ class TrenchingBloc extends Bloc<TrenchingEvent, TrenchingState>{
       chainageToController:chainageToController,
       sectionLengthController:sectionLengthController,
       trenchingDepthController:trenchingDepthController,
-      trenchWidthController:trenchWidthController,
+      trenchTopWidthController:trenchTopWidthController,
+      trenchBottomWidthController:trenchBottomWidthController,
       terrainController:terrainController,
       activityRemarkController:activityRemarkController,
+      beddingAcceptedController :beddingAcceptedController,
+      kmDELA_FROMController : kmDELA_FROMController,
+      kmPANA_LA_TOController : kmPANA_LA_TOController,
+      dailyProgressController : dailyProgressController,
+      methodOfTrenchingController : methodOfTrenchingController,
+      sectionNoController : sectionNoController,
     ));
   }
+
 }

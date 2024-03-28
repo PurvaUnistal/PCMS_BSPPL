@@ -1,11 +1,10 @@
-import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
 import 'package:bsppl/Utils/common_widget/local_img.dart';
+import 'package:bsppl/Utils/common_widget/styles_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
-import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/RouteSurvey/domain/model/align_sheet_model.dart';
@@ -14,8 +13,8 @@ import 'package:bsppl/features/Trenching/domain/bloc/trenching_bloc.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_event.dart';
 import 'package:bsppl/features/Trenching/domain/bloc/trenching_state.dart';
 import 'package:bsppl/features/Trenching/domain/model/joint_type_model.dart';
+import 'package:bsppl/features/Trenching/presentation/widget/RowWidget.dart';
 import 'package:bsppl/features/Trenching/presentation/widget/card_widget.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,6 +59,8 @@ class _TrenchingPageState extends State<TrenchingPage> {
             _verticalSpace(),
             _reportNumberController(dataState: dataState),
             _verticalSpace(),
+            _weatherDropDown(dataState: dataState),
+            _verticalSpace(),
             _alignmentDropdown(dataState: dataState),
             _verticalSpace(),
             _jointFromCard(dataState: dataState),
@@ -74,11 +75,23 @@ class _TrenchingPageState extends State<TrenchingPage> {
             _verticalSpace(),
             _trenchDepthController(dataState: dataState),
             _verticalSpace(),
-            _trenchWidthController(dataState: dataState),
+            _trenchTopWidthController(dataState: dataState),
+            _verticalSpace(),
+            _trenchBottomWidthController(dataState: dataState),
             _verticalSpace(),
             _terrainController(dataState: dataState),
             _verticalSpace(),
-            _weatherDropDown(dataState: dataState),
+            _sectionNoController(dataState: dataState),
+            _verticalSpace(),
+            _kmDELA_FROMController(dataState: dataState),
+            _verticalSpace(),
+            _kmPANA_LA_TOController(dataState: dataState),
+            _verticalSpace(),
+            _dailyProgressController(dataState: dataState),
+            _verticalSpace(),
+            _methodOfTrenchingController(dataState: dataState),
+            _verticalSpace(),
+            _beddingAcceptedController(dataState: dataState),
             _verticalSpace(),
             _activityRemark(dataState: dataState),
             _verticalSpace(),
@@ -134,13 +147,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
   Widget _jointFromCard({required TrenchingFetchDataState dataState}){
     return CardWidget(
       children: [
-        Text("*  Joint From",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: AppColor.appBlueColor
-          ),),
+        RowWidget(title: "Joint From${dataState.jointFrom == "" ?"":"(${dataState.jointFrom})"}"),
         _verticalSpace(),
         _kmFromController(dataState: dataState),
         _verticalSpace(),
@@ -156,13 +163,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
   Widget _jointToCard({required TrenchingFetchDataState dataState}){
     return CardWidget(
       children: [
-        Text("Joint To",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: AppColor.appBlueColor
-          ),),
+        RowWidget(title: "Joint To${dataState.jointTo == "" ?"":"(${dataState.jointTo})"}"),
         _verticalSpace(),
         _kmToController(dataState: dataState),
         _verticalSpace(),
@@ -177,17 +178,19 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _kmFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.km,
       hintText: AppString.km,
-      //   controller: dataState.gpsCoordinateNorthController,
+         controller: dataState.kmFromController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
   Widget _jointTypeFromDropDown({required TrenchingFetchDataState dataState}) {
     return DropdownWidget<JointTypeModel>(
-      star: AppString.star,
       hint: AppString.selectJointType,
       label: AppString.selectJointType,
       dropdownValue: dataState.jointTypeFromValue?.name != null ? dataState.jointTypeFromValue : null,
@@ -201,37 +204,45 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointNoFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.jointNo,
       hintText: AppString.jointNo,
       controller: dataState.jointNoFromController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
   Widget _suffixFromController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.text,
       label: AppString.suffix,
       hintText: AppString.suffix,
       controller: dataState.suffixFromController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointFromEvent());
+      },
     );
   }
 
   Widget _kmToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.km,
       hintText: AppString.km,
       controller: dataState.kmToController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointToEvent());
+      },
     );
   }
 
   Widget _jointTypeToDropDown({required TrenchingFetchDataState dataState}) {
     return DropdownWidget<JointTypeModel>(
-      star: AppString.star,
       hint: AppString.selectJointType,
       label: AppString.selectJointType,
       dropdownValue: dataState.jointTypeToValue?.name != null ? dataState.jointTypeToValue : null,
@@ -245,21 +256,27 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _jointNoToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.jointNo,
       hintText: AppString.jointNo,
          controller: dataState.jointNoToController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointToEvent());
+      },
     );
   }
 
   Widget _suffixToController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.text,
       label: AppString.suffix,
       hintText: AppString.suffix,
          controller: dataState.suffixToController,
+      onChanged: (value) {
+        BlocProvider.of<TrenchingBloc>(context).add(
+            SelectJointToEvent());
+      },
     );
   }
 
@@ -301,7 +318,6 @@ class _TrenchingPageState extends State<TrenchingPage> {
 
   Widget _trenchDepthController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
       keyboardType: TextInputType.number,
       label: AppString.trenchingDepth,
       hintText: AppString.trenchingDepth,
@@ -309,12 +325,20 @@ class _TrenchingPageState extends State<TrenchingPage> {
     );
   }
 
-  Widget _trenchWidthController({required TrenchingFetchDataState dataState}) {
+  Widget _trenchTopWidthController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
       keyboardType: TextInputType.number,
-      label: AppString.trenchWidth,
-      hintText: AppString.trenchWidth,
-         controller: dataState.trenchWidthController,
+      label: AppString.trenchTopWidth,
+      hintText: AppString.trenchTopWidth,
+         controller: dataState.trenchTopWidthController,
+    );
+  }
+  Widget _trenchBottomWidthController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      label: AppString.trenchBottomWidth,
+      hintText: AppString.trenchBottomWidth,
+      controller: dataState.trenchBottomWidthController,
     );
   }
 
@@ -337,6 +361,59 @@ class _TrenchingPageState extends State<TrenchingPage> {
             SelectWeatherEvent(weatherValue: value));
       },
       items:dataState.weatherList,
+    );
+  }
+
+  Widget _sectionNoController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.sectionNo,
+      hintText: AppString.sectionNo,
+      controller: dataState.sectionNoController,
+    );
+  }
+  Widget _kmDELA_FROMController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmDELA_FROM,
+      hintText: AppString.kmDELA_FROM,
+      controller: dataState.kmDELA_FROMController,
+    );
+  }
+
+  Widget _kmPANA_LA_TOController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.kmPANA_LA_TO,
+      hintText: AppString.kmPANA_LA_TO,
+      controller: dataState.kmPANA_LA_TOController,
+    );
+  }
+
+  Widget _dailyProgressController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.dailyProgress,
+      hintText: AppString.dailyProgress,
+      controller: dataState.dailyProgressController,
+    );
+  }
+
+  Widget _methodOfTrenchingController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.methodOfTrenching,
+      hintText: AppString.methodOfTrenching,
+      controller: dataState.methodOfTrenchingController,
+    );
+  }
+
+  Widget _beddingAcceptedController({required TrenchingFetchDataState dataState}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.text,
+      label: AppString.beddingAccepted,
+      hintText: AppString.beddingAccepted,
+      controller: dataState.beddingAcceptedController,
     );
   }
 

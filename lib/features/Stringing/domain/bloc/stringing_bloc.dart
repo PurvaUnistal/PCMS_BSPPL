@@ -8,6 +8,7 @@ import 'package:bsppl/features/Stringing/domain/bloc/stringing_event.dart';
 import 'package:bsppl/features/Stringing/domain/bloc/stringing_state.dart';
 import 'package:bsppl/features/Stringing/domain/model/coating_ok_model.dart';
 import 'package:bsppl/features/Stringing/helper/stringing_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -70,6 +71,7 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
     weatherValue = WeatherModel();
     _weatherList = [];
     _coatingOkList = [];
+    await fetchPipeNumberData(context: event.context, pageNo: "1");
     userId = await PreferenceUtil.getString(key: PreferenceValue.userId);
     sectionId = await PreferenceUtil.getString(key: PreferenceValue.sectionId);
     _weatherList = WeatherModel.getWeatherData();
@@ -120,6 +122,15 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
     _eventComplete(emit);
   }
 
+
+  fetchPipeNumberData({required BuildContext context, required String pageNo}) async {
+    try{
+      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo );
+      return res;
+    }catch(e){
+
+    }
+  }
 
   _submit(StringingSubmitEvent event, emit) async {
     try{

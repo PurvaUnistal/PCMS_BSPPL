@@ -10,7 +10,7 @@ String pipeNumberModelToJson(PipeNumberModel data) => json.encode(data.toJson())
 
 class PipeNumberModel {
   int code;
-  String status;
+  dynamic status;
   List<String> data;
   String message;
 
@@ -34,6 +34,7 @@ class PipeNumberModel {
     "data": List<dynamic>.from(data.map((x) => x)),
     "message": message,
   };
+
   @override
   String toString() {
     // TODO: implement toString

@@ -1,11 +1,39 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
+import 'package:bsppl/Server/app_url.dart';
 import 'package:bsppl/Utils/utils.dart';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/Backfilling/domain/model/SubmitDataModel.dart';
 import 'package:flutter/material.dart';
 
 class StringingHelper{
+
+
+  static Future<PipeNumberModel?> pipeNumberData({
+    required BuildContext context,
+    required String page,
+  }) async {
+    Map<String, String> param = {
+      "type": "getPipeNumber",
+      "SectionID": page,
+    };
+    log("paramPipeNumber-->${param}");
+    try{
+      var res = await ApiServer.postData(
+        urlEndPoint: AppUrl.submitAll,
+          context: context,body: param);
+      if(res != null && res["status"] == "success"){
+        return PipeNumberModel.fromJson(res);
+      }
+    } catch(e){
+      log("catchgetPipeNumber-->${e.toString()}");
+      Utils.errorSnackBar(msg: e.toString(),context:  context);
+      return null;
+    }
+    return null;
+  }
+
 
   static Future<dynamic> validation({
     required BuildContext context,

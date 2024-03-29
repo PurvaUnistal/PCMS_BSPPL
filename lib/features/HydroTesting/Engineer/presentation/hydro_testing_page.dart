@@ -74,10 +74,10 @@ class _HydroTextingPageState extends State<HydroTextingPage> {
 
   Widget _dateController({required HydroTestFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<HydroTestBloc>(context).add(SelectDateEvent(context: context));
       },

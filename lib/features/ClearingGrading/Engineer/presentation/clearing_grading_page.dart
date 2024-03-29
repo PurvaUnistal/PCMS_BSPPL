@@ -105,8 +105,8 @@ class _ClearingGradingPageState extends State<ClearingGradingPage> {
       star: AppString.star,
       label: AppString.date,
       hintText: AppString.date,
-      enabled: true,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<ClearingGradingBloc>(context).add(
             SelectDateEvent(context: context,));

@@ -67,10 +67,10 @@ class _IssueToContractorPageState extends State<IssueToContractorPage> {
 
   Widget _dateController({required IssueToContractorFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<IssueToContractorBloc>(context).add(
             SelectDateEvent(context: context,));

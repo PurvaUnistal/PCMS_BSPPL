@@ -88,7 +88,7 @@ class _StringingPageState extends State<StringingPage> {
 
   Widget _dateController({required StringingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       star: AppString.star,
       label: AppString.date,
       hintText: AppString.date,

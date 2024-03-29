@@ -110,11 +110,11 @@ class _BendingPageState extends State<BendingPage> {
 
   Widget _dateController({required BendFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
       star: AppString.star,
       hintText: AppString.date,
       label: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<BendingBloc>(context).add(
             SelectDateEvent(context: context,));

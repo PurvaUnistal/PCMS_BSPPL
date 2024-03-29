@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/preference_utils.dart';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/weather_model.dart';
 import 'package:bsppl/features/RouteSurvey/Engineer/helper/route_survey_helper.dart';
@@ -45,6 +46,7 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
   CoatingOkModel? coatingValue;
   String? pipeNumberValue;
   AlignSheetModel? alignSheetValue;
+  PipeNumberModel? pipeNumberModel;
 
   List<AlignSheetModel> _alignSheetList = [];
   List<AlignSheetModel> get alignSheetList => _alignSheetList;
@@ -83,6 +85,7 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
     coatingValue = CoatingOkModel();
     weatherValue = WeatherModel();
     alignSheetValue = AlignSheetModel();
+    pipeNumberModel = PipeNumberModel();
     _weatherList = [];
     _coatingOkList = [];
     _pipeNumberList = [];
@@ -152,19 +155,26 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
 
   fetchPipeNumberData({required BuildContext context, required String pageNo}) async {
     try{
-      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo );
-      _pipeNumberList = res!.data;
-      return res;
-    }catch(e){
-      log("pipeNumberDataCatch-->${e.toString()}");
+      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo);
+      if(res != null){
+        pipeNumberModel = res;
+        if(res.data != null){
+          _pipeNumberList = res.data!;
+        }
+        return res;
+      }
+    } catch(e){
+      log("pipeNumberModel-->${e.toString()}");
     }
   }
 
   _selectPipePaging(SelectPipePagingEvent event,emit) async {
-    pipeNumberValue = null;
     _pipeNumberList = [];
+    pipeNumberValue = null;
+    if(pipePageController.text.isNotEmpty){
       await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
       _eventComplete(emit);
+    }
   }
 
   _selectPipeNoValue(SelectPipeNoValueEvent event,emit) {
@@ -231,24 +241,25 @@ class StringingBloc extends Bloc<StringingEvent,StringingState>{
 
   _eventComplete(Emitter<StringingState>emit) {
     emit(StringingFetchDataState(
-      isPageLoader : isPageLoader,
-      isLoader: isLoader,
-      photo: photo,
-      coatingValue : coatingValue,
-      weatherValue:weatherValue,
-      weatherList :  weatherList,
-      coatingOkList :  coatingOkList,
-      pipeNumberList: pipeNumberList,
-      pipeNumberValue: pipeNumberValue,
-      dateController :  dateController,
-      reportNumberController :  reportNumberController,
-      chainageController :  chainageController,
-      pipePageController :  pipePageController,
-      pipeDiameterController :  pipeDiameterController,
-      pipeMeterialController :  pipeMeterialController,
-      activityRemarkController :  activityRemarkController,
-      alignSheetValue:alignSheetValue,
-      alignSheetList:alignSheetList,
+        isPageLoader : isPageLoader,
+        isLoader: isLoader,
+        photo: photo,
+        coatingValue : coatingValue,
+        weatherValue:weatherValue,
+        weatherList :  weatherList,
+        coatingOkList :  coatingOkList,
+        pipeNumberList: pipeNumberList,
+        pipeNumberValue: pipeNumberValue,
+        dateController :  dateController,
+        reportNumberController :  reportNumberController,
+        chainageController :  chainageController,
+        pipePageController :  pipePageController,
+        pipeDiameterController :  pipeDiameterController,
+        pipeMeterialController :  pipeMeterialController,
+        activityRemarkController :  activityRemarkController,
+        alignSheetValue:alignSheetValue,
+        alignSheetList:alignSheetList,
+        pipeNumberModel : pipeNumberModel
     ));
   }
 

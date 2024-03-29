@@ -94,8 +94,8 @@ class _BackfillingPageState extends State<BackfillingPage> {
     return TextFieldWidget(
       hintText: AppString.date,
       label: AppString.date,
-      enabled: true,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<BackfillingBloc>(context).add(SelectDateEvent(context: context));
       },

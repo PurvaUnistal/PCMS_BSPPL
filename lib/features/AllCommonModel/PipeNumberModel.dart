@@ -9,16 +9,16 @@ PipeNumberModel pipeNumberModelFromJson(String str) => PipeNumberModel.fromJson(
 String pipeNumberModelToJson(PipeNumberModel data) => json.encode(data.toJson());
 
 class PipeNumberModel {
-  int code;
+  int? code;
   dynamic status;
-  List<String> data;
-  String message;
+  List<String>? data;
+  String? message;
 
   PipeNumberModel({
-    required this.code,
-    required this.status,
-    required this.data,
-    required this.message,
+     this.code,
+     this.status,
+     this.data,
+     this.message,
   });
 
   factory PipeNumberModel.fromJson(Map<String, dynamic> json) => PipeNumberModel(
@@ -31,7 +31,7 @@ class PipeNumberModel {
   Map<String, dynamic> toJson() => {
     "code": code,
     "status": status,
-    "data": List<dynamic>.from(data.map((x) => x)),
+    "data": List<dynamic>.from(data!.map((x) => x)),
     "message": message,
   };
 

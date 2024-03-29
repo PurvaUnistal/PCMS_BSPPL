@@ -9,7 +9,6 @@ import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/Home/domain/bloc/home_bloc.dart';
 import 'package:bsppl/features/Home/domain/model/drawer_model.dart';
 import 'package:bsppl/features/Home/presentation/widget/logout_widget.dart';
-import 'package:bsppl/features/Login/domain/model/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,7 +29,6 @@ class HomeDrawerWidget extends StatelessWidget {
             _header(dataState: state,context: context),
             const Divider(),
             _listBuilder(dataState: state),
-            _changePassword(context: context),
             _logout(context: context),
           ],
           ),
@@ -155,31 +153,6 @@ class HomeDrawerWidget extends StatelessWidget {
               ),
             );
           }),
-    );
-  }
-
-  Widget _changePassword({required BuildContext context}) {
-    return Padding(
-      padding:  EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.02,
-          bottom:  MediaQuery.of(context).size.width * 0.02),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-/*          Navigator.push(context,
-              MaterialPageRoute(builder: (_) =>  const ChangePasswordPage()));*/
-        },
-        child: Row(
-          children: [
-            Icon(Icons.password_rounded, color: AppColor.black,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.03,
-            ),
-            TextWidget(AppString.changePassword,
-              fontSize: AppFont.font_12,
-            ),
-          ],
-        ),
-      ),
     );
   }
 

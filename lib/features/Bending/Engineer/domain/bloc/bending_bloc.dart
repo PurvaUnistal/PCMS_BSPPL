@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/preference_utils.dart';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/Bending/Engineer/domain/bloc/bending_event.dart';
 import 'package:bsppl/features/AllCommonModel/bend_model.dart';
 import 'package:bsppl/features/AllCommonModel/check_model.dart';
@@ -48,6 +49,7 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
   CheckModel? disbondingValue;
   HolidayModel? holidayValue;
   String? pipeNumberValue;
+  PipeNumberModel? pipeNumberModel;
 
   List<String> _pipeNumberList = [];
   List<String> get pipeNumberList => _pipeNumberList;
@@ -114,6 +116,7 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
     guagingValue = CheckModel();
     disbondingValue = CheckModel();
     holidayValue = HolidayModel();
+    pipeNumberModel = PipeNumberModel();
     pipeNumberValue = null;
     _pipeNumberList = [];
     _weatherList = [];
@@ -200,19 +203,26 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
 
   fetchPipeNumberData({required BuildContext context, required String pageNo}) async {
     try{
-      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo );
-      _pipeNumberList = res!.data;
-      return res;
-    }catch(e){
-      log("pipeNumberDataCatch-->${e.toString()}");
+      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo);
+      if(res != null){
+        pipeNumberModel = res;
+        if(res.data != null){
+          _pipeNumberList = res.data!;
+        }
+        return res;
+      }
+    } catch(e){
+      log("pipeNumberModel-->${e.toString()}");
     }
   }
 
   _selectPipePaging(SelectPipePagingEvent event,emit) async {
-    pipeNumberValue = null;
     _pipeNumberList = [];
-    await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
-    _eventComplete(emit);
+    pipeNumberValue = null;
+    if(pipePageController.text.isNotEmpty){
+      await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
+      _eventComplete(emit);
+    }
   }
 
   _selectPipeNoValue(SelectPipeNoValueEvent event,emit) {
@@ -337,6 +347,7 @@ class BendingBloc extends Bloc<BendEvent,BendState>{
       toKmController: toKmController,
       pipeNumberList: pipeNumberList,
       pipeNumberValue: pipeNumberValue,
+      pipeNumberModel: pipeNumberModel,
     ));
   }
 }

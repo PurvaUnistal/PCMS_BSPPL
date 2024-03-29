@@ -1,9 +1,9 @@
+import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/common_widget/button_widget.dart';
 import 'package:bsppl/Utils/common_widget/dropdown_widget.dart';
 import 'package:bsppl/Utils/common_widget/image_pop_widget.dart';
 import 'package:bsppl/Utils/common_widget/local_img.dart';
-import 'package:bsppl/Utils/common_widget/styles_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_field_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
@@ -108,7 +108,7 @@ class _TrenchingPageState extends State<TrenchingPage> {
   Widget _dateController({required TrenchingFetchDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

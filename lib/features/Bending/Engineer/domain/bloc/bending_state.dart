@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/AllCommonModel/bend_model.dart';
 import 'package:bsppl/features/AllCommonModel/check_model.dart';
 import 'package:bsppl/features/AllCommonModel/holiday_model.dart';
@@ -52,6 +53,7 @@ class BendFetchDataState extends BendState {
   TextEditingController activityRemarkController;
   List<String> pipeNumberList;
   String? pipeNumberValue;
+  PipeNumberModel? pipeNumberModel;
 
   BendFetchDataState({
     required this.isPageLoader,
@@ -86,6 +88,7 @@ class BendFetchDataState extends BendState {
     required this.activityRemarkController,
     required this.pipeNumberValue,
     required this.pipeNumberList,
+    required this.pipeNumberModel,
 });
 
   @override
@@ -122,5 +125,6 @@ class BendFetchDataState extends BendState {
     activityRemarkController,
     pipeNumberValue,
     pipeNumberList,
+    pipeNumberModel,
   ];
 }

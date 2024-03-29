@@ -11,13 +11,9 @@ class Styles {
   static TextStyle rel = const TextStyle(fontSize: 8, fontWeight: FontWeight.normal, color: Colors.black);
 
   static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.red);
+  static TextStyle alert = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.red);
 
   static TextStyle labels =  TextStyle(fontWeight: FontWeight.w400, fontSize: 13, color: AppColor.appBlueColor);
-  /*static TextStyle title =   TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-      color: AppColor.appBlueColor
-  );*/
 
   static TextStyle texts = const TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.black);
 

@@ -19,6 +19,14 @@ class SelectDateEvent extends LowerEvent{
   List<Object?> get props => [context];
 }
 
+class SelectCalibrationDateEvent extends LowerEvent{
+  final BuildContext context;
+  SelectCalibrationDateEvent({required this.context});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [context];
+}
+
 class SelectAlignmentEvent extends LowerEvent{
   final dynamic alignSheetValue;
   SelectAlignmentEvent({ required this.alignSheetValue});

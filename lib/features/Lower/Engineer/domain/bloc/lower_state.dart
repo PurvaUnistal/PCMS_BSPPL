@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/AllCommonModel/check_model.dart';
 import 'package:bsppl/features/AllCommonModel/completed_not_model.dart';
 import 'package:bsppl/features/AllCommonModel/provide_not_model.dart';
@@ -72,8 +73,11 @@ class LowerFetchDataState extends LowerState{
   final TextEditingController trenchAcceptanceController;
   final TextEditingController coatingRepairController;
   final TextEditingController activityRemarkController;
+  PipeNumberModel? pipeNumberModel;
   List<String> pipeNumberList;
   String? pipeNumberValue;
+
+
   LowerFetchDataState({
     required this.photo,
     required this.isLoader,
@@ -126,6 +130,7 @@ class LowerFetchDataState extends LowerState{
     required this.prePaddingList,
     required this.pipeNumberValue,
     required this.pipeNumberList,
+    required this.pipeNumberModel,
 
   });
   @override
@@ -182,5 +187,6 @@ class LowerFetchDataState extends LowerState{
     prePaddingList,
     pipeNumberValue,
     pipeNumberList,
+    pipeNumberModel,
   ];
 }

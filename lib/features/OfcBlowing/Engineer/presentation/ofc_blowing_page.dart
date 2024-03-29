@@ -86,7 +86,7 @@ class _OfcBlowingPageState extends State<OfcBlowingPage> {
 
   Widget _dateController({required OfcBlowingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

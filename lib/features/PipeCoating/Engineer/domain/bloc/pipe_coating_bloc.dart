@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/preference_utils.dart';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/domain/bloc/pipe_coating_event.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/domain/bloc/pipe_coating_state.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/helper/pipe_coating_helper.dart';
@@ -21,7 +22,7 @@ class PipeCoatingBloc extends Bloc<PipeCoatingEvent, PipeCoatingState>{
     on<SelectPipeNoValueEvent>(_selectPipeNoValue);
     on<PipeCoatingSubmitEvent>(_submit);
   }
-  
+
   String userId = '';
   String sectionId = '';
   bool _isPageLoader = false;
@@ -38,28 +39,30 @@ class PipeCoatingBloc extends Bloc<PipeCoatingEvent, PipeCoatingState>{
   List<String> _pipeNumberList = [];
   List<String> get pipeNumberList => _pipeNumberList;
 
-   TextEditingController dateController = TextEditingController();
-   TextEditingController reportNumberController = TextEditingController();
-   TextEditingController pipePageController = TextEditingController();
-   TextEditingController kmFromController = TextEditingController();
-   TextEditingController kmToController = TextEditingController();
-   TextEditingController dailyProgressController = TextEditingController();
-   TextEditingController relativeHumidityController = TextEditingController();
-   TextEditingController airTemperatureController = TextEditingController();
-   TextEditingController dewPointProgessController = TextEditingController();
-   TextEditingController pipeTemperatureController = TextEditingController();
-   TextEditingController manufactureController = TextEditingController();
-   TextEditingController materialType1Controller = TextEditingController();
-   TextEditingController materialType2Controller = TextEditingController();
-   TextEditingController materialBatchController = TextEditingController();
-   TextEditingController defectLocationController = TextEditingController();
-   TextEditingController repairAreaController = TextEditingController();
-   TextEditingController surfaceRemovalController = TextEditingController();
-   TextEditingController visualInspController = TextEditingController();
-   TextEditingController preHeatController = TextEditingController();
-   TextEditingController dftCheckController = TextEditingController();
-   TextEditingController holidayTestController = TextEditingController();
-   TextEditingController activityRemarksController = TextEditingController();
+  PipeNumberModel? pipeNumberModel;
+
+  TextEditingController dateController = TextEditingController();
+  TextEditingController reportNumberController = TextEditingController();
+  TextEditingController pipePageController = TextEditingController();
+  TextEditingController kmFromController = TextEditingController();
+  TextEditingController kmToController = TextEditingController();
+  TextEditingController dailyProgressController = TextEditingController();
+  TextEditingController relativeHumidityController = TextEditingController();
+  TextEditingController airTemperatureController = TextEditingController();
+  TextEditingController dewPointProgessController = TextEditingController();
+  TextEditingController pipeTemperatureController = TextEditingController();
+  TextEditingController manufactureController = TextEditingController();
+  TextEditingController materialType1Controller = TextEditingController();
+  TextEditingController materialType2Controller = TextEditingController();
+  TextEditingController materialBatchController = TextEditingController();
+  TextEditingController defectLocationController = TextEditingController();
+  TextEditingController repairAreaController = TextEditingController();
+  TextEditingController surfaceRemovalController = TextEditingController();
+  TextEditingController visualInspController = TextEditingController();
+  TextEditingController preHeatController = TextEditingController();
+  TextEditingController dftCheckController = TextEditingController();
+  TextEditingController holidayTestController = TextEditingController();
+  TextEditingController activityRemarksController = TextEditingController();
 
   _pageLoad(PipeCoatingPageLoadEvent event, emit) async {
     emit(PipeCoatingPageLoadState());
@@ -130,19 +133,26 @@ class PipeCoatingBloc extends Bloc<PipeCoatingEvent, PipeCoatingState>{
 
   fetchPipeNumberData({required BuildContext context, required String pageNo}) async {
     try{
-      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo );
-      _pipeNumberList = res!.data;
-      return res;
-    }catch(e){
-      log("pipeNumberDataCatch-->${e.toString()}");
+      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo);
+      if(res != null){
+        pipeNumberModel = res;
+        if(res.data != null){
+          _pipeNumberList = res.data!;
+        }
+        return res;
+      }
+    } catch(e){
+      log("pipeNumberModel-->${e.toString()}");
     }
   }
 
   _selectPipePaging(SelectPipePagingEvent event,emit) async {
-    pipeNumberValue = null;
     _pipeNumberList = [];
-    await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
-    _eventComplete(emit);
+    pipeNumberValue = null;
+    if(pipePageController.text.isNotEmpty){
+      await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
+      _eventComplete(emit);
+    }
   }
 
   _selectPipeNoValue(SelectPipeNoValueEvent event,emit) {
@@ -154,20 +164,20 @@ class PipeCoatingBloc extends Bloc<PipeCoatingEvent, PipeCoatingState>{
   _submit(PipeCoatingSubmitEvent event, emit) async {
     try{
       var validationCheck = await PipeCoatingHelper.validation(
-          context: event.context,
-          date: dateController.text.trim().toString(),
-          reportNo: reportNumberController.text.trim().toString(),
-          pipeNo: pipeNumberValue.toString(),
+        context: event.context,
+        date: dateController.text.trim().toString(),
+        reportNo: reportNumberController.text.trim().toString(),
+        pipeNo: pipeNumberValue.toString(),
       );
       if(await validationCheck == true){
         _isLoader =  true;
         _eventComplete(emit);
         var res = await PipeCoatingHelper.submitData(
-            context: event.context,
-            sectionId: sectionId,
-            reportNo: reportNumberController.text.trim().toString(),
-            userId: userId,
-            pipeCoatingDate: dateController.text.trim().toString(),
+          context: event.context,
+          sectionId: sectionId,
+          reportNo: reportNumberController.text.trim().toString(),
+          userId: userId,
+          pipeCoatingDate: dateController.text.trim().toString(),
           photo: photo,
           remarks: activityRemarksController.text.trim().toString(),
           airTemperature: airTemperatureController.text.trim().toString(),
@@ -258,11 +268,10 @@ class PipeCoatingBloc extends Bloc<PipeCoatingEvent, PipeCoatingState>{
         preHeatController: preHeatController,
         repairAreaController: repairAreaController,
         surfaceRemovalController: surfaceRemovalController,
-      pipeNumberList: pipeNumberList,
-      pipeNumberValue: pipeNumberValue,
-
-    )
+        pipeNumberList: pipeNumberList,
+        pipeNumberValue: pipeNumberValue,
+        pipeNumberModel : pipeNumberModel)
     );
-    }
+  }
 
 }

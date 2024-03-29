@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,7 @@ class PipeCoatingFetchDataState extends PipeCoatingState{
   final TextEditingController activityRemarksController;
   List<String> pipeNumberList;
   String? pipeNumberValue;
+  PipeNumberModel? pipeNumberModel;
 
   PipeCoatingFetchDataState({
     required this.photo,
@@ -74,8 +76,7 @@ class PipeCoatingFetchDataState extends PipeCoatingState{
     required this.surfaceRemovalController,
     required this.pipeNumberValue,
     required this.pipeNumberList,
-
-
+    required this.pipeNumberModel,
 });
 
   @override
@@ -108,5 +109,6 @@ List<Object?> get props => [
     surfaceRemovalController,
     pipeNumberValue,
     pipeNumberList,
+    pipeNumberModel,
   ];
 }

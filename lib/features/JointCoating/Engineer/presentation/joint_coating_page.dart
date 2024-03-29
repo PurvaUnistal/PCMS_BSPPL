@@ -108,10 +108,10 @@ class _JointCoatingPageState extends State<JointCoatingPage> {
 
   Widget _dateController({required JointCoatingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<JointCoatingBloc>(context).add(SelectDateEvent(context: context));
       },

@@ -67,9 +67,9 @@ class _HindrancePageState extends State<HindrancePage> {
 
   Widget _dateController() {
     return TextFieldWidget(
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       // controller: dataState.dateController,
       onTap: () {
       },

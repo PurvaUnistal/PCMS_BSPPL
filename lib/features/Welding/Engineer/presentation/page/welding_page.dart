@@ -172,7 +172,7 @@ class _WeldingPageState extends State<WeldingPage> {
   Widget _dateController({required WeldingFetchDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

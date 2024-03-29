@@ -72,7 +72,7 @@ class _YardReceivingPageState extends State<YardReceivingPage> {
 
   Widget _dateController({required YardReceivingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: false,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

@@ -10,8 +10,6 @@ import 'package:bsppl/Utils/loader/dotted_loader.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/domain/bloc/pipe_coating_bloc.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/domain/bloc/pipe_coating_event.dart';
 import 'package:bsppl/features/PipeCoating/Engineer/domain/bloc/pipe_coating_state.dart';
-import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/align_sheet_model.dart';
-import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -111,7 +109,7 @@ class _PipeCoatingPageState extends State<PipeCoatingPage> {
   Widget _dateController({required PipeCoatingFetchDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

@@ -78,7 +78,7 @@ class _LevellingPageState extends State<LevellingPage> {
 
   Widget _dateController({required LevellingFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,

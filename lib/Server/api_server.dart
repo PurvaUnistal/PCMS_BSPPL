@@ -45,7 +45,10 @@ class ApiServer {
 
   static Future<dynamic> postData({var urlEndPoint, required BuildContext context, var body}) async {
     try {
-      final response = await post(Uri.parse(urlEndPoint), body: json.encode(body)).timeout(const Duration(minutes: 1));
+      final response = await post(Uri.parse(urlEndPoint),
+        //  body: json.encode(body)).timeout(const Duration(minutes: 1)
+          body: body).timeout(const Duration(minutes: 1)
+      );
       log("get Res ===== ${response.body}");
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

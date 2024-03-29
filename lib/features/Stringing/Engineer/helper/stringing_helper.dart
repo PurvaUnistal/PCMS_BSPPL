@@ -34,13 +34,11 @@ try{
   }) async {
     Map<String, String> param = {
       "type": "getPipeNumber",
-      "SectionID": page,
+      "page": page,
     };
     log("paramPipeNumber-->${param}");
     try{
-      var res = await ApiServer.postData(
-        urlEndPoint: AppUrl.submitAll,
-          context: context,body: param);
+      var res = await ApiServer.postData(urlEndPoint: AppUrl.submitAll, context: context,body: param);
       if(res != null && res["status"] == "success"){
         return PipeNumberModel.fromJson(res);
       }

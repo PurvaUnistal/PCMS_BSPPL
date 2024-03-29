@@ -88,6 +88,7 @@ class _RadiographyPageState extends State<RadiographyPage> {
       hintText: AppString.date,
       label: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<RadioGraphyBloc>(context).add(SelectDateEvent(context: context));
       },

@@ -89,10 +89,10 @@ class _HdpeDuctPageState extends State<HdpeDuctPage> {
 
   Widget _dateController({required HdpeDuctFetchDataState dataState}) {
     return TextFieldWidget(
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<HdpeDuctBloc>(context).add(SelectDateEvent(context: context));
       },

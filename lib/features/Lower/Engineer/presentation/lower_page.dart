@@ -129,10 +129,10 @@ class _LowerPageState extends State<LowerPage> {
   Widget _dateController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
-      enabled: true,
       label: AppString.date,
       hintText: AppString.date,
       controller: dataState.dateController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
       onTap: () {
         BlocProvider.of<LowerBloc>(context).add(SelectDateEvent(context: context));
       },
@@ -391,7 +391,7 @@ class _LowerPageState extends State<LowerPage> {
 
   Widget _locationController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       label: AppString.location,
       hintText: AppString.location,
       controller: dataState.locationController,
@@ -418,10 +418,14 @@ class _LowerPageState extends State<LowerPage> {
 
   Widget _calibrationDoneController({required LowerFetchDataState dataState}) {
     return TextFieldWidget(
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.datetime,
       label: AppString.calibarationDate,
       hintText: AppString.calibarationDate,
       controller: dataState.calibrationDoneController,
+      suffixIcon: Icon(Icons.calendar_today, color: AppColor.appBlueColor,),
+      onTap: () {
+        BlocProvider.of<LowerBloc>(context).add(SelectCalibrationDateEvent(context: context));
+      },
     );
   }
 

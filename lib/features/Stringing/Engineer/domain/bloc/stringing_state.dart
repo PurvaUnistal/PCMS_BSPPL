@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/align_sheet_model.dart';
 import 'package:bsppl/features/RouteSurvey/Engineer/domain/model/weather_model.dart';
 import 'package:bsppl/features/Stringing/Engineer/domain/model/coating_ok_model.dart';
@@ -36,6 +37,7 @@ class StringingFetchDataState extends StringingState {
   TextEditingController pipeDiameterController;
   TextEditingController pipeMeterialController;
   TextEditingController activityRemarkController;
+  PipeNumberModel? pipeNumberModel;
 
   StringingFetchDataState({
     required this.isPageLoader,
@@ -56,6 +58,7 @@ class StringingFetchDataState extends StringingState {
     required this.pipeDiameterController,
     required this.pipeMeterialController,
     required this.activityRemarkController,
+    required this.pipeNumberModel,
   });
   @override
   List<Object?> get props => [
@@ -77,5 +80,7 @@ class StringingFetchDataState extends StringingState {
     activityRemarkController,
     alignSheetValue,
     alignSheetList,
+    pipeNumberModel,
+
   ];
 }

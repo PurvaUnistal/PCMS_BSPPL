@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bsppl/Server/api_server.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/Utils/preference_utils.dart';
+import 'package:bsppl/features/AllCommonModel/PipeNumberModel.dart';
 import 'package:bsppl/features/AllCommonModel/check_model.dart';
 import 'package:bsppl/features/AllCommonModel/completed_not_model.dart';
 import 'package:bsppl/features/AllCommonModel/provide_not_model.dart';
@@ -23,6 +24,7 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
   LowerBloc() :super(LowerInitialState()){
     on<LowerPageLoadEvent>(_pageLoad);
     on<SelectDateEvent>(_selectDate);
+    on<SelectCalibrationDateEvent>(_selectCalibrationDate);
     on<SelectAlignmentEvent>(_selectAlignment);
     on<SelectJointTypeFromEvent>(_jointTypeFrom);
     on<SelectJointTypeToEvent>(_jointTypeTo);
@@ -66,6 +68,7 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
   CompletedModel? deWateringValue;
   ProvideModel? paddingValue;
   String? pipeNumberValue;
+  PipeNumberModel? pipeNumberModel;
 
   List<String> _pipeNumberList = [];
   List<String> get pipeNumberList => _pipeNumberList;
@@ -165,9 +168,10 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
     jointTypeFromValue = JointTypeModel();
     jointTypeToValue = JointTypeModel();
     weatherValue = WeatherModel();
-   prePaddingValue = CheckModel();
+    prePaddingValue = CheckModel();
     deWateringValue = CompletedModel();
     paddingValue = ProvideModel();
+    pipeNumberModel = PipeNumberModel();
     _alignSheetList = [];
     _jointTypeFromList = [];
     _jointTypeToList = [];
@@ -183,7 +187,7 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
     _jointTypeToList = JointTypeModel.getJointTypeData();
     _weatherList = WeatherModel.getWeatherData();
     _prePaddingList = CheckModel.getCheckData();
-    _deWateringList = CompletedModel.getCompletedData(); 
+    _deWateringList = CompletedModel.getCompletedData();
     _paddingList = ProvideModel.getProvideData();
     _eventComplete(emit);
   }
@@ -204,6 +208,21 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
     if (dateTime != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
       dateController.text = formattedDate.toString();
+      _eventComplete(emit);
+    } else {
+      log("Date is not selected");
+    }
+  }
+
+  _selectCalibrationDate(SelectCalibrationDateEvent event, emit) async {
+    DateTime? dateTime = await showDatePicker(
+        context: event.context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime.now());
+    if (dateTime != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+      calibrationDoneController.text = formattedDate.toString();
       _eventComplete(emit);
     } else {
       log("Date is not selected");
@@ -310,19 +329,26 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
 
   fetchPipeNumberData({required BuildContext context, required String pageNo}) async {
     try{
-      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo );
-      _pipeNumberList = res!.data;
-      return res;
-    }catch(e){
-      log("pipeNumberDataCatch-->${e.toString()}");
+      var res = await StringingHelper.pipeNumberData(context: context, page:pageNo);
+      if(res != null){
+        pipeNumberModel = res;
+        if(res.data != null){
+          _pipeNumberList = res.data!;
+        }
+        return res;
+      }
+    } catch(e){
+      log("pipeNumberModel-->${e.toString()}");
     }
   }
 
   _selectPipePaging(SelectPipePagingEvent event,emit) async {
-    pipeNumberValue = null;
     _pipeNumberList = [];
-    await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
-    _eventComplete(emit);
+    pipeNumberValue = null;
+    if(pipePageController.text.isNotEmpty){
+      await fetchPipeNumberData(context: event.context, pageNo: pipePageController.text.trim().toString());
+      _eventComplete(emit);
+    }
   }
 
   _selectPipeNoValue(SelectPipeNoValueEvent event,emit) {
@@ -422,61 +448,62 @@ class LowerBloc extends Bloc<LowerEvent, LowerState>{
 
   _eventComplete(Emitter<LowerState>emit) {
     emit(LowerFetchDataState(
-      photo:photo,
-      isLoader: isLoader,
-      jointFrom: jointFrom,
-      jointTo: jointTo,
-      isPageLoader:isPageLoader,
-      isPostPadding:isPostPadding,
-      isHolidayCheck:isHolidayCheck,
-      alignSheetValue:alignSheetValue,
-      jointTypeFromValue:jointTypeFromValue,
-      jointTypeToValue:jointTypeToValue,
-      weatherValue:weatherValue,
-      alignSheetList:alignSheetList,
-      jointTypeFromList:jointTypeFromList,
-      jointTypeToList:jointTypeToList,
-      weatherList:weatherList,
-      dateController:dateController,
-      reportNumberController:reportNumberController,
-      pipePageController:pipePageController,
-      kmFromController:kmFromController,
-      jointNoFromController:jointNoFromController,
-      suffixFromController:suffixFromController,
-      kmToController:kmToController,
-      jointNoToController:jointNoToController,
-      suffixToController:suffixToController,
-      chainageFromController:chainageFromController,
-      chainageToController:chainageToController,
-      sectionLengthController:sectionLengthController,
-      locationController:locationController,
-      holidayDetailsController:holidayDetailsController,
-      makeModelController:makeModelController,
-      testVoltageController:testVoltageController,
-      calibrationDoneController: calibrationDoneController,
-      repairDamagesController: repairDamagesController,
-      activityRemarkController:activityRemarkController,
-      toKmController : toKmController,
-      visualInspController : visualInspController,
-      dailyProgressController : dailyProgressController,
-      sectionNoController : sectionNoController,
-      coatingRepairController : coatingRepairController,
-      fromKmController : fromKmController,
-      trenchAcceptanceController :trenchAcceptanceController,
-      deWateringValue :deWateringValue,
-      paddingValue : paddingValue,
-      prePaddingValue : prePaddingValue,
-      deWateringList : deWateringList,
-      paddingList : paddingList,
-      prePaddingList :prePaddingList,
-      pipeDiameterController :pipeDiameterController,
-      pipeMeterialController: pipeMeterialController,
-      pipeNumberList: pipeNumberList,
-      pipeNumberValue: pipeNumberValue,
+        photo:photo,
+        isLoader: isLoader,
+        jointFrom: jointFrom,
+        jointTo: jointTo,
+        isPageLoader:isPageLoader,
+        isPostPadding:isPostPadding,
+        isHolidayCheck:isHolidayCheck,
+        alignSheetValue:alignSheetValue,
+        jointTypeFromValue:jointTypeFromValue,
+        jointTypeToValue:jointTypeToValue,
+        weatherValue:weatherValue,
+        alignSheetList:alignSheetList,
+        jointTypeFromList:jointTypeFromList,
+        jointTypeToList:jointTypeToList,
+        weatherList:weatherList,
+        dateController:dateController,
+        reportNumberController:reportNumberController,
+        pipePageController:pipePageController,
+        kmFromController:kmFromController,
+        jointNoFromController:jointNoFromController,
+        suffixFromController:suffixFromController,
+        kmToController:kmToController,
+        jointNoToController:jointNoToController,
+        suffixToController:suffixToController,
+        chainageFromController:chainageFromController,
+        chainageToController:chainageToController,
+        sectionLengthController:sectionLengthController,
+        locationController:locationController,
+        holidayDetailsController:holidayDetailsController,
+        makeModelController:makeModelController,
+        testVoltageController:testVoltageController,
+        calibrationDoneController: calibrationDoneController,
+        repairDamagesController: repairDamagesController,
+        activityRemarkController:activityRemarkController,
+        toKmController : toKmController,
+        visualInspController : visualInspController,
+        dailyProgressController : dailyProgressController,
+        sectionNoController : sectionNoController,
+        coatingRepairController : coatingRepairController,
+        fromKmController : fromKmController,
+        trenchAcceptanceController :trenchAcceptanceController,
+        deWateringValue :deWateringValue,
+        paddingValue : paddingValue,
+        prePaddingValue : prePaddingValue,
+        deWateringList : deWateringList,
+        paddingList : paddingList,
+        prePaddingList :prePaddingList,
+        pipeDiameterController :pipeDiameterController,
+        pipeMeterialController: pipeMeterialController,
+        pipeNumberList: pipeNumberList,
+        pipeNumberValue: pipeNumberValue,
+        pipeNumberModel:pipeNumberModel
     ));
   }
 
- 
 
- 
+
+
 }

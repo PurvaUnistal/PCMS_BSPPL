@@ -25,9 +25,6 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: _onWillPop,
      child: const PhoneHomeWidget(),
-     /* child: AppConfig.getDeviceType(context: context) == DeviceType.phone
-      ? const PhoneHomeWidget()
-      : const TabletHomeWidget(),*/
     );
   }
 

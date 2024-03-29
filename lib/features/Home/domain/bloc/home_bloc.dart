@@ -1,5 +1,6 @@
 import 'package:bsppl/Utils/commonClass/enums.dart';
 import 'package:bsppl/Utils/commonClass/user_info.dart';
+import 'package:bsppl/Utils/common_widget/app_string.dart';
 import 'package:bsppl/features/Dashboard/presentation/page/dashboard_page.dart';
 import 'package:bsppl/features/Home/domain/model/drawer_model.dart';
 import 'package:bsppl/features/Home/helper/home_helper.dart';
@@ -7,6 +8,8 @@ import 'package:bsppl/features/Login/domain/model/login_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../Utils/preference_utils.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -28,8 +31,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Widget> _pageWidgetList = [];
   List<Widget> get pageWidgetList => _pageWidgetList;
 
-  /*LoginModel _userData =  UserInfo.instance!.userData!;
-  LoginModel get userData => _userData;*/
+
 
   List<DrawerModel> _drawerList = [];
   List<DrawerModel> get drawerList => _drawerList;
@@ -39,6 +41,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   String _title =  "";
   String get title => _title;
+
+  String _userName = '';
+  String get userName => _userName;
 
   Widget _actionButtonWidget =  const SizedBox.shrink();
   Widget get actionButtonWidget => _actionButtonWidget;
@@ -57,12 +62,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _pageLoad(HomePageLoadEvent event, emit) async {
     emit(HomePageLoadState());
     _bottomTabIndex = 0;
-  //  _userData =  UserInfo.instance!.userData!;
-  //  _roleType =  userData!;
     _bottomNavigationBarItemList = [];
     _restaurantMenu = [];
     _pageWidgetList = [];
     _title =  "Dashboard";
+    _userName =  await PreferenceUtil.getString(key: PreferenceValue.userName,);
     _childWidget = const DashboardView();
     _actionButtonWidget =  const SizedBox.shrink();
     _drawerList  =  await HomeHelper.fetchDrawerList(context: event.context);
@@ -140,6 +144,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         drawerList: drawerList,
         childWidget: childWidget,
         title: title,
+      userName: userName,
         actionButtonWidget: actionButtonWidget,
     ));
   }

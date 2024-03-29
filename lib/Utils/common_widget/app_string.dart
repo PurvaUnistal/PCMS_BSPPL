@@ -2,7 +2,7 @@ class AppString{
 
   static String appName = "PBGPL MDPL";
   static String rel = "Release Date";
-  static String relDate = "28-03-2024";
+  static String relDate = "29-03-2024";
 
 
   static String userName = "Enter Your Username";
@@ -89,6 +89,7 @@ class AppString{
   static get tpNoFrom => "TP No. From";
   static get tpNoTo => "TP No. To";
   static get distance => "Distance";
+  static get searchPipe => "Search Pipe";
   static get pipeNo => "Pipe Number";
   static get bendNo => "Bend Number";
   static get bendDegree => "Bend Degree";
@@ -136,8 +137,8 @@ class AppString{
   static get manufacturingDate => "Manufacturing Date";
   static get expectedDate => "Expected Date";
   static get selectCustomerComplaint => "Select Customer Complaint";
-  static get routeSurvey => " Activity - Route Survey";
-  static get pipeCoating => " Activity - Pipe Coating";
+  static get routeSurvey => "Route Survey";
+  static get pipeCoating => "Pipe Coating";
   static get yardReceiving => "Yard Receiving";
   static get hoto => "Hoto";
   static get clearingGrading => "Clearing & Grading";
@@ -259,6 +260,7 @@ class AppString{
   static get filler7Welders2 => "Filler 7 Welders 2";
   static get filler8Welders1 => "Filler 8 Welders 1";
   static get filler8Welders2 => "Filler 8 Welders 2";
+
   static get selectFitup => "Select Fitup";
   static get selectWeldVisual => "Select Weld Visual";
   static get stripWelder1 => "Strip Welder1";

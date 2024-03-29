@@ -2,6 +2,7 @@ import 'package:bsppl/Utils/commonClass/user_info.dart';
 import 'package:bsppl/Utils/common_widget/app_color.dart';
 import 'package:bsppl/Utils/common_widget/app_font.dart';
 import 'package:bsppl/Utils/common_widget/app_string.dart';
+import 'package:bsppl/Utils/common_widget/styles_widget.dart';
 import 'package:bsppl/Utils/common_widget/text_widget.dart';
 import 'package:bsppl/Utils/loader/center_loader_widget.dart';
 import 'package:bsppl/Utils/loader/dotted_loader.dart';
@@ -26,7 +27,7 @@ class HomeDrawerWidget extends StatelessWidget {
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
         child: ListView(
           children: [
-            _header(context: context),
+            _header(dataState: state,context: context),
             const Divider(),
             _listBuilder(dataState: state),
             _changePassword(context: context),
@@ -41,7 +42,7 @@ class HomeDrawerWidget extends StatelessWidget {
 );
   }
 
-  Widget _header({required BuildContext context}) {
+  Widget _header({required BuildContext context,required FetchHomeDataState dataState}) {
     return Row(
       children: [
         ClipRRect(
@@ -55,9 +56,7 @@ class HomeDrawerWidget extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.03,
         ),
-        TextWidget("Purva",
-          fontSize: AppFont.font_14,
-        )
+       Text(dataState.userName[0].toUpperCase() + dataState.userName.substring(1).toLowerCase(),style: Styles.labels,)
       ],
     );
   }

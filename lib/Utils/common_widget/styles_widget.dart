@@ -20,4 +20,6 @@ class Styles {
   );*/
 
   static TextStyle texts = const TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.black);
+
+
 }

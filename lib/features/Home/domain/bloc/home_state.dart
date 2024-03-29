@@ -24,6 +24,7 @@ class FetchHomeDataState extends HomeInitial {
    final Widget childWidget;
    final Widget actionButtonWidget;
    final String title;
+   final String userName;
    FetchHomeDataState ({required this.isLoader,
      required this.bottomNavigationBarItemList,
      required this.bottomTabIndex,
@@ -32,6 +33,7 @@ class FetchHomeDataState extends HomeInitial {
      required this.drawerList,
      required this.childWidget,
      required this.title,
+     required this.userName,
      required this.actionButtonWidget,
    });
   @override
@@ -41,6 +43,7 @@ class FetchHomeDataState extends HomeInitial {
     drawerList,
     childWidget,
     title,
+    userName,
     actionButtonWidget,
   ];
 }
